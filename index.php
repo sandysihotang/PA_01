@@ -6,11 +6,11 @@ $head->top("Home");
  ?>
   <style type="text/css">
   .d-block{
-    width: 1300px;
-    height: 700px;
+    width: 950px;
+    height: 610px;
+    margin-left: 140px;
   }
 </style>
-<body style="background-image: url(img/slide/flower-meadow.jpg); background-attachment: fixed;width: 100%;height: 100%;">
 	<nav class="nav bg-light navbar-light">
     <div class="container-fluid">
 		<div class="float-left col-md-3">
@@ -51,7 +51,7 @@ $head->top("Home");
 	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
 	  <ul class="nav nav-pills">
   <li class="nav-item">
-    <a class="nav-link active" href="#"><i class="fa fa-home"></i> Home</a>
+    <a class="nav-link active" href="index.php"><i class="fa fa-home"></i> Home</a>
   </li>
   <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-list"></i> Pesan</a>
@@ -69,11 +69,11 @@ $head->top("Home");
     <a class="nav-link" href="#"><i class="fa fa-binoculars"></i> About</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="#"><i class="fa fa-folder-open"></i> Galery</a>
+    <a class="nav-link" href="galery.php"><i class="fa fa-folder-open"></i> Galery</a>
   </li>
 </ul>
 	</nav>
-  <div class="container-fluid">
+  <div class="container-fluid alert-warning">
     <h1 align="center">Welcome To Gastro Sijabu-Jabu</h1>
   <div id="carouselExampleIndicators" class="carousel slide img-thumbnail" data-ride="carousel">
         <ol class="carousel-indicators">
@@ -84,9 +84,9 @@ $head->top("Home");
         <div class="carousel-inner">        	
           <div class="carousel-item active">
             <img class="d-block" src="img/slide/gastro1.jpg?auto=yes&bg=777&fg=555&text=First slide" alt="First slide">
-            <div class="carousel-caption d-none d-md-block">
+            <!-- <div class="carousel-caption d-none d-md-block">
                   <img src="img/slide/a.jpg" class="img-thumbnail">
-            </div>
+            </div> -->
           </div>
           <div class="carousel-item">
             <img class="d-block" src="img/slide/gastro2.jpg?auto=yes&bg=666&fg=444&text=Second slide" alt="Second slide">
@@ -193,10 +193,11 @@ $head->top("Home");
       <?php if(isset($_SESSION['is_logged_in']) && $account->get_session('user')==2){ ?>
       <div class="container"><a href="form_tambah_menu.php" class="btn btn-danger"><i class="fa fa-plus"></i> Tambah Menu Makanan</a></div><br>
       <?php }?>
-      <div class="container img-thumbnail" style="background-image: url(img/slide/makanan.jpg);">
-        <h2 align="center"><button class="btn btn-primary"><i class="fa fa-birthday-cake"></i> Menu Makanan <i class="fa fa-birthday-cake"></i></button></h2>
+      <div class="container img-thumbnail bg-dark">
+        <h2 align="center"><button class="btn btn-primary"><i class="fa fa-birthday-cake"></i> Menu Makanan Andalan <i class="fa fa-birthday-cake"></i></button></h2>
         <div class="row">
           <?php 
+          if (isset($_SESSION['is_logged_in']) && $account->get_session('user')==2) {
           $makanan=new menu;
           $menu_makanan=$makanan->read_menu();
           while($row=mysqli_fetch_assoc($menu_makanan)){
@@ -207,30 +208,56 @@ $head->top("Home");
               <h4 align="center"><?=$row['nama_makanan']?></h4>
               <h4 align="center">Rp.<?= number_format($row['Harga']) ?>.00</h4>
               <h4 align="center">Jumlah stok <?=$row['stock']?></h4>
-              <div class="card-body" align="center">
+              <div class="card-body">
                 <?php if(isset($_SESSION['is_logged_in']) && $account->get_session('user')==2){ ?>
-                <a href="delete.php?id=<?= $row['idmenu']?>&jenis=makanan" class="btn btn-danger">Delete</a>&nbsp;
-                <a href="update.php?id=<?= $row['idmenu']?>&jenis=makanan" class="btn btn-info">Update</a>
-                <?php }?>
+                <a href="delete.php?id=<?= $row['idmenu']?>&jenis=makanan" class="btn btn-danger btn-sm">Delete</a>&nbsp;
+                <a href="update_makanan.php?id=<?= $row['idmenu']?>" class="btn btn-info btn-sm">Update</a>
+                <?php if ($row['status_promosi']=='Tidak dipromosikan') { ?>
+                <a href="promosikan.php?id=<?= $row['idmenu']?>&jenis=makanan&status=<?= $row['status_promosi']?>" class="btn btn-dark btn-sm"><i class="fa fa-star"></i>Promosikan</a>  
+                <?php } else { ?>
+                <a href="promosikan.php?id=<?= $row['idmenu']?>&jenis=makanan&status=<?= $row['status_promosi']?>" class="btn btn-dark btn-sm"><i class="fa fa-star"></i>HapusPromo</a>
+                <?php }
+                }?>
+              </div>
+            </div>
+          </div>
+         <?php } 
+       }
+       else{
+        $data= new menu;
+        $data1=$data->read_promo_makanan();
+        while($row=mysqli_fetch_assoc($data1)){
+         ?>
+           <div class="col-md-4">
+            <div class="card" style="width: 18rem;">
+              <img class="img-thumbnail img" src="img/menu/<?=$row['gambar']?>" alt="Card image cap">
+              <h4 align="center"><?=$row['nama_makanan']?></h4>
+              <h4 align="center">Rp.<?= number_format($row['Harga']) ?>.00</h4>
+              <h4 align="center">Jumlah stok <?=$row['stock']?></h4>
+              <div class="card-body" align="center">
                 <?php if(isset($_SESSION['is_logged_in']) && $account->get_session('user')==1){ ?>
-                <a href="#" class="btn btn-success"><i class="fa fa-tags"></i> Pesan</a>
+                <a href="transaksi_makanan.php?id=<?=$row['idmenu']?>" class="btn btn-success"><i class="fa fa-tags"></i> Pesan</a>
                 <?php } ?>
                 <?php if(!isset($_SESSION['is_logged_in']) ){ ?>
-                <a href="#" class="btn btn-success"><i class="fa fa-tags"></i> Pesan</a>
+                <a href="index.php" class="btn btn-success"><i class="fa fa-tags"></i> Pesan</a>
                 <?php } ?>
               </div>
             </div>
           </div>
-         <?php } ?>
+        <?php }
+      } ?>
           
         </div><br>
         <h5 align="center"><a href="#" class="btn btn-danger" ><i class="fa fa-th"></i> VIEW MORE</a></h5>
       </div><br><br><br>
-      <div class="container img-thumbnail" style="background-image: url(img/slide/minuman.jpg);">
-        <h2 align="center"><button class="btn btn-primary"><i class="fa fa-beer"></i> Menu Minuman <i class="fa fa-beer"></i></button></h2>
+      <div class="container img-thumbnail bg-dark">
+        <h2 align="center"><button class="btn btn-primary"><i class="fa fa-beer"></i> Menu Minuman Andalan <i class="fa fa-beer"></i></button></h2>
         <div class="row">
           <?php 
-          $minuman=$makanan->read_menu_minuman();
+          if (isset($_SESSION['is_logged_in']) && $account->get_session('user')==2) {
+          
+          $minum=new menu;
+          $minuman=$minum->read_menu_minuman();
           while ($row_minum=mysqli_fetch_assoc($minuman)) { ?>
           <div class="col-md-4">
             <div class="card" style="width: 18rem;">
@@ -240,21 +267,52 @@ $head->top("Home");
               <h4 align="center">Jumlah stok <?=$row_minum['stock']?></h4>
               <div class="card-body" align="center">
                 <?php if(isset($_SESSION['is_logged_in']) && $account->get_session('user')==2){ ?>
-                <a href="delete.php?id=<?= $row_minum['id_minum']?>&jenis=minuman" class="btn btn-danger">Delete</a>&nbsp;
-                <a href="update.php?id=<?= $row_minum['id_minum']?>&jenis=minuman" class="btn btn-info">Update</a>
-                <?php }?>
-                <?php if(isset($_SESSION['is_logged_in']) && $account->get_session('user')==1){ ?>
-                <a href="#" class="btn btn-success"><i class="fa fa-tags"></i> Pesan</a>
-                <?php } ?>
-                <?php if(!isset($_SESSION['is_logged_in']) ){ ?>
-                <a href="#" class="btn btn-success"><i class="fa fa-tags"></i> Pesan</a>
-                <?php } ?>
+                <a href="delete.php?id=<?= $row_minum['id_minum']?>&jenis=minuman" class="btn btn-danger btn-sm">Delete</a>&nbsp;
+                <a href="update.php?id=<?= $row_minum['id_minum']?>&jenis=minuman" class="btn btn-info btn-sm">Update</a>
+                <?php if ($row_minum['status_promosi']=='Tidak dipromosikan') { ?>
+                  <a href="promosikan.php?id=<?= $row_minum['id_minum']?>&jenis=minuman&status=<?= $row_minum['status_promosi']?>" class="btn btn-dark btn-sm"><i class="fa fa-star"></i>Promosikan</a>
+                <?php } 
+                else {?>
+                  <a href="promosikan.php?id=<?= $row_minum['id_minum']?>&jenis=minuman&status=<?= $row_minum['status_promosi']?>" class="btn btn-dark btn-sm"><i class="fa fa-star"></i>HapusPromo</a>
+                <?php }
+              }?>
               </div>
             </div>
           </div>            
         <?php  }
-
-           ?>
+      }
+       else{   
+        $minum=new menu;
+        $minuman=$minum->read_promo_minuman();
+        while ($row_minum=mysqli_fetch_assoc($minuman)) {  ?>
+        <div class="col-md-4">
+            <div class="card" style="width: 18rem;">
+              <img class="img-thumbnail img" src="img/menu/<?=$row_minum['gambar']?>" alt="Card image cap">
+              <h4 align="center"><?=$row_minum['nama_minuman']?></h4>
+              <h4 align="center">Rp.<?= number_format($row_minum['harga']) ?>.00</h4>
+              <h4 align="center">Jumlah stok <?=$row_minum['stock']?></h4>
+              <div class="card-body" align="center">
+                <?php if(isset($_SESSION['is_logged_in']) && $account->get_session('user')==2){ ?>
+                <a href="delete.php?id=<?= $row_minum['id_minum']?>&jenis=minuman" class="btn btn-danger btn-sm">Delete</a>&nbsp;
+                <a href="update.php?id=<?= $row_minum['id_minum']?>&jenis=minuman" class="btn btn-info btn-sm">Update</a>
+                <?php if ($row_minum['status_promosi']=='Tidak dipromosikan') { ?>
+                  <a href="promosikan.php?id=<?= $row_minum['id_minum']?>&jenis=minuman&status=<?= $row_minum['status_promosi']?>" class="btn btn-dark btn-sm"><i class="fa fa-star"></i>Promosikan</a>
+                <?php } 
+                else {?>
+                  <a href="promosikan.php?id=<?= $row_minum['id_minum']?>&jenis=minuman&status=<?= $row_minum['status_promosi']?>" class="btn btn-dark btn-sm"><i class="fa fa-star"></i>HapusPromo</a>
+                <?php }
+              }?>
+                <?php if(isset($_SESSION['is_logged_in']) && $account->get_session('user')==1){ ?>
+                <a href="transaksi.php?id=<?= $row_minum['id_minum'] ?>" class="btn btn-success"><i class="fa fa-tags"></i> Pesan</a>
+                <?php } ?>
+                <?php if(!isset($_SESSION['is_logged_in']) ){ ?>
+                <a href="index.php" class="btn btn-success"><i class="fa fa-tags"></i> Pesan</a>
+                <?php } ?>
+              </div>
+            </div>
+          </div>
+        <?php } 
+      } ?>
 
         </div><br>
         <h5 align="center"><a href="#" class="btn btn-primary" ><i class="fa fa-th"></i> VIEW MORE</a></h5>
@@ -277,14 +335,14 @@ $head->top("Home");
       </div><br>
 
 
-      <div class="container-fluid bg-secondary text-white jumbotron" style="opacity: 0.8;">
+      <div class="container-fluid bg-dark jumbotron text-white" style="opacity: 0.8;">
         <div class="row">
         <div class="col-md-4">
           <h2>GASTRO SIJABU JABU</h2>
             <p>Website Resto yang berada di : Pasar Siborong-Borong, Siborong-Borong, North Tapanuli Regency, North Sumatra 22474</p>
         </div>
         <div class="col-md-4">
-          <h2>Developper:</h2>
+          <h2>Developer:</h2>
           <h3>Institut Teknologi Del</h3>
           <ul>
             <li>Sandy Sihotang</li>
@@ -301,15 +359,14 @@ $head->top("Home");
         </div>
       </div>
       <hr>
-      <div class="bg-dark">
+      <div>
             <div class="col-sm-6">
-                <p class="mbr-text text-white">
+                <p class="mbr-text text-black">
                   © Copyright 2018 Gastro Sijabu jabu</p>
               </div><br>
           </div>
        </div> 
-       </div> 
-     </body>
+       </div>
 <?php 
   $head->buttom();
  ?>

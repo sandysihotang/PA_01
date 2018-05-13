@@ -60,63 +60,36 @@ $head->top("Home");
         <div class="row">
           <div class="col-md-12">
             <div class="product">
-              <h3 align="center">Tambah Makanan</h3><hr class="pg-titl-bdr-bte"></hr>
-
-              <form action="tambah.php" method="post" enctype="multipart/form-data">
+              <h3 align="center">Update Makanan</h3><hr class="pg-titl-bdr-bte"></hr>
+              <?php 
+              $data=new menu;
+              $menu=$data->get_while_id($_GET['id']);
+              $makanan=mysqli_fetch_assoc($menu);
+               ?>
+              <form action="tambah.php?id=<?=$_GET['id']?>" method="post" enctype="multipart/form-data">
                 <div class="form-group">
                   <p>Nama Makanan</p>
-                  <input type="text" name="nama_makanan" class="form-control" required />
+                  <input type="text" name="nama_makanan" value="<?=$makanan['nama_makanan']?>" class="form-control" required />
                 </div>
                 <div class="form-group">
                   <p>Harga Makanan</p>
-                  <input type="number" name="harga" class="form-control" required />
+                  <input type="number" name="harga" value="<?=$makanan['Harga']?>" class="form-control" required />
                 </div>
                 <div class="form-group">
                   <p>Jumlah Stok</p>
-                  <input type="number"  name="stok" class="form-control" required />
+                  <input type="number"  name="stok" class="form-control" value="<?=$makanan['stock']?>" required />
                 </div>
                 <div class="form-group">
                   <p>Gambar</p>
-                  <input type="file" name="gambar" class="btn btn-primary">
+                  <input type="file" name="gambar" value="<?= $makanan['gambar']?>" class="btn btn-primary">
                 </div>
-                <div class="text-center"><button name="tambah_makanan" type="submit" class="btn btn-komentar btn-md"><i class="fa fa-plus"></i>Tambah</button></div>
+                <div class="text-center"><button name="update_makanan" type="submit" class="btn btn-md"><i class="fa fa-plus"></i>Update</button></div>
               </form>
             </div>
           </div>
         </div>
       </div><br>
-
-  <div class="container img-thumbnail alert-warning">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="product">
-              <h3 align="center">Tambah Minuman</h3><hr class="pg-titl-bdr-bte"></hr>
-
-              <form action="tambah.php" method="post" enctype="multipart/form-data">
-                <div class="form-group">
-                  <p>Nama Minuman</p>
-                  <input type="text" name="nama_minuman" class="form-control" required />
-                </div>
-                <div class="form-group">
-                  <p>Harga Minuman</p>
-                  <input type="number" name="harga" class="form-control" required />
-                </div>
-                <div class="form-group">
-                  <p>Jumlah Stok</p>
-                  <input type="number"  name="stok" class="form-control" required />
-                </div>
-                <div class="form-group">
-                  <p>Gambar</p>
-                  <input type="file" name="gambar" class="btn btn-primary">
-                </div>
-                <div class="text-center"><button name="tambah_minuman" type="submit" class="btn btn-komentar btn-md"><i class="fa fa-plus"></i>Tambah</button></div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div><br>
- 
-      <div class="container-fluid bg-secondary text-white jumbotron" style="opacity: 0.8;">
+      <div class="container-fluid bg-dark text-white jumbotron" style="opacity: 0.8;">
         <div class="row">
         <div class="col-md-4">
           <h2>GASTRO SIJABU JABU</h2>

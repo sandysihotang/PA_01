@@ -25,22 +25,11 @@ $head->top("Home");
      else{ 
       $account=new outentikasi;
 
-      if ($account->get_session('user')==2) { ?>
-      <div class="nav navbar float-right"><button class="btn btn-primary btn-sm" >
-        <i class="fa fa-user"></i><b>Administrator</b></button>
-        
-      
-     <?php }
-     else if($account->get_session('user')==3){
-     ?>
-     <div class="nav navbar float-right"><button class="btn btn-primary btn-sm" >
-        <i class="fa fa-user"></i><b>Kasir</b></button>
-     <?php } 
-     else { $user=$account->get_user($account->get_session('id'));
+     $user=$account->get_user($account->get_session('id'));
             $name=$user->fetch_assoc(); ?>
       <div class="nav navbar float-right"><button class="btn btn-primary btn-sm" >
         <i class="fa fa-user"></i><?= $name['firstname']." ".$name['lastname'] ?></button>
-      <?php } ?>
+       
         &nbsp;<a href="functions/logout.php" class="btn btn-danger btn-sm">Logout</a></button>      
     </div> 
     <?php } ?>
@@ -68,7 +57,7 @@ $head->top("Home");
     <a class="nav-link" href="#"><i class="fa fa-binoculars"></i> About</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link active" href="galery.php"><i class="fa fa-folder-open"></i> Galery</a>
+    <a class="nav-link" href="galery.php"><i class="fa fa-folder-open"></i> Galery</a>
   </li>
 </ul>
 	</nav>
@@ -155,92 +144,30 @@ $head->top("Home");
         </div>
       </div> 
       </div> 
-		<div class="container" align=center><h1>GALERY GASTRO SIJABU JABU</h1>
-			<?php 
-			$account=new outentikasi;
-			if ($account->get_session('is_logged_in') && $account->get_session('user')==2) { ?>
-				<button type="button" data-toggle="modal" data-target="#Modal" class="btn btn-success">Tambah Gambar <i class="fa fa-plus"></i></button>
-		<?php	} ?>
-			
-		</div>
-		 <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-              <h4 class="modal-title" id="myModalLabel">Upload Gambar</h4>
-            </div>
-            <div class="modal-body">
-
-              <div id="accordion" role="tablist">
-                <div class="card">
-                  <div class="card-header" role="tab" id="headingOne">
-                    <h5 class="mb-0">
-                      <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                        Gambar
-                      </a>
-                    </h5>
-                  </div>
-
-                  <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne">
-                    <div class="card-body">
-                      <form action="tambah_galery.php" method="post" class="form-signin" enctype="multipart/form-data">
-                        <h2>Insert Gambar</h2>
-                        <label for="inputEmail" class="sr-only">Deskripsi</label>
-                        <textarea  class="form-control" required autofocus name="deskripsi" placeholder="Deskripsi"></textarea><br><br>
-                        <label for="inputPassword" class="sr-only">Gambar</label>
-                        <input type="file" name="gambar" class="form-control" required autofocus placeholder="Password"><br>
-                        <button class="btn btn-primary btn-block" type="submit" name="tambah_galery"><i class="fa fa-plus"></i> Tambahkan</button>
-                      </form>
-                    </div>
-                  </div>
-                </div>               
-              </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-          </div>
+      <?php 
+      $data=new pemesanan;
+      $data_saya=$data->pesan_makanan($_GET['id']);
+      $makanan_saya=$data_saya->fetch_assoc();
+       ?>
+		<div class="container" align=center><h1>Pesanan Anda</h1></div>
+		<div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <img src="img/menu/<?=$makanan_saya['gambar']?>" class="img-thumbnail" style="width: 100%;height: 100%;">
+        </div>
+        <div class="col-md-6">
+          <h5>Nama Makanan</h5>
+          <p><?= $makanan_saya['nama_makanan'] ?></p>
+          <h5>Harga</h5>
+          <p>Rp.<?= number_format($makanan_saya['Harga']) ?>.00</p>
+          <h5>Jumlah Porsi</h5>
+          <form method="post" action="add_to_chart.php?id=<?= $_GET['id']?>">
+          <input type="number" name="jumlah_porsi" class="form-control" value="1"><br>
+          <button type="submit" class="btn btn-primary" name="lanjutkan">Lanjutkan <i class="fa fa-arrow-right"></i></button>
+        </form>
         </div>
       </div>
-
-      <div class="modal fade" id="firefoxModal" tabindex="-1" role="dialog" aria-labelledby="firefoxModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">            
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-          </div>
-        </div>
-      </div> 
-      </div>
-		<?php 
-		$data=new galery;
-		$galery= $data->read_galery();?>
-		<div class="container-fluid  bg-dark"><br>
-			<div class="row">
-		<?php while($mygalery=mysqli_fetch_assoc($galery)){
-		 ?>
-		
-		
-				<div class="col-md-3">
-					<div class="card">
-						<img src="img/galery/<?= $mygalery['img'] ?>" class="img-thumbnail img" alt="Card image cap">
-						<div class="card-body alert-primary">
-							<p><?= $mygalery['Deskripsi'] ?></p>
-						</div>
-					</div>
-					<?php if (isset($_SESSION['is_logged_in']) && $account->get_session('user')==2) { ?>
-						<div align="center">
-							<a href="delete.php?id=<?= $mygalery['id'] ?>&jenis=galery" class="btn btn-danger">Delete Image</a>
-						</div>
-					<?php	} ?>
-				</div>
-			
-		<?php } ?>
-		</div><br>
-		</div>
+    </div>
 <br>
 
       <div class="container-fluid bg-dark text-white jumbotron" style="opacity: 0.8;">

@@ -2,7 +2,7 @@
 session_start();
 include_once("functions/my_functions.php");
 $head=new top_buttom;
-$head->top("Home");
+$head->top("List Transaksi");
  ?>
   <style type="text/css">
   .d-block{
@@ -25,22 +25,11 @@ $head->top("Home");
      else{ 
       $account=new outentikasi;
 
-      if ($account->get_session('user')==2) { ?>
-      <div class="nav navbar float-right"><button class="btn btn-primary btn-sm" >
-        <i class="fa fa-user"></i><b>Administrator</b></button>
-        
-      
-     <?php }
-     else if($account->get_session('user')==3){
-     ?>
-     <div class="nav navbar float-right"><button class="btn btn-primary btn-sm" >
-        <i class="fa fa-user"></i><b>Kasir</b></button>
-     <?php } 
-     else { $user=$account->get_user($account->get_session('id'));
+     $user=$account->get_user($account->get_session('id'));
             $name=$user->fetch_assoc(); ?>
       <div class="nav navbar float-right"><button class="btn btn-primary btn-sm" >
         <i class="fa fa-user"></i><?= $name['firstname']." ".$name['lastname'] ?></button>
-      <?php } ?>
+       
         &nbsp;<a href="functions/logout.php" class="btn btn-danger btn-sm">Logout</a></button>      
     </div> 
     <?php } ?>
@@ -68,7 +57,7 @@ $head->top("Home");
     <a class="nav-link" href="#"><i class="fa fa-binoculars"></i> About</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link active" href="galery.php"><i class="fa fa-folder-open"></i> Galery</a>
+    <a class="nav-link" href="galery.php"><i class="fa fa-folder-open"></i> Galery</a>
   </li>
 </ul>
 	</nav>
@@ -155,92 +144,101 @@ $head->top("Home");
         </div>
       </div> 
       </div> 
-		<div class="container" align=center><h1>GALERY GASTRO SIJABU JABU</h1>
-			<?php 
-			$account=new outentikasi;
-			if ($account->get_session('is_logged_in') && $account->get_session('user')==2) { ?>
-				<button type="button" data-toggle="modal" data-target="#Modal" class="btn btn-success">Tambah Gambar <i class="fa fa-plus"></i></button>
-		<?php	} ?>
-			
-		</div>
-		 <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-              <h4 class="modal-title" id="myModalLabel">Upload Gambar</h4>
-            </div>
-            <div class="modal-body">
+      <h1 align="center">Transaksi Anda</h1>
+      <div class="container-fluid img-thumbnail">
+        <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nama Makanan/ Minuman</th>
+                <th scope="col">Jumlah Porsi</th>
+                <th scope="col">Total Harga</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php 
+                $data=new pemesanan;
+                $i=1;
+                $tot=0;
+                $pemesanan=$data->ambil_data_makanan_belum_bayar($account->get_session('id'));
+                while($makanan=mysqli_fetch_assoc($pemesanan)){ 
+                  $nama=$data->read_makanan($makanan['id_menu']);
+                  $nama_makanan=$nama->fetch_assoc();
+                  $tot+=$makanan['total_harga'];
+                  ?>
+                  <tr>
+                    <th><?=$i?></th>
+                    <td><?= $nama_makanan['nama_makanan'] ?></td>
+                    <td><?=$makanan['jumlah_pesanan']?></td>
+                    <td>Rp.<?= number_format($makanan['total_harga']) ?>.00</td>
+                    <td><button class="btn btn-secondary" data-toggle="modal" data-target="#Modal<?=$i?>" >Update</button></td>
+                  </tr>
+                 <div class="modal fade" id="Modal<?=$i?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                          <h4 class="modal-title" id="myModalLabel">Update</h4>
+                        </div>
+                        <div class="modal-body">
 
-              <div id="accordion" role="tablist">
-                <div class="card">
-                  <div class="card-header" role="tab" id="headingOne">
-                    <h5 class="mb-0">
-                      <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                        Gambar
-                      </a>
-                    </h5>
-                  </div>
+                          <div id="accordion" role="tablist">
+                            <div class="card">
+                              <div class="card-header" role="tab" id="headingOne">
+                                <h5 class="mb-0">
+                                  <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    Update Porsi
+                                  </a>
+                                </h5>
+                              </div>
 
-                  <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne">
-                    <div class="card-body">
-                      <form action="tambah_galery.php" method="post" class="form-signin" enctype="multipart/form-data">
-                        <h2>Insert Gambar</h2>
-                        <label for="inputEmail" class="sr-only">Deskripsi</label>
-                        <textarea  class="form-control" required autofocus name="deskripsi" placeholder="Deskripsi"></textarea><br><br>
-                        <label for="inputPassword" class="sr-only">Gambar</label>
-                        <input type="file" name="gambar" class="form-control" required autofocus placeholder="Password"><br>
-                        <button class="btn btn-primary btn-block" type="submit" name="tambah_galery"><i class="fa fa-plus"></i> Tambahkan</button>
-                      </form>
+                              <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne">
+                                <div class="card-body">
+                                  <form action="update_menu.php?id=<?=$makanan['id_pemesanan']?>&harga=<?=$nama_makanan['Harga']?>" method="post" class="form-signin" enctype="multipart/form-data">
+                                    <b><p><?= $nama_makanan['nama_makanan'] ?></p></b>
+                                    <input type="number" name="porsi" class="form-control" required autofocus value="<?=$makanan['jumlah_pesanan']?>"><br>
+                                    <button class="btn btn-primary btn-block" type="submit" name="update_menu"><i class="fa fa-plus"></i> Update</button>
+                                  </form>
+                                </div>
+                              </div>
+                            </div>               
+                          </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>               
-              </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-          </div>
-        </div>
-      </div>
 
-      <div class="modal fade" id="firefoxModal" tabindex="-1" role="dialog" aria-labelledby="firefoxModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">            
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-          </div>
-        </div>
-      </div> 
+                  <div class="modal fade" id="firefoxModal" tabindex="-1" role="dialog" aria-labelledby="firefoxModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">            
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div> 
+                  </div>
+                  <?php $i++; } ?>
+
+                  <tr>
+                    <td colspan="3" align="center">Total Seluruhnya</td>
+                    <td>Rp.<?= number_format($tot) ?>.00</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td colspan="3">Pilih cara pembayaran</td>
+                    <td><button class="btn btn-primary">Cash</button>&nbsp;<button class="btn btn-success">Atm</button> <a href="index.php" class="btn btn-info">Tambah</a></td>
+                    <td></td>
+                  </tr>
+            </tbody>
+          </table>
       </div>
-		<?php 
-		$data=new galery;
-		$galery= $data->read_galery();?>
-		<div class="container-fluid  bg-dark"><br>
-			<div class="row">
-		<?php while($mygalery=mysqli_fetch_assoc($galery)){
-		 ?>
-		
-		
-				<div class="col-md-3">
-					<div class="card">
-						<img src="img/galery/<?= $mygalery['img'] ?>" class="img-thumbnail img" alt="Card image cap">
-						<div class="card-body alert-primary">
-							<p><?= $mygalery['Deskripsi'] ?></p>
-						</div>
-					</div>
-					<?php if (isset($_SESSION['is_logged_in']) && $account->get_session('user')==2) { ?>
-						<div align="center">
-							<a href="delete.php?id=<?= $mygalery['id'] ?>&jenis=galery" class="btn btn-danger">Delete Image</a>
-						</div>
-					<?php	} ?>
-				</div>
-			
-		<?php } ?>
-		</div><br>
-		</div>
+      <h1 align="center">Transaksi Selesai</h1>
 <br>
 
       <div class="container-fluid bg-dark text-white jumbotron" style="opacity: 0.8;">
