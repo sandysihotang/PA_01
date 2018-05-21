@@ -60,8 +60,6 @@ $head->top("Home");
       <a class="dropdown-item" href="#"><i class="fa fa-beer"></i> Minuman</a>
       <div class="dropdown-divider"></div>
       <a class="dropdown-item" href="#"><i class="fa fa-table"></i> Meja</a>
-      <div class="dropdown-divider"></div>
-      <a class="dropdown-item" href="#"><i class="fa fa-fort-awesome"></i> Pesta</a>
     </div>
   </li>
   <li class="nav-item">
@@ -70,6 +68,11 @@ $head->top("Home");
   <li class="nav-item">
     <a class="nav-link active" href="galery.php"><i class="fa fa-folder-open"></i> Galery</a>
   </li>
+  <?php if (isset($_SESSION['is_logged_in']) && $account->get_session('user')==1) { ?>
+  <li class="nav-item">
+    <a href="list_transaksi.php" class="nav-link"><i class="fa fa-bar-chart-o"></i> List Pemesanan</a>
+  </li>
+   <?php } ?>
 </ul>
 	</nav>
 	 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

@@ -71,4 +71,27 @@
 			}
 	}
 }
+	
+		if (isset($_POST['update_minuman'])) {
+		$nama_minuman=$_POST['nama_minuman'];
+		$harga=$_POST['harga'];
+		$stock=$_POST['stok'];
+		$gambar=$_FILES['gambar']['name'];
+		$tmp=$_FILES['gambar']['tmp_name'];
+		$fotobaru='makanan-'.date('His').$gambar;
+		$path='img/menu/'.$fotobaru;
+
+		if (move_uploaded_file($tmp,$path)) {
+			$name=new menu;
+			$key=$name->update_menu_minuman($nama_minuman,$fotobaru,$harga,$stock,$_GET['id']);
+			if ($key) {
+				echo "<script>alert('Menu Minuman Berhasil Diubah');</script>";
+				header('Refresh:0  url=index.php');
+			}
+			else{
+				echo "<script>alert('Menu Minuman Gagal Diubah');</script>";
+				header('Refresh:0  url=index.php');
+			}
+	}
+}
  ?>

@@ -1,8 +1,11 @@
-	<?php 
+<?php 
 session_start();
 include_once("functions/my_functions.php");
+if (!isset($_SESSION['is_logged_in'])) {
+  header('location: index.php');
+}
 $head=new top_buttom;
-$head->top("Home");
+$head->top("KASIR");
  ?>
   <style type="text/css">
   .d-block{
@@ -22,14 +25,9 @@ $head->top("Home");
       </button>
     </div>
      <?php } 
-     else{ 
-      $account=new outentikasi;
-
-     $user=$account->get_user($account->get_session('id'));
-            $name=$user->fetch_assoc(); ?>
+     else{  ?>
       <div class="nav navbar float-right"><button class="btn btn-primary btn-sm" >
-        <i class="fa fa-user"></i><?= $name['firstname']." ".$name['lastname'] ?></button>
-       
+        <i class="fa fa-user"></i><b>Kasir</b></button>
         &nbsp;<a href="functions/logout.php" class="btn btn-danger btn-sm">Logout</a></button>      
     </div> 
     <?php } ?>
@@ -39,29 +37,11 @@ $head->top("Home");
 	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
 	  <ul class="nav nav-pills">
   <li class="nav-item">
-    <a class="nav-link" href="index.php"><i class="fa fa-home"></i> Home</a>
-  </li>
-  <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-list"></i> Pesan</a>
-    <div class="dropdown-menu">
-      <a class="dropdown-item" href="#"><i class="fa fa-birthday-cake"></i> Makanan</a>
-      <div class="dropdown-divider"></div>
-      <a class="dropdown-item" href="#"><i class="fa fa-beer"></i> Minuman</a>
-      <div class="dropdown-divider"></div>
-      <a class="dropdown-item" href="#"><i class="fa fa-table"></i> Meja</a>
-    </div>
+    <a class="nav-link active" href="kasir.php"><i class="fa fa-home"></i> Konfirmasi Pelanggan</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="#"><i class="fa fa-binoculars"></i> About</a>
+    <a class="nav-link" href="penyelesaian_pesanan.php"><i class="fa fa-binoculars"></i> Penyelesaian Pesanan</a>
   </li>
-  <li class="nav-item">
-    <a class="nav-link" href="galery.php"><i class="fa fa-folder-open"></i> Galery</a>
-  </li>
-  <?php if (isset($_SESSION['is_logged_in']) && $account->get_session('user')==1) { ?>
-  <li class="nav-item">
-    <a href="list_transaksi.php" class="nav-link"><i class="fa fa-book-heart"></i> List Pemesanan</a>
-  </li>
-   <?php } ?>
 </ul>
 	</nav>
 	 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -147,30 +127,83 @@ $head->top("Home");
         </div>
       </div> 
       </div> 
-      <?php 
-      $data=new pemesanan;
-      $data_saya=$data->pesan_makanan($_GET['id']);
-      $makanan_saya=$data_saya->fetch_assoc();
-       ?>
-		<div class="container" align=center><h1>Pesanan Anda</h1></div>
-		<div class="container">
-      <div class="row">
-        <div class="col-md-6">
-          <img src="img/menu/<?=$makanan_saya['gambar']?>" class="img-thumbnail" style="width: 100%;height: 100%;">
-        </div>
-        <div class="col-md-6">
-          <h5>Nama Makanan</h5>
-          <p><?= $makanan_saya['nama_makanan'] ?></p>
-          <h5>Harga</h5>
-          <p>Rp.<?= number_format($makanan_saya['Harga']) ?>.00</p>
-          <h5>Jumlah Porsi</h5>
-          <form method="post" action="add_to_chart.php?id=<?= $_GET['id']?>&jenis=makanan">
-          <input type="number" name="jumlah_porsi" class="form-control"><br>
-          <button type="submit" class="btn btn-primary" name="lanjutkan">Lanjutkan <i class="fa fa-arrow-right"></i></button>
-        </form>
-        </div>
-      </div>
-    </div>
+		<div class="container" align=center><h1>PESANAN</h1></div>
+		<div class="container-fluid">
+			<h2 class="alert alert-dark">Cash</h2>
+			<table class="table table-striped img-thumbnail">
+				<thead>
+					<tr>
+						<th scope="col">#</th>
+						<th scope="col">Nama</th>
+						<th scope="col">Daftar Pesanan</th>
+						<th scope="col">Action</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php $i=1;
+					$data=new konfirmasi_pelanggan;
+					$pelanggan=$data->get_data_pemesanan(); 
+					while($row=$pelanggan->fetch_assoc()){
+					?>
+					<tr>
+						<td><?=$i?></td>
+						<td><?php 
+						$nam=new outentikasi;
+						$name=$nam->get_user($row['id_pelanggan'])->fetch_assoc();
+						echo $name['firstname']." ".$name['lastname'];
+						 ?></td>
+						<td><a class="btn btn-success btn-sm" href="all_pemesanan.php?id=<?=$row['id_pelanggan']?>">LOOK</a></td>
+						<form method="post" action="konfirmasi_pesanan.php?id=<?=$row['id_pelanggan']?>">
+							<td><select class="form-control" name="aksi">
+								<option>Konfirmasi</option>
+								<option>Selesai</option>
+							</select></td>
+							<td><input type="submit" name="ubah" value="Update" class="btn-sm btn btn-primary"></td>
+						</form>
+					</tr>
+					<?php 
+					$i++; 
+				} ?>
+        <?php 
+        $data1=$data->get_data_pemesanan1();
+        while($row1=mysqli_fetch_assoc($data1)){
+         ?>		
+         <tr>
+          <td><?=$i?></td>
+          <td><?php 
+          $nam1=new outentikasi;
+            $name1=$nam1->get_user($row1['id_pelanggan'])->fetch_assoc();
+            echo $name1['firstname']." ".$name1['lastname']; ?></td>
+          <td><a class="btn btn-success btn-sm" href="all_pemesanan.php?id=<?=$row1['id_pelanggan']?>">LOOK</a></td>
+            <form method="post" action="konfirmasi_pesanan.php?id=<?=$row1['id_pelanggan']?>">
+              <td><select class="form-control" name="aksi">
+                <option>Konfirmasi</option>
+                <option>Selesai</option>
+              </select></td>
+              <td><input type="submit" name="ubah" value="Update" class="btn-sm btn btn-primary"></td>
+            </form>
+        </tr>			
+       <?php
+       $i++; } ?>
+				</tbody>
+				
+			</table>
+		</div><br><br>
+		<div class="container-fluid">
+			<h2 class="alert alert-dark">ATM</h2>
+			<table class="table table-striped img-thumbnail">
+				<thead>
+					<tr>
+						<th scope="col">#</th>
+						<th scope="col">Nama</th>
+						<th scope="col">Date & Time</th>
+						<th scope="col">Action</th>
+						<th scope="col"></th>
+					</tr>
+				</thead>
+			</table>
+		</div>
 <br>
 
       <div class="container-fluid bg-dark text-white jumbotron" style="opacity: 0.8;">
@@ -208,4 +241,3 @@ $head->top("Home");
 <?php 
   $head->buttom();
  ?>
- 

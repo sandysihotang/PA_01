@@ -149,7 +149,7 @@ $head->top("Home");
       </div> 
       <?php 
       $data=new pemesanan;
-      $data_saya=$data->pesan_makanan($_GET['id']);
+      $data_saya=$data->pesan_minuman($_GET['id']);
       $makanan_saya=$data_saya->fetch_assoc();
        ?>
 		<div class="container" align=center><h1>Pesanan Anda</h1></div>
@@ -159,12 +159,12 @@ $head->top("Home");
           <img src="img/menu/<?=$makanan_saya['gambar']?>" class="img-thumbnail" style="width: 100%;height: 100%;">
         </div>
         <div class="col-md-6">
-          <h5>Nama Makanan</h5>
-          <p><?= $makanan_saya['nama_makanan'] ?></p>
+          <h5>Nama Minuman</h5>
+          <p><?= $makanan_saya['nama_minuman'] ?></p>
           <h5>Harga</h5>
-          <p>Rp.<?= number_format($makanan_saya['Harga']) ?>.00</p>
+          <p>Rp.<?= number_format($makanan_saya['harga']) ?>.00</p>
           <h5>Jumlah Porsi</h5>
-          <form method="post" action="add_to_chart.php?id=<?= $_GET['id']?>&jenis=makanan">
+          <form method="post" action="add_to_chart.php?id=<?= $_GET['id']?>&jenis=minuman">
           <input type="number" name="jumlah_porsi" class="form-control"><br>
           <button type="submit" class="btn btn-primary" name="lanjutkan">Lanjutkan <i class="fa fa-arrow-right"></i></button>
         </form>

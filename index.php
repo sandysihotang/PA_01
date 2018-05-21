@@ -61,8 +61,6 @@ $head->top("Home");
       <a class="dropdown-item" href="#"><i class="fa fa-beer"></i> Minuman</a>
       <div class="dropdown-divider"></div>
       <a class="dropdown-item" href="#"><i class="fa fa-table"></i> Meja</a>
-      <div class="dropdown-divider"></div>
-      <a class="dropdown-item" href="#"><i class="fa fa-fort-awesome"></i> Pesta</a>
     </div>
   </li>
   <li class="nav-item">
@@ -71,6 +69,12 @@ $head->top("Home");
   <li class="nav-item">
     <a class="nav-link" href="galery.php"><i class="fa fa-folder-open"></i> Galery</a>
   </li>
+  <?php if (isset($_SESSION['is_logged_in']) && $account->get_session('user')==1) { ?>
+  <li class="nav-item">
+    <a href="list_transaksi.php" class="nav-link"><i class="fa fa-bar-chart-o"></i> List Pemesanan</a>
+  </li>
+   <?php } ?>
+
 </ul>
 	</nav>
   <div class="container-fluid alert-warning">
@@ -207,7 +211,6 @@ $head->top("Home");
               <img class="img-thumbnail img" src="img/menu/<?=$row['gambar']?>" alt="Card image cap">
               <h4 align="center"><?=$row['nama_makanan']?></h4>
               <h4 align="center">Rp.<?= number_format($row['Harga']) ?>.00</h4>
-              <h4 align="center">Jumlah stok <?=$row['stock']?></h4>
               <div class="card-body">
                 <?php if(isset($_SESSION['is_logged_in']) && $account->get_session('user')==2){ ?>
                 <a href="delete.php?id=<?= $row['idmenu']?>&jenis=makanan" class="btn btn-danger btn-sm">Delete</a>&nbsp;
@@ -226,6 +229,7 @@ $head->top("Home");
        else{
         $data= new menu;
         $data1=$data->read_promo_makanan();
+        $data2=new pemesanan;
         while($row=mysqli_fetch_assoc($data1)){
          ?>
            <div class="col-md-4">
@@ -233,14 +237,22 @@ $head->top("Home");
               <img class="img-thumbnail img" src="img/menu/<?=$row['gambar']?>" alt="Card image cap">
               <h4 align="center"><?=$row['nama_makanan']?></h4>
               <h4 align="center">Rp.<?= number_format($row['Harga']) ?>.00</h4>
-              <h4 align="center">Jumlah stok <?=$row['stock']?></h4>
               <div class="card-body" align="center">
-                <?php if(isset($_SESSION['is_logged_in']) && $account->get_session('user')==1){ ?>
-                <a href="transaksi_makanan.php?id=<?=$row['idmenu']?>" class="btn btn-success"><i class="fa fa-tags"></i> Pesan</a>
-                <?php } ?>
-                <?php if(!isset($_SESSION['is_logged_in']) ){ ?>
-                <a href="index.php" class="btn btn-success"><i class="fa fa-tags"></i> Pesan</a>
-                <?php } ?>
+                <?php  if (isset($_SESSION['is_logged_in']) && $account->get_session('user')==1) { 
+                    if ($row['status']==2) {
+                      echo "Makanan Sudah Habis";
+                    } else{ ?>
+                    <a href="transaksi_makanan.php?id=<?=$row['idmenu']?>" class="btn btn-success"><i class="fa fa-tags"></i> Pesan</a>
+                  <?php 
+                   } 
+                 }
+                  else {
+                    if ($row['status']==2) {
+                      echo "Makanan Sudah Habis";
+                    } else{?>
+                    <a href="index.php" class="btn btn-success"><i class="fa fa-tags"></i> Pesan</a>
+                    <?php }
+                }?>
               </div>
             </div>
           </div>
@@ -248,7 +260,6 @@ $head->top("Home");
       } ?>
           
         </div><br>
-        <h5 align="center"><a href="#" class="btn btn-danger" ><i class="fa fa-th"></i> VIEW MORE</a></h5>
       </div><br><br><br>
       <div class="container img-thumbnail bg-dark">
         <h2 align="center"><button class="btn btn-primary"><i class="fa fa-beer"></i> Menu Minuman Andalan <i class="fa fa-beer"></i></button></h2>
@@ -264,11 +275,10 @@ $head->top("Home");
               <img class="img-thumbnail img" src="img/menu/<?=$row_minum['gambar']?>" alt="Card image cap">
               <h4 align="center"><?=$row_minum['nama_minuman']?></h4>
               <h4 align="center">Rp.<?= number_format($row_minum['harga']) ?>.00</h4>
-              <h4 align="center">Jumlah stok <?=$row_minum['stock']?></h4>
               <div class="card-body" align="center">
                 <?php if(isset($_SESSION['is_logged_in']) && $account->get_session('user')==2){ ?>
                 <a href="delete.php?id=<?= $row_minum['id_minum']?>&jenis=minuman" class="btn btn-danger btn-sm">Delete</a>&nbsp;
-                <a href="update.php?id=<?= $row_minum['id_minum']?>&jenis=minuman" class="btn btn-info btn-sm">Update</a>
+                <a href="update_minuman.php?id=<?= $row_minum['id_minum']?>&jenis=minuman" class="btn btn-info btn-sm">Update</a>
                 <?php if ($row_minum['status_promosi']=='Tidak dipromosikan') { ?>
                   <a href="promosikan.php?id=<?= $row_minum['id_minum']?>&jenis=minuman&status=<?= $row_minum['status_promosi']?>" class="btn btn-dark btn-sm"><i class="fa fa-star"></i>Promosikan</a>
                 <?php } 
@@ -290,24 +300,21 @@ $head->top("Home");
               <img class="img-thumbnail img" src="img/menu/<?=$row_minum['gambar']?>" alt="Card image cap">
               <h4 align="center"><?=$row_minum['nama_minuman']?></h4>
               <h4 align="center">Rp.<?= number_format($row_minum['harga']) ?>.00</h4>
-              <h4 align="center">Jumlah stok <?=$row_minum['stock']?></h4>
               <div class="card-body" align="center">
-                <?php if(isset($_SESSION['is_logged_in']) && $account->get_session('user')==2){ ?>
-                <a href="delete.php?id=<?= $row_minum['id_minum']?>&jenis=minuman" class="btn btn-danger btn-sm">Delete</a>&nbsp;
-                <a href="update.php?id=<?= $row_minum['id_minum']?>&jenis=minuman" class="btn btn-info btn-sm">Update</a>
-                <?php if ($row_minum['status_promosi']=='Tidak dipromosikan') { ?>
-                  <a href="promosikan.php?id=<?= $row_minum['id_minum']?>&jenis=minuman&status=<?= $row_minum['status_promosi']?>" class="btn btn-dark btn-sm"><i class="fa fa-star"></i>Promosikan</a>
+                <?php if(isset($_SESSION['is_logged_in']) && $account->get_session('user')==1){  
+                            if($row_minum['status']==2) 
+                              echo "Minuman ini Sudah Habis";
+                           else {?>
+                              <a href="transaksi_minuman.php?id=<?= $row_minum['id_minum'] ?>" class="btn btn-success"><i class="fa fa-tags"></i> Pesan</a>
                 <?php } 
-                else {?>
-                  <a href="promosikan.php?id=<?= $row_minum['id_minum']?>&jenis=minuman&status=<?= $row_minum['status_promosi']?>" class="btn btn-dark btn-sm"><i class="fa fa-star"></i>HapusPromo</a>
-                <?php }
               }?>
-                <?php if(isset($_SESSION['is_logged_in']) && $account->get_session('user')==1){ ?>
-                <a href="transaksi.php?id=<?= $row_minum['id_minum'] ?>" class="btn btn-success"><i class="fa fa-tags"></i> Pesan</a>
-                <?php } ?>
-                <?php if(!isset($_SESSION['is_logged_in']) ){ ?>
+                <?php if(!isset($_SESSION['is_logged_in']) ){ 
+                  if ($row_minum['status']==2) {
+                    echo "Minuman Sudah Habis";
+                  }else { ?>
                 <a href="index.php" class="btn btn-success"><i class="fa fa-tags"></i> Pesan</a>
-                <?php } ?>
+                <?php } 
+                } ?>
               </div>
             </div>
           </div>
@@ -315,7 +322,6 @@ $head->top("Home");
       } ?>
 
         </div><br>
-        <h5 align="center"><a href="#" class="btn btn-primary" ><i class="fa fa-th"></i> VIEW MORE</a></h5>
       </div>
 <br><br>
       <div class="container">

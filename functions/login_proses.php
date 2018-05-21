@@ -12,10 +12,16 @@
 		if($data->num_rows>0){
 			$mydata=$data->fetch_assoc();
 			$outen=new outentikasi;
-			$outen->set_session('is_logged_in',TRUE);
-			$outen->set_session('user',$mydata['role']);
-			$outen->set_session('id',$mydata['id']);
-			header("location: ../index.php");
+			if ($mydata['role']==3) {
+				$outen->set_session('is_logged_in',TRUE);
+				$outen->set_session('user',$mydata['role']);
+				header("location: ../kasir.php");
+			}else{
+				$outen->set_session('is_logged_in',TRUE);
+				$outen->set_session('user',$mydata['role']);
+				$outen->set_session('id',$mydata['id']);
+				header("location: ../index.php");
+			}
 		}
 		else{
 			echo"<script>alert('Maaf Anda Tidak Terdaftar!');</script>";
