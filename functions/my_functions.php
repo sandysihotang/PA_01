@@ -179,7 +179,11 @@
 			return $data;
 		}
 		public function update_menu_beli($id,$porsi,$harga){
-			$data=mysqli_query($this->connect(),"UPDATE pemesanan_makanan SET jumlah_pesanan='$porsi',total_harga='$harga' WHERE id_pemesanan='$id'");
+			$data=mysqli_query($this->connect(),"UPDATE pemesanan_makanan SET jumlah_pesanan='$porsi',total_harga='$harga' WHERE id='$id'");
+			return $data;
+		}
+		public function update_menu_beli_minum($id,$porsi,$harga){
+			$data=mysqli_query($this->connect(),"UPDATE pemesanan_minuman SET jumlah_pesanan='$porsi',total_harga='$harga' WHERE id='$id'");
 			return $data;
 		}
 		public function action_metode_bayar_cash($id_pelanggan,$action,$date){
@@ -197,20 +201,31 @@
 		}
 		public function action_metode_bayar_atm($id_pelanggan,$action,$date){
 			$status_bayar_sebelumnya="Belum dibayar";
-			$data_makanan=mysqli_query($this->connect(),"UPDATE pemesanan_makanan SET metode_bayar='$action'  WHERE status_bayar='$status_bayar_sebelumnya' AND id_pelanggan='$id_pelanggan' AND (metode_bayar is NULL OR metode_bayar != 1)");
-			$data_minuman=mysqli_query($this->connect(),"UPDATE pemesanan_minuman SET metode_bayar='$action' WHERE status_bayar='$status_bayar_sebelumnya' AND id_pelanggan='$id_pelanggan' AND (metode_bayar is NULL OR metode_bayar != 1)");
-			return $data_makanan && $data_minuman;	
+
+			$id_pemesanan=md5(date('Y-m-d i s'));
+			$makanan=mysqli_query($this->connect(),"SELECT SUM(total_harga) as makanan FROM pemesanan_makanan WHERE id_pemesanan is null AND id_pelanggan=$id_pelanggan")->fetch_assoc();
+			$minuman=mysqli_query($this->connect(),"SELECT SUM(total_harga) as minuman FROM pemesanan_minuman WHERE id_pemesanan is null AND id_pelanggan=$id_pelanggan")->fetch_assoc();	
+			$total_harga=$makanan['makanan']+$minuman['minuman'];
+			$all_pemesanan=mysqli_query($this->connect(),"INSERT INTO all_pemesanan(id,tanggal_ambil,pelanggan,status_bayar,metode_bayar,total_harga) VALUES ('$id_pemesanan','$date','$id_pelanggan','$status_bayar_sebelumnya',$action,$total_harga)");
+			$update_makanan=mysqli_query($this->connect(),"UPDATE pemesanan_makanan SET id_pemesanan='$id_pemesanan' WHERE id_pelanggan=$id_pelanggan AND status_bayar='$status_bayar_sebelumnya' AND id_pemesanan is null" );
+			$update_minuman=mysqli_query($this->connect(),"UPDATE pemesanan_minuman SET id_pemesanan='$id_pemesanan' WHERE id_pelanggan=$id_pelanggan AND status_bayar='$status_bayar_sebelumnya' AND id_pemesanan is null");
+
+			return $all_pemesanan && $update_makanan && $update_minuman;
+		
 		}
 		public function	ambil_data_belum_bayar($id_pelanggan){
-			$data_belum_bayar=mysqli_query($this->connect(),"SELECT * FROM all_pemesanan WHERE pelanggan='$id_pelanggan' AND status_bayar='Belum dibayar' AND metode_bayar=1");
+			$data_belum_bayar=mysqli_query($this->connect(),"SELECT * FROM all_pemesanan WHERE pelanggan='$id_pelanggan' AND metode_bayar=1 AND (status_bayar='Belum dibayar' OR status_bayar='Dikonfirmasi') ");
 			return $data_belum_bayar;	
 		}
-		public function kirim_bukti($nama_bukti,$id){
+		public function ambil_data_belum_bayar_atm($id_pelanggan){
+			$data_belum_bayar=mysqli_query($this->connect(),"SELECT * FROM all_pemesanan WHERE pelanggan='$id_pelanggan' AND (status_bayar='Belum dibayar' OR status_bayar='Dikonfirmasi') AND metode_bayar=2");
+			return $data_belum_bayar;	
+		}
+		public function kirim_bukti($nama_bukti,$id,$pel){
 			$status_bayar='Belum dibayar';
 			$metode=2;
-			$update_makanan=mysqli_query($this->connect(),"UPDATE pemesanan_makanan SET bukti_bayar='$nama_bukti' WHERE metode_bayar='$metode' AND id_pelanggan='$id' AND status_bayar='$status_bayar'");
-			$update_minuman=mysqli_query($this->connect(),"UPDATE pemesanan_minuman SET bukti_bayar='$nama_bukti' WHERE metode_bayar='$metode' AND id_pelanggan='$id' AND status_bayar='$status_bayar'");
-			return $update_minuman && $update_makanan;
+			$update=mysqli_query($this->connect(),"UPDATE all_pemesanan SET bukti_bayar='$nama_bukti' WHERE metode_bayar='$metode' AND id='$id' AND status_bayar='$status_bayar' AND pelanggan='$pel'");
+			return $update;
 		}
 		public function get_nama_makanan($id){
 			$return =mysqli_query($this->connect(),"SELECT * from pemesanan_makanan WHERE id_pemesanan='$id'");
@@ -220,15 +235,23 @@
 			$return =mysqli_query($this->connect(),"SELECT * from pemesanan_minuman WHERE id_pemesanan='$id'");
 			return $return;
 		}
+		public function all_menu_makanan(){
+			$return =mysqli_query($this->connect(),"SELECT * FROM makanan");
+			return $return;
+		}
+		public function all_menu_minuman(){
+			$return =mysqli_query($this->connect(),"SELECT * FROM minuman");
+			return $return;
+		}
 	}
 
 	class konfirmasi_pelanggan extends connection{
 		public function get_data_pemesanan(){
-			$query=mysqli_query($this->connect(),"SELECT id_pelanggan from pemesanan_makanan WHERE metode_bayar=1 AND status_bayar='Belum dibayar' GROUP BY id_pelanggan");
+			$query=mysqli_query($this->connect(),"SELECT * FROM all_pemesanan WHERE metode_bayar=1 AND status_bayar='Belum dibayar'");
 			return $query;
 		}
 		public function get_data_pemesanan1(){
-			$query=mysqli_query($this->connect(),"SELECT id_pelanggan FROM pemesanan_minuman WHERE metode_bayar=1 AND status_bayar='Belum dibayar' AND id_pelanggan NOT IN (SELECT id_pelanggan FROM pemesanan_makanan WHERE metode_bayar=1 AND status_bayar='Belum dibayar') GROUP BY id_pelanggan");
+			$query=mysqli_query($this->connect(),"SELECT * FROM all_pemesanan WHERE metode_bayar=2 AND status_bayar='Belum dibayar' AND bukti_bayar IS NOT NULL");
 			return $query;
 		}
 		public function get_pesanan_byid_makanan($id){
@@ -248,11 +271,60 @@
 			return $query;
 		}
 		public function action_pemesanan($action,$id){
-			$query=mysqli_query($this->connect(),"UPDATE pemesanan_makanan SET status_bayar='$action' WHERE metode_bayar=1 AND id_pelanggan='$id'");
-			$query1=mysqli_query($this->connect(),"UPDATE pemesanan_minuman SET status_bayar='$action' WHERE metode_bayar=1 AND id_pelanggan='$id'");
+			$query=mysqli_query($this->connect(),"UPDATE all_pemesanan SET status_bayar='$action' WHERE id='$id'");
+		}
+		public function get_penyelesaian_pesanan_cash(){
+			$query=mysqli_query($this->connect(),"SELECT * FROM all_pemesanan WHERE status_bayar='Konfirmasi' AND metode_bayar=1");
+			return $query;
+		}
+		public function get_penyelesaian_pesanan_atm(){
+			$query=mysqli_query($this->connect(),"SELECT * FROM all_pemesanan WHERE status_bayar='Konfirmasi' AND metode_bayar=2");
+			return $query;
+		}
+		public function get_data_to_penyelesaian($id){
+			$query=mysqli_query($this->connect(),"SELECT * FROM all_pemesanan WHERE id_pemesanan=$id");
+			return $query;
+		}
+		public function selesai_cash($id){
+			$query=mysqli_query($this->connect(),"UPDATE all_pemesanan SET status_bayar='Selesai',tanggal_selesai=NOW() WHERE id='$id'");
+			return $query;
+		}
+		public function selesai_atm($id){
+			$query=mysqli_query($this->connect(),"UPDATE all_pemesanan SET status_bayar='Selesai',tanggal_selesai=NOW() WHERE id='$id'");
+			return $query;
 		}
 	}
 
 
-
+	class meja extends connection{
+		public function add_meja($jenis,$jumlah,$date,$id){
+			$data=mysqli_query($this->connect(),"INSERT INTO booking_meja(id_pelanggan,volume,tangal_pemakaian,status,jenis) VALUES ('$id',$jumlah,'$date','Dipesan','$jenis')");
+			return $data;
+		}
+		public function check($id){
+			$benar=false;
+			$data=mysqli_query($this->connect(),"SELECT * FROM booking_meja WHERE id_pelanggan='$id' AND status='Dipesan'");
+			if ($data->num_rows) {
+				$benar=true;
+			}
+			return $benar;
+		}
+		public function read_meja_by($id){
+			$data=mysqli_query($this->connect(),"SELECT * FROM booking_meja WHERE id_pelanggan='$id' AND status='Dipesan'");
+			return $data;
+		}
+		public function read_pemesanan_meja(){
+			$data=mysqli_query($this->connect(),"SELECT * FROM booking_meja WHERE status='Dipesan'");
+			return $data;
+		}
+		public function selesai_pemakaian($id){
+			mysqli_query($this->connect(),"UPDATE booking_meja SET status='Selesai' WHERE id_pemesanan=$id");
+		}
+	}
+	class komentar extends connection{
+		public function tambah_komentar($id,$komentar){
+			$return=mysqli_query($this->connect(),"INSERT INTO komentar(id_pelanggan,komentar) VALUES ('$id','$komentar')");
+			return $return;
+		}
+	}
 ?>	

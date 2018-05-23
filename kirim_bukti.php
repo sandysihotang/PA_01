@@ -8,7 +8,7 @@
 		$path="img/bukti-bayar/".$nama_bukti;
 		if (move_uploaded_file($tmp,$path)) {
 			$pemesanan=new pemesanan;
-			$bukti=$pemesanan->kirim_bukti($nama_bukti,$_GET['id']);
+			$bukti=$pemesanan->kirim_bukti($nama_bukti,$_GET['id'],$_GET['pel']);
 			if ($bukti) {
 				echo "<script>alert('Berhasil Mengirim Bukti')</script>";
 				header('Refresh:0 url=list_transaksi.php');

@@ -13,7 +13,7 @@ $head->top("List Transaksi");
     height: 700px;
   }
 </style>
-	<nav class="nav bg-light navbar-light">
+	<nav class="nav bg-light navbar-light wow fadeInUp">
     <div class="container-fluid">
 		<div class="float-left col-md-3">
       <label><i class="fa fa-phone"></i> +91234</label>      
@@ -47,11 +47,11 @@ $head->top("List Transaksi");
   <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-list"></i> Pesan</a>
     <div class="dropdown-menu">
-      <a class="dropdown-item" href="#"><i class="fa fa-birthday-cake"></i> Makanan</a>
+      <a class="dropdown-item" href="pesan_makanan.php"><i class="fa fa-birthday-cake"></i> Makanan</a>
       <div class="dropdown-divider"></div>
-      <a class="dropdown-item" href="#"><i class="fa fa-beer"></i> Minuman</a>
+      <a class="dropdown-item" href="pesan_minuman.php"><i class="fa fa-beer"></i> Minuman</a>
       <div class="dropdown-divider"></div>
-      <a class="dropdown-item" href="#"><i class="fa fa-table"></i> Meja</a>
+      <a class="dropdown-item" href="pesan_meja.php"><i class="fa fa-table"></i> Meja</a>
     </div>
   </li>
   <li class="nav-item">
@@ -150,7 +150,7 @@ $head->top("List Transaksi");
         </div>
       </div> 
       </div> 
-      <h1 align="center" class="alert alert-primary">Transaksi Anda</h1>
+      <h1 align="center" class="alert alert-secondary">Transaksi Anda</h1>
       <div class="container-fluid img-thumbnail">
         <table class="table table-striped">
             <thead>
@@ -203,7 +203,7 @@ $head->top("List Transaksi");
 
                               <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne">
                                 <div class="card-body">
-                                  <form action="update_menu.php?id=<?=$makanan['id_pemesanan']?>&harga=<?=$nama_makanan['Harga']?>" method="post" class="form-signin" enctype="multipart/form-data">
+                                  <form action="update_menu.php?id=<?=$makanan['id']?>&id_menu=<?= $makanan['id_menu'] ?>&jenis=makanan" method="post" class="form-signin" enctype="multipart/form-data">
                                     <b><p><?= $nama_makanan['nama_makanan'] ?></p></b>
                                     <input type="number" name="porsi" class="form-control" required autofocus value="<?=$makanan['jumlah_pesanan']?>"><br>
                                     <button class="btn btn-primary btn-block" type="submit" name="update_menu"><i class="fa fa-plus"></i> Update</button>
@@ -268,14 +268,9 @@ $head->top("List Transaksi");
 
                               <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne">
                                 <div class="card-body">
-                                  <form action="update_menu.php?id=<?=$minuman['id_pemesanan']?>&harga=<?=$nama_minuman['Harga']?>" method="post" class="form-signin" enctype="multipart/form-data">
+                                  <form action="update_menu.php?id=<?=$minuman['id']?>&id_menu=<?= $minuman['Id_menu_minum'] ?>&jenis=minuman" method="post" class="form-signin" enctype="multipart/form-data">
                                     <b><p><?= $nama_minuman['nama_minuman'] ?></p></b>
-                                    <select name="porsi" class="form-control">
-                                       <?php for($i=1;$i<=$makanan_saya['stock'];$i++){ ?>
-                                        <option><?= $i ?></option>
-                                        <?php 
-                                      } ?>
-                                    </select><br>
+                                    <input type="number" name="porsi" class="form-control" required autofocus value="<?=$minuman['jumlah_pesanan']?>"><br>
                                     <button class="btn btn-primary btn-block" type="submit" name="update_menu"><i class="fa fa-plus"></i> Update</button>
                                   </form>
                                 </div>
@@ -317,7 +312,7 @@ $head->top("List Transaksi");
             </tbody>
           </table>
       </div><br>
-      <h1 align="center" class="alert alert-primary">Transaksi Belum Terkonfirmasi</h1>
+      <h1 align="center" class="alert alert-secondary">Transaksi Belum Terkonfirmasi</h1>
 <br>
       <div class="container-fluid img-thumbnail">
         <h5 align="center" class="btn btn-dark">Transaksi ATM</h5>
@@ -325,14 +320,66 @@ $head->top("List Transaksi");
             <thead>
               <tr>
                 <th scope="col">#</th>
-                <th scope="col">Nama Makanan/ Minuman</th>
-                <th scope="col">Jumlah Porsi</th>
+                <th scope="col">No. Pesanan</th>
+                <th scope="col">Tanggal Ambil</th>
                 <th scope="col">Total Harga</th>
-                <td scope="col" align="center"><b>Bukti Bayar</b></td>
                 <th scope="col">Status Bayar</th>
+                <th scope="col">Bukti Bayar</th>
+                <th scope="col"></th>
               </tr>
             </thead>
-            
+            <?php 
+            $all=new pemesanan;
+            $data=$all->ambil_data_belum_bayar_atm($account->get_session('id'));
+            $i=1;
+            while($mydata=mysqli_fetch_object($data)){
+             ?>
+             <tr>
+               <td><?= $i ?></td>
+               <td><?= $mydata->id ?></td>
+               <td><?= $mydata->tanggal_ambil ?></td>
+               <td>Rp.<?= number_format($mydata->total_harga) ?>.00</td>
+               <td><?= $mydata->status_bayar ?></td>
+               <td><?php if ($mydata->bukti_bayar==NULL){?>
+                  <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModal<?=$i?>">
+                    Kirim Bukti Bayar
+                  </button>
+
+                  <div class="modal fade" id="exampleModal<?=$i?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel">Kirim Bukti Bayar</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <form method="post" enctype="multipart/form-data" action="kirim_bukti.php?id=<?= $mydata->id ?>&pel=<?= $account->get_session('id') ?>">
+                            <div class="form-group">
+                              <label>Pilih Gambar</label>
+                              <input type="file" name="gambar" class="form-control">
+                            </div>
+                            <div class="form-group">
+                              <button type="submit" class="btn btn-primary" name="kirim">Kirim</button>
+                            </div>
+                          </form>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+             <?php   }
+                else {
+                  echo '<a href="img/bukti-bayar/'.$mydata->bukti_bayar.'">'.$mydata->bukti_bayar.'</a>';
+                }
+               ?></td>
+               <td><a href="look_all.php?id=<?=$mydata->id?>" class="btn btn-primary btn-sm text-white">LOOK</a>&nbsp;&nbsp;</td>
+             </tr>
+
+            <?php $i++; } ?>
         </table>
       </div>
 

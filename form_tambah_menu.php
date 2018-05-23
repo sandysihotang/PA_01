@@ -13,7 +13,7 @@ if (!isset($_SESSION['is_logged_in'])) {
     height: 700px;
   }
 </style>
-	<nav class="nav bg-light navbar-light">
+	<nav class="nav bg-light navbar-light wow fadeInUp">
     <div class="container-fluid">
 		<div class="float-left col-md-3">
       <label><i class="fa fa-phone"></i> +91234</label>      
@@ -42,11 +42,11 @@ if (!isset($_SESSION['is_logged_in'])) {
   <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-list"></i> Pesan</a>
     <div class="dropdown-menu">
-      <a class="dropdown-item" href="#"><i class="fa fa-birthday-cake"></i> Makanan</a>
+      <a class="dropdown-item" href="pesan_makanan.php"><i class="fa fa-birthday-cake"></i> Makanan</a>
       <div class="dropdown-divider"></div>
-      <a class="dropdown-item" href="#"><i class="fa fa-beer"></i> Minuman</a>
+      <a class="dropdown-item" href="pesan_minuman.php"><i class="fa fa-beer"></i> Minuman</a>
       <div class="dropdown-divider"></div>
-      <a class="dropdown-item" href="#"><i class="fa fa-table"></i> Meja</a>
+      <a class="dropdown-item" href="pesan_meja.php"><i class="fa fa-table"></i> Meja</a>
     </div>
   </li>
   <li class="nav-item">

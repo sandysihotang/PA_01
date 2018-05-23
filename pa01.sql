@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 21 Mei 2018 pada 09.22
+-- Generation Time: 23 Mei 2018 pada 11.38
 -- Versi Server: 10.1.30-MariaDB
 -- PHP Version: 7.2.1
 
@@ -59,17 +59,9 @@ CREATE TABLE `all_pemesanan` (
   `pelanggan` varchar(200) NOT NULL,
   `metode_bayar` int(11) DEFAULT NULL,
   `bukti_bayar` varchar(300) DEFAULT NULL,
-  `status_bayar` varchar(100) NOT NULL
+  `status_bayar` varchar(100) NOT NULL,
+  `tanggal_selesai` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data untuk tabel `all_pemesanan`
---
-
-INSERT INTO `all_pemesanan` (`id`, `tanggal_ambil`, `total_harga`, `pelanggan`, `metode_bayar`, `bukti_bayar`, `status_bayar`) VALUES
-('141568f0485542fec3cb95c92769b228', '2018-05-15 12:45:00', 61600000, '1212032011980001', 1, NULL, 'Belum dibayar'),
-('579cac72ff6c998fa5ab2787f4f81636', '2018-05-29 12:12:00', 2147483647, '1212032011980001', 1, NULL, 'Belum dibayar'),
-('bae830851e6914b7b1bc8d24542c49dc', '2018-05-30 12:12:00', 189154993, '1212032011980001', 1, NULL, 'Belum dibayar');
 
 -- --------------------------------------------------------
 
@@ -78,10 +70,22 @@ INSERT INTO `all_pemesanan` (`id`, `tanggal_ambil`, `total_harga`, `pelanggan`, 
 --
 
 CREATE TABLE `booking_meja` (
-  `id_pemesanan` varchar(50) NOT NULL,
+  `id_pemesanan` int(11) NOT NULL,
   `id_pelanggan` varchar(50) NOT NULL,
-  `no_meja` int(11) NOT NULL
+  `tangal_pemakaian` datetime NOT NULL,
+  `status` varchar(50) DEFAULT NULL,
+  `jenis` varchar(50) NOT NULL,
+  `volume` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data untuk tabel `booking_meja`
+--
+
+INSERT INTO `booking_meja` (`id_pemesanan`, `id_pelanggan`, `tangal_pemakaian`, `status`, `jenis`, `volume`) VALUES
+(1, '1212032011980001', '2018-05-22 12:12:00', 'Selesai', 'Party', 1),
+(2, '1212032011980001', '2018-05-09 12:12:00', 'Selesai', 'Party', 1),
+(3, '1212032011980001', '2018-05-14 12:12:00', 'Selesai', 'Party', 1);
 
 -- --------------------------------------------------------
 
@@ -106,6 +110,40 @@ INSERT INTO `galery` (`id`, `Deskripsi`, `img`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Struktur dari tabel `informasi`
+--
+
+CREATE TABLE `informasi` (
+  `id` int(11) NOT NULL,
+  `gambar` varchar(500) NOT NULL,
+  `deskripsi` text NOT NULL,
+  `Judul` varchar(500) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `komentar`
+--
+
+CREATE TABLE `komentar` (
+  `id` int(11) NOT NULL,
+  `id_pelanggan` varchar(200) NOT NULL,
+  `balasan` text,
+  `komentar` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data untuk tabel `komentar`
+--
+
+INSERT INTO `komentar` (`id`, `id_pelanggan`, `balasan`, `komentar`) VALUES
+(4, '1212032011980001', NULL, 'Makanan nya lumayan enak'),
+(5, '1212032011980001', NULL, 'SANDY SIHOTANG');
+
+-- --------------------------------------------------------
+
+--
 -- Struktur dari tabel `makanan`
 --
 
@@ -124,19 +162,9 @@ CREATE TABLE `makanan` (
 
 INSERT INTO `makanan` (`idmenu`, `nama_makanan`, `gambar`, `Harga`, `status`, `status_promosi`) VALUES
 (12, 'Ayam Krispi', 'makanan-090144IMG-20180421-WA0015.jpg', 1232, 1, 'Promosikan'),
-(13, 'Ayam golek', 'makanan-085733makanan-113143makanan-061552IMG-20180507-WA0031.jpg', 50000, 1, 'Promosikan');
-
--- --------------------------------------------------------
-
---
--- Struktur dari tabel `meja`
---
-
-CREATE TABLE `meja` (
-  `no_meja` int(11) NOT NULL,
-  `status` varchar(50) NOT NULL,
-  `volume` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+(13, 'Ayam golek', 'makanan-085733makanan-113143makanan-061552IMG-20180507-WA0031.jpg', 50000, 1, 'Promosikan'),
+(14, 'Ayam Golek', 'makanan-043755makanan-032906IMG-20180511-WA0007.jpg', 10000, 1, 'Tidak dipromosikan'),
+(15, 'Nasi Gurih', 'makanan-043836IMG-20180421-WA0013.jpg', 7888, 1, 'Tidak dipromosikan');
 
 -- --------------------------------------------------------
 
@@ -177,7 +205,8 @@ CREATE TABLE `minuman` (
 --
 
 INSERT INTO `minuman` (`id_minum`, `nama_minuman`, `gambar`, `harga`, `status`, `status_promosi`) VALUES
-(10, 'Air Kelapa', 'makanan-090503IMG-20180507-WA0033.jpg', 1423, 2, 'Promosikan');
+(10, 'Air Kelapa', 'makanan-044543IMG-20180507-WA0033.jpg', 1423, 1, 'Promosikan'),
+(11, 'Air Jeruk', 'minuman-044629makanan-044606IMG-20180507-WA0021.jpg', 12423, 1, 'Promosikan');
 
 -- --------------------------------------------------------
 
@@ -209,6 +238,7 @@ INSERT INTO `pelanggan` (`nik`, `firstname`, `lastname`, `tlp`, `alamat`) VALUES
 --
 
 CREATE TABLE `pemesanan_makanan` (
+  `id` int(11) NOT NULL,
   `id_pemesanan` varchar(100) DEFAULT NULL,
   `id_menu` int(11) NOT NULL,
   `id_pelanggan` varchar(50) NOT NULL,
@@ -217,15 +247,6 @@ CREATE TABLE `pemesanan_makanan` (
   `total_harga` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data untuk tabel `pemesanan_makanan`
---
-
-INSERT INTO `pemesanan_makanan` (`id_pemesanan`, `id_menu`, `id_pelanggan`, `jumlah_pesanan`, `status_bayar`, `total_harga`) VALUES
-('579cac72ff6c998fa5ab2787f4f81636', 12, '1212032011980001', 1234567543, 'Belum dibayar', 2147483647),
-('bae830851e6914b7b1bc8d24542c49dc', 12, '1212032011980001', 12234, 'Belum dibayar', 15072288),
-('141568f0485542fec3cb95c92769b228', 13, '1212032011980001', 1232, 'Belum dibayar', 61600000);
-
 -- --------------------------------------------------------
 
 --
@@ -233,6 +254,7 @@ INSERT INTO `pemesanan_makanan` (`id_pemesanan`, `id_menu`, `id_pelanggan`, `jum
 --
 
 CREATE TABLE `pemesanan_minuman` (
+  `id` int(11) NOT NULL,
   `id_pemesanan` varchar(200) DEFAULT NULL,
   `Id_menu_minum` int(11) NOT NULL,
   `id_pelanggan` varchar(100) NOT NULL,
@@ -240,13 +262,6 @@ CREATE TABLE `pemesanan_minuman` (
   `status_bayar` varchar(50) NOT NULL,
   `total_harga` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data untuk tabel `pemesanan_minuman`
---
-
-INSERT INTO `pemesanan_minuman` (`id_pemesanan`, `Id_menu_minum`, `id_pelanggan`, `jumlah_pesanan`, `status_bayar`, `total_harga`) VALUES
-('bae830851e6914b7b1bc8d24542c49dc', 10, '1212032011980001', 122335, 'Belum dibayar', 174082705);
 
 -- --------------------------------------------------------
 
@@ -312,8 +327,7 @@ ALTER TABLE `all_pemesanan`
 --
 ALTER TABLE `booking_meja`
   ADD PRIMARY KEY (`id_pemesanan`),
-  ADD KEY `id_pelanggan` (`id_pelanggan`),
-  ADD KEY `no_meja` (`no_meja`);
+  ADD KEY `id_pelanggan` (`id_pelanggan`);
 
 --
 -- Indexes for table `galery`
@@ -322,17 +336,24 @@ ALTER TABLE `galery`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `informasi`
+--
+ALTER TABLE `informasi`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `komentar`
+--
+ALTER TABLE `komentar`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_pelanggan` (`id_pelanggan`);
+
+--
 -- Indexes for table `makanan`
 --
 ALTER TABLE `makanan`
   ADD PRIMARY KEY (`idmenu`),
   ADD KEY `status` (`status`);
-
---
--- Indexes for table `meja`
---
-ALTER TABLE `meja`
-  ADD PRIMARY KEY (`no_meja`);
 
 --
 -- Indexes for table `metode_bayar`
@@ -357,6 +378,7 @@ ALTER TABLE `pelanggan`
 -- Indexes for table `pemesanan_makanan`
 --
 ALTER TABLE `pemesanan_makanan`
+  ADD PRIMARY KEY (`id`),
   ADD KEY `id_menu` (`id_menu`),
   ADD KEY `id_pelanggan` (`id_pelanggan`),
   ADD KEY `id_pemesanan` (`id_pemesanan`);
@@ -365,6 +387,7 @@ ALTER TABLE `pemesanan_makanan`
 -- Indexes for table `pemesanan_minuman`
 --
 ALTER TABLE `pemesanan_minuman`
+  ADD PRIMARY KEY (`id`),
   ADD KEY `Id_menu_minum` (`Id_menu_minum`),
   ADD KEY `id_pelanggan` (`id_pelanggan`),
   ADD KEY `id_pemesanan` (`id_pemesanan`);
@@ -386,22 +409,34 @@ ALTER TABLE `status_makanan_minuman`
 --
 
 --
+-- AUTO_INCREMENT for table `booking_meja`
+--
+ALTER TABLE `booking_meja`
+  MODIFY `id_pemesanan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT for table `galery`
 --
 ALTER TABLE `galery`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
+-- AUTO_INCREMENT for table `informasi`
+--
+ALTER TABLE `informasi`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `komentar`
+--
+ALTER TABLE `komentar`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT for table `makanan`
 --
 ALTER TABLE `makanan`
-  MODIFY `idmenu` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
-
---
--- AUTO_INCREMENT for table `meja`
---
-ALTER TABLE `meja`
-  MODIFY `no_meja` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idmenu` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `metode_bayar`
@@ -413,7 +448,19 @@ ALTER TABLE `metode_bayar`
 -- AUTO_INCREMENT for table `minuman`
 --
 ALTER TABLE `minuman`
-  MODIFY `id_minum` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id_minum` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT for table `pemesanan_makanan`
+--
+ALTER TABLE `pemesanan_makanan`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `pemesanan_minuman`
+--
+ALTER TABLE `pemesanan_minuman`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
@@ -436,8 +483,13 @@ ALTER TABLE `all_pemesanan`
 -- Ketidakleluasaan untuk tabel `booking_meja`
 --
 ALTER TABLE `booking_meja`
-  ADD CONSTRAINT `booking_meja_ibfk_1` FOREIGN KEY (`id_pelanggan`) REFERENCES `pelanggan` (`nik`),
-  ADD CONSTRAINT `booking_meja_ibfk_2` FOREIGN KEY (`no_meja`) REFERENCES `meja` (`no_meja`);
+  ADD CONSTRAINT `booking_meja_ibfk_1` FOREIGN KEY (`id_pelanggan`) REFERENCES `pelanggan` (`nik`);
+
+--
+-- Ketidakleluasaan untuk tabel `komentar`
+--
+ALTER TABLE `komentar`
+  ADD CONSTRAINT `komentar_ibfk_1` FOREIGN KEY (`id_pelanggan`) REFERENCES `pelanggan` (`nik`);
 
 --
 -- Ketidakleluasaan untuk tabel `makanan`

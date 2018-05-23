@@ -4,6 +4,13 @@ include_once("functions/my_functions.php");
 if (!isset($_SESSION['is_logged_in'])) {
   header('location: index.php');
 }
+if (isset($_GET['meja'])) {
+  $id=$_GET['meja'];
+  $meja=new meja;
+  $meja->selesai_pemakaian($id);
+  echo "<script>alert('Berhasi Mengupdate')</script>";
+  header('Refresh:0 url=kasir.php');
+}
 $head=new top_buttom;
 $head->top("KASIR");
  ?>
@@ -13,7 +20,7 @@ $head->top("KASIR");
     height: 700px;
   }
 </style>
-	<nav class="nav bg-light navbar-light">
+	<nav class="nav bg-light navbar-light wow fadeInUp">
     <div class="container-fluid">
 		<div class="float-left col-md-3">
       <label><i class="fa fa-phone"></i> +91234</label>      
@@ -135,6 +142,7 @@ $head->top("KASIR");
 					<tr>
 						<th scope="col">#</th>
 						<th scope="col">Nama</th>
+            <th scope="col">Tanggal Ambil</th>
 						<th scope="col">Daftar Pesanan</th>
 						<th scope="col">Action</th>
 						<th></th>
@@ -150,11 +158,12 @@ $head->top("KASIR");
 						<td><?=$i?></td>
 						<td><?php 
 						$nam=new outentikasi;
-						$name=$nam->get_user($row['id_pelanggan'])->fetch_assoc();
+						$name=$nam->get_user($row['pelanggan'])->fetch_assoc();
 						echo $name['firstname']." ".$name['lastname'];
 						 ?></td>
-						<td><a class="btn btn-success btn-sm" href="all_pemesanan.php?id=<?=$row['id_pelanggan']?>">LOOK</a></td>
-						<form method="post" action="konfirmasi_pesanan.php?id=<?=$row['id_pelanggan']?>">
+             <td><?= $row['tanggal_ambil'] ?></td>
+						<td><a class="btn btn-success btn-sm" href="all_pemesanan.php?id=<?=$row['id']?>">LOOK</a></td>
+						<form method="post" action="konfirmasi_pesanan.php?id=<?=$row['id']?>">
 							<td><select class="form-control" name="aksi">
 								<option>Konfirmasi</option>
 								<option>Selesai</option>
@@ -165,27 +174,6 @@ $head->top("KASIR");
 					<?php 
 					$i++; 
 				} ?>
-        <?php 
-        $data1=$data->get_data_pemesanan1();
-        while($row1=mysqli_fetch_assoc($data1)){
-         ?>		
-         <tr>
-          <td><?=$i?></td>
-          <td><?php 
-          $nam1=new outentikasi;
-            $name1=$nam1->get_user($row1['id_pelanggan'])->fetch_assoc();
-            echo $name1['firstname']." ".$name1['lastname']; ?></td>
-          <td><a class="btn btn-success btn-sm" href="all_pemesanan.php?id=<?=$row1['id_pelanggan']?>">LOOK</a></td>
-            <form method="post" action="konfirmasi_pesanan.php?id=<?=$row1['id_pelanggan']?>">
-              <td><select class="form-control" name="aksi">
-                <option>Konfirmasi</option>
-                <option>Selesai</option>
-              </select></td>
-              <td><input type="submit" name="ubah" value="Update" class="btn-sm btn btn-primary"></td>
-            </form>
-        </tr>			
-       <?php
-       $i++; } ?>
 				</tbody>
 				
 			</table>
@@ -197,14 +185,78 @@ $head->top("KASIR");
 					<tr>
 						<th scope="col">#</th>
 						<th scope="col">Nama</th>
-						<th scope="col">Date & Time</th>
-						<th scope="col">Action</th>
-						<th scope="col"></th>
+            <th scope="col">Pesanan</th>
+						<th scope="col">Tanggal Ambil</th>
+						<th scope="col">Bukti-bayar</th>
+            <th scope="col">Action</th>
+            <th></th>
 					</tr>
 				</thead>
+        <tbody>
+           <?php 
+        $data1=$data->get_data_pemesanan1();
+        while($row1=mysqli_fetch_assoc($data1)){
+         ?>   
+         <tr>
+          <td><?=$i?></td>
+          <td><?php 
+          $nam1=new outentikasi;
+            $name1=$nam1->get_user($row1['pelanggan'])->fetch_assoc();
+            echo $name1['firstname']." ".$name1['lastname']; ?></td>
+          <td><a class="btn btn-success btn-sm" href="all_pemesanan.php?id=<?=$row1['id']?>">LOOK</a></td>
+          <td><?= $row1['tanggal_ambil'] ?></td>
+          <td><a href="img/bukti-bayar/<?= $row1['bukti_bayar'] ?>"><?= $row1['bukti_bayar'] ?></a></td>
+            <form method="post" action="konfirmasi_pesanan.php?id=<?=$row1['id']?>">
+              <td><select class="form-control" name="aksi">
+                <option>Konfirmasi</option>
+                <option>Selesai</option>
+              </select></td>
+              <td><input type="submit" name="ubah" value="Update" class="btn-sm btn btn-primary"></td>
+            </form>
+            
+        </tr>     
+       <?php
+       $i++; } ?>
+        </tbody>
 			</table>
 		</div>
 <br>
+  <div class="container-fluid">
+      <h2 class="alert alert-dark">MEJA</h2>
+      <table class="table table-striped img-thumbnail">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nama</th>
+            <th scope="col">Jumlah Kursi</th>
+            <th scope="col">Tanggal Pemakaian</th>
+            <th scope="col">Jenis</th>
+            <th scope="col">Action</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php 
+          $data=new meja;
+          $meja=$data->read_pemesanan_meja();
+          $j=1;
+          while($row=$meja->fetch_object()){
+           ?>
+           <tr>
+            <td><?= $j?></td>
+             <td><?php 
+             $nam1=new outentikasi;
+             $name=$nam1->get_user($row->id_pelanggan)->fetch_object();
+             echo $name->firstname.' '.$name->lastname; ?></td>
+             <td><?= $row->volume ?> Meja</td>
+             <td><?= $row->tangal_pemakaian ?></td>
+             <td><?= $row->jenis ?></td>
+             <td><a href="kasir.php?meja=<?= $row->id_pemesanan ?>" class="btn btn-success btn-sm">Selesai</a></td>
+           </tr>
+          <?php } ?>
+        </tbody>
+      </table>
+    </div>
 
       <div class="container-fluid bg-dark text-white jumbotron" style="opacity: 0.8;">
         <div class="row">

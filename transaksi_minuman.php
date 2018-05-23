@@ -10,7 +10,7 @@ $head->top("Home");
     height: 700px;
   }
 </style>
-	<nav class="nav bg-light navbar-light">
+	<nav class="nav bg-light navbar-light wow fadeInUp">
     <div class="container-fluid">
 		<div class="float-left col-md-3">
       <label><i class="fa fa-phone"></i> +91234</label>      
@@ -44,11 +44,11 @@ $head->top("Home");
   <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-list"></i> Pesan</a>
     <div class="dropdown-menu">
-      <a class="dropdown-item" href="#"><i class="fa fa-birthday-cake"></i> Makanan</a>
+      <a class="dropdown-item" href="pesan_makanan.php"><i class="fa fa-birthday-cake"></i> Makanan</a>
       <div class="dropdown-divider"></div>
-      <a class="dropdown-item" href="#"><i class="fa fa-beer"></i> Minuman</a>
+      <a class="dropdown-item" href="pesan_minuman.php"><i class="fa fa-beer"></i> Minuman</a>
       <div class="dropdown-divider"></div>
-      <a class="dropdown-item" href="#"><i class="fa fa-table"></i> Meja</a>
+      <a class="dropdown-item" href="pesan_meja.php"><i class="fa fa-table"></i> Meja</a>
     </div>
   </li>
   <li class="nav-item">
@@ -59,7 +59,7 @@ $head->top("Home");
   </li>
   <?php if (isset($_SESSION['is_logged_in']) && $account->get_session('user')==1) { ?>
   <li class="nav-item">
-    <a href="list_transaksi.php" class="nav-link"><i class="fa fa-book-heart"></i> List Pemesanan</a>
+    <a href="list_transaksi.php" class="nav-link"><i class="fa fa-bar-chart-o"></i> List Pemesanan</a>
   </li>
    <?php } ?>
 </ul>
@@ -165,7 +165,7 @@ $head->top("Home");
           <p>Rp.<?= number_format($makanan_saya['harga']) ?>.00</p>
           <h5>Jumlah Porsi</h5>
           <form method="post" action="add_to_chart.php?id=<?= $_GET['id']?>&jenis=minuman">
-          <input type="number" name="jumlah_porsi" class="form-control"><br>
+          <input type="number" name="jumlah_porsi" class="form-control" required><br>
           <button type="submit" class="btn btn-primary" name="lanjutkan">Lanjutkan <i class="fa fa-arrow-right"></i></button>
         </form>
         </div>

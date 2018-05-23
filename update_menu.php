@@ -3,12 +3,24 @@
 	session_start();
 	if (isset($_POST['update_menu'])) {
 		$porsi=$_POST['porsi'];
-		$harga_baru=$_GET['harga']*$porsi;
 		$update=new pemesanan;
-		$data=$update->update_menu_beli($_GET['id'],$porsi,$harga_baru);
-		if ($data) {
-			echo "<script>alert('Behasil Diupdate')</script>";
-			header('Refresh:0 url= list_transaksi.php');
+		if ($_GET['jenis']=='makanan') {
+			$harga=$update->read_makanan($_GET['id_menu'])->fetch_object()->Harga;
+			$harga_baru=$harga*$porsi;		
+			$data=$update->update_menu_beli($_GET['id'],$porsi,$harga_baru);
+			if ($data) {
+				echo "<script>alert('Behasil Diupdate')</script>";
+				header('Refresh:0 url= list_transaksi.php');
+			}
+		}
+		if($_GET['jenis']=='minuman'){
+			$harga=$update->read_minuman($_GET['id_menu'])->fetch_object()->harga;
+			$harga_baru=$harga*$porsi;	
+			$data=$update->update_menu_beli_minum($_GET['id'],$porsi,$harga_baru);
+			if ($data) {
+				echo "<script>alert('Behasil Diupdate')</script>";
+				header('Refresh:0 url= list_transaksi.php');
+			}
 		}
 	}
 

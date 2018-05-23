@@ -6,14 +6,14 @@ $head->top("Home");
  ?>
   <style type="text/css">
   .d-block{
-    width: 950px;
-    height: 610px;
-    margin-left: 140px;
+    width: 100%;
+    height: 100%;
   }
 </style>
-	<nav class="nav bg-light navbar-light">
+	<nav class="nav bg-light navbar-light wow fadeInUp">
     <div class="container-fluid">
 		<div class="float-left col-md-3">
+      <img src="">
       <label><i class="fa fa-phone"></i> +91234</label>      
     </div>
     <?php 
@@ -53,16 +53,18 @@ $head->top("Home");
   <li class="nav-item">
     <a class="nav-link active" href="index.php"><i class="fa fa-home"></i> Home</a>
   </li>
+  <?php if ((isset($_SESSION['is_logged_in']) && $account->get_session('user')==1) || !isset($_SESSION['is_logged_in'])) { ?>
   <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-list"></i> Pesan</a>
     <div class="dropdown-menu">
-      <a class="dropdown-item" href="#"><i class="fa fa-birthday-cake"></i> Makanan</a>
+      <a class="dropdown-item" href="pesan_makanan.php"><i class="fa fa-birthday-cake"></i> Makanan</a>
       <div class="dropdown-divider"></div>
-      <a class="dropdown-item" href="#"><i class="fa fa-beer"></i> Minuman</a>
+      <a class="dropdown-item" href="pesan_minuman.php"><i class="fa fa-beer"></i> Minuman</a>
       <div class="dropdown-divider"></div>
-      <a class="dropdown-item" href="#"><i class="fa fa-table"></i> Meja</a>
+      <a class="dropdown-item" href="pesan_meja.php"><i class="fa fa-table"></i> Meja</a>
     </div>
   </li>
+  <?php } ?>
   <li class="nav-item">
     <a class="nav-link" href="#"><i class="fa fa-binoculars"></i> About</a>
   </li>
@@ -77,7 +79,7 @@ $head->top("Home");
 
 </ul>
 	</nav>
-  <div class="container-fluid alert-warning">
+  <div class="alert-secondary">
     <h1 align="center">Welcome To Gastro Sijabu-Jabu</h1>
   <div id="carouselExampleIndicators" class="carousel slide img-thumbnail" data-ride="carousel">
         <ol class="carousel-indicators">
@@ -87,16 +89,13 @@ $head->top("Home");
         </ol>
         <div class="carousel-inner">        	
           <div class="carousel-item active">
-            <img class="d-block" src="img/slide/gastro1.jpg?auto=yes&bg=777&fg=555&text=First slide" alt="First slide">
-            <!-- <div class="carousel-caption d-none d-md-block">
-                  <img src="img/slide/a.jpg" class="img-thumbnail">
-            </div> -->
+            <img class="d-block" src="img/slide/gastro2.jpg?auto=yes&bg=777&fg=555&text=First slide" alt="First slide">
           </div>
           <div class="carousel-item">
-            <img class="d-block" src="img/slide/gastro2.jpg?auto=yes&bg=666&fg=444&text=Second slide" alt="Second slide">
+            <img class="d-block" src="img/slide/asri.jpg?auto=yes&bg=666&fg=444&text=Second slide" alt="Second slide">
           </div>
           <div class="carousel-item">
-            <img class="d-block" src="img/slide/c.jpg?auto=yes&bg=555&fg=333&text=Third slide" alt="Third slide">
+            <img class="d-block" src="img/slide/IMG-20180511-WA0002.jpg?auto=yes&bg=555&fg=333&text=Third slide" alt="Third slide">
           </div>
 
         <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
@@ -197,8 +196,8 @@ $head->top("Home");
       <?php if(isset($_SESSION['is_logged_in']) && $account->get_session('user')==2){ ?>
       <div class="container"><a href="form_tambah_menu.php" class="btn btn-danger"><i class="fa fa-plus"></i> Tambah Menu Makanan</a></div><br>
       <?php }?>
-      <div class="container img-thumbnail bg-dark">
-        <h2 align="center"><button class="btn btn-primary"><i class="fa fa-birthday-cake"></i> Menu Makanan Andalan <i class="fa fa-birthday-cake"></i></button></h2>
+      <div class="container-fluid img-thumbnail bg-dark wow fadeInUp" data-wow-offset="0" data-wow-delay="0.5s">
+        <h2 align="center"><button class="btn btn-primary"><i class="fa fa-birthday-cake"></i> Menu Makanan Recomended <i class="fa fa-birthday-cake"></i></button></h2>
         <div class="row">
           <?php 
           if (isset($_SESSION['is_logged_in']) && $account->get_session('user')==2) {
@@ -206,9 +205,9 @@ $head->top("Home");
           $menu_makanan=$makanan->read_menu();
           while($row=mysqli_fetch_assoc($menu_makanan)){
            ?>
-           <div class="col-md-4">
+           <div class="col-md-4 wow slideInLeft"data-wow-offset="0" data-wow-delay="1.5s">
             <div class="card" style="width: 18rem;">
-              <img class="img-thumbnail img" src="img/menu/<?=$row['gambar']?>" alt="Card image cap">
+              <img class="img-thumbnail img wow bounce" src="img/menu/<?=$row['gambar']?>" alt="Card image cap">
               <h4 align="center"><?=$row['nama_makanan']?></h4>
               <h4 align="center">Rp.<?= number_format($row['Harga']) ?>.00</h4>
               <div class="card-body">
@@ -232,7 +231,7 @@ $head->top("Home");
         $data2=new pemesanan;
         while($row=mysqli_fetch_assoc($data1)){
          ?>
-           <div class="col-md-4">
+           <div class="col-md-4 wow bounceIn" data-wow-offset="0" data-wow-delay="1.5s">
             <div class="card" style="width: 18rem;">
               <img class="img-thumbnail img" src="img/menu/<?=$row['gambar']?>" alt="Card image cap">
               <h4 align="center"><?=$row['nama_makanan']?></h4>
@@ -260,9 +259,9 @@ $head->top("Home");
       } ?>
           
         </div><br>
-      </div><br><br><br>
-      <div class="container img-thumbnail bg-dark">
-        <h2 align="center"><button class="btn btn-primary"><i class="fa fa-beer"></i> Menu Minuman Andalan <i class="fa fa-beer"></i></button></h2>
+      </div><br>
+      <div class="container-fluid img-thumbnail bg-dark wow fadeInUp" data-wow-offset="0" data-wow-delay="0.5s">
+        <h2 align="center"><button class="btn btn-primary"><i class="fa fa-beer"></i> Menu Minuman Recomended <i class="fa fa-beer"></i></button></h2>
         <div class="row">
           <?php 
           if (isset($_SESSION['is_logged_in']) && $account->get_session('user')==2) {
@@ -270,7 +269,7 @@ $head->top("Home");
           $minum=new menu;
           $minuman=$minum->read_menu_minuman();
           while ($row_minum=mysqli_fetch_assoc($minuman)) { ?>
-          <div class="col-md-4">
+          <div class="col-md-4 wow bounceIn" data-wow-offset="0" data-wow-delay="1.5s">
             <div class="card" style="width: 18rem;">
               <img class="img-thumbnail img" src="img/menu/<?=$row_minum['gambar']?>" alt="Card image cap">
               <h4 align="center"><?=$row_minum['nama_minuman']?></h4>
@@ -295,7 +294,7 @@ $head->top("Home");
         $minum=new menu;
         $minuman=$minum->read_promo_minuman();
         while ($row_minum=mysqli_fetch_assoc($minuman)) {  ?>
-        <div class="col-md-4">
+        <div class="col-md-4 wow bounceIn" data-wow-offset="0" data-wow-delay="1.5s">
             <div class="card" style="width: 18rem;">
               <img class="img-thumbnail img" src="img/menu/<?=$row_minum['gambar']?>" alt="Card image cap">
               <h4 align="center"><?=$row_minum['nama_minuman']?></h4>
@@ -324,23 +323,40 @@ $head->top("Home");
         </div><br>
       </div>
 <br><br>
-      <div class="container">
+      <div class="container wow fadeInUp" data-wow-offset="0" data-wow-delay="0.5s">
         <div class="row">
           <div class="col-md-6">
             <div class="card-body card bg-light">
               <div class="alert alert-primary"><h5 align="center">Location</h5></div>
-                <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d996.7082831867101!2d98.9774854!3d2.2165318!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x302e11a29988a121%3A0x4da8d232959238a0!2sGastro+Si+Jabu-Jabu!5e0!3m2!1sen!2sid!4v1525933266538" width="500" height="400" frameborder="0" style="border:0" allowfullscreen></iframe>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d996.7082831867101!2d98.9774854!3d2.2165318!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x302e11a29988a121%3A0x4da8d232959238a0!2sGastro+Si+Jabu-Jabu!5e0!3m2!1sen!2sid!4v1525933266538" width="500" height="343" frameborder="0" style="border:0" allowfullscreen></iframe>
             </div>
           </div>
           <div class="col-md-6">
-            <div class="card-body">
-              <h5 align="center">Kualitas tempat yang asri</h5>
+            <div class="card-body card bg-light">
+              <div class="alert alert-primary"><h5 align="center">Kualitas tempat yang asri</h5></div>
+              <img src="img/slide/asri.jpg" class="img-thumbnail">
             </div>
           </div>
         </div>
       </div><br>
-
-
+      <?php if(isset($_SESSION['is_logged_in']) && $_SESSION['user']==1){ ?>
+      <div class="container-fluid alert-dark wow bounceInDown" data-wow-offset="0" data-wow-delay="0.6s">
+        <div class="container" align="center"> <h2>Berikan Komentar Anda</h2></div>
+        <div class="row">
+          <div class="col-md-6">
+                <form id="formKomentar" method="post" action="tambah_komentar.php">                  
+                <div>
+                   <textarea class="form-control" name="komentar" rows="5" placeholder="Komentar"></textarea>
+                </div><br>
+               
+                <div>
+                    <input type="submit" class="btn btn-info" value="Tambahkan Komentar" name="tambah_komentar" />
+                </div>
+                </form>
+          </div>
+        </div><br>
+      </div>
+      <?php } ?>
       <div class="container-fluid bg-dark jumbotron text-white" style="opacity: 0.8;">
         <div class="row">
         <div class="col-md-4">

@@ -14,48 +14,41 @@ $head->top("Home");
                 <th scope="col">#</th>
                 <th scope="col">Nama Makanan/ Minuman</th>
                 <th scope="col">Jumlah Porsi</th>
-                <th scope="col">Tanggal Pengambilan</th>
                 <th scope="col">Total Harga</th>
               </tr>
             </thead>
             <tbody>
               <?php 
-                $data=new konfirmasi_pelanggan;
-                $i=1;
-                $tot=0;
-                $pemesanan=$data->get_pesanan_byid_makanan($_GET['id']);
-                while($makanan=mysqli_fetch_assoc($pemesanan)){ 
-                  $nama=$data->get_data_makanan($makanan['id_menu']);
-                  $nama_makanan=$nama->fetch_assoc();
-                  $tot+=$makanan['total_harga'];
-                  ?>
-                  <tr>
-                    <th><?=$i?></th>
-                    <td><?= $nama_makanan['nama_makanan'] ?></td>
-                    <td><?=$makanan['jumlah_pesanan']?></td>
-                    <td><?=$makanan['waktu_pengambilan']?></td>
-                    <td>Rp.<?= number_format($makanan['total_harga']) ?>.00</td>
-                  </tr>
-                  <?php $i++; } ?>
-              <?php 
-                $pemesanan_minum=$data->get_pesanan_byid_minuman($_GET['id']);
-                while($minuman=mysqli_fetch_assoc($pemesanan_minum)){ 
-                  $nama=$data->get_data_minuman($minuman['Id_menu_minum']);
-                  $nama_minuman=$nama->fetch_assoc();
-                  $tot+=$minuman['total_harga'];
-                  ?>
-                  <tr>
-                    <th><?=$i?></th>
-                    <td><?= $nama_minuman['nama_minuman'] ?></td>
-                    <td><?=$minuman['jumlah_pesanan']?></td>
-                    <td><?=$minuman['waktu_pengambilan']?></td>
-                    <td>Rp.<?= number_format($minuman['total_harga']) ?>.00</td>
-                  </tr>
-                  <?php $i++; } ?>
-                  <tr>
-                    <td colspan="4" align="center">Total Seluruhnya</td>
-                    <td>Rp.<?= number_format($tot) ?>.00</td>
-                  </tr>                  
+            $my=new pemesanan;
+            $i=1;
+            $tot=0;
+            $makanan=$my->get_nama_makanan($_GET['id']);
+            while($makanan1=mysqli_fetch_object($makanan)){
+             ?>    
+             <tr>
+               <td><?=$i?>. </td>
+               <td><?= $my->read_makanan( $makanan1->id_menu )->fetch_assoc()['nama_makanan'] ?></td>
+               <td><?= $makanan1->jumlah_pesanan ?></td>
+               <td>Rp.<?= number_format($makanan1->total_harga )?>.00</td>
+             </tr>   
+            <?php $tot+=$makanan1->total_harga;
+            $i++; } ?>
+            <?php 
+            $minuman=$my->get_nama_minuman($_GET['id']);
+            while($minuman1=mysqli_fetch_object($minuman)){
+             ?>
+             <tr>
+               <td><?=$i?>. </td>
+               <td><?= $my->read_minuman( $minuman1->Id_menu_minum )->fetch_assoc()['nama_minuman'] ?></td>
+               <td><?= $minuman1->jumlah_pesanan ?></td>
+               <td>Rp.<?= number_format($minuman1->total_harga )?>.00</td>
+             </tr> 
+            <?php $tot+=$minuman1->total_harga;
+          } ?>
+            <tr>
+              <td colspan="3">Total Seluruhnya</td>
+              <td>Rp.<?=number_format($tot)?>.00</td>
+            </tr>
             </tbody>
           </table>
 </div>

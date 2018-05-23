@@ -2,7 +2,7 @@
 session_start();
 include_once("functions/my_functions.php");
 $head=new top_buttom;
-$head->top("Home");
+$head->top("Galery");
  ?>
   <style type="text/css">
   .d-block{
@@ -10,7 +10,7 @@ $head->top("Home");
     height: 700px;
   }
 </style>
-	<nav class="nav bg-light navbar-light">
+	<nav class="nav bg-light navbar-light  wow fadeInUp">
     <div class="container-fluid">
 		<div class="float-left col-md-3">
       <label><i class="fa fa-phone"></i> +91234</label>      
@@ -52,16 +52,18 @@ $head->top("Home");
   <li class="nav-item">
     <a class="nav-link" href="index.php"><i class="fa fa-home"></i> Home</a>
   </li>
+ <?php if ((isset($_SESSION['is_logged_in']) && $account->get_session('user')==1) || !isset($_SESSION['is_logged_in'])) { ?>
   <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-list"></i> Pesan</a>
     <div class="dropdown-menu">
-      <a class="dropdown-item" href="#"><i class="fa fa-birthday-cake"></i> Makanan</a>
+      <a class="dropdown-item" href="pesan_makanan.php"><i class="fa fa-birthday-cake"></i> Makanan</a>
       <div class="dropdown-divider"></div>
-      <a class="dropdown-item" href="#"><i class="fa fa-beer"></i> Minuman</a>
+      <a class="dropdown-item" href="pesan_minuman.php"><i class="fa fa-beer"></i> Minuman</a>
       <div class="dropdown-divider"></div>
-      <a class="dropdown-item" href="#"><i class="fa fa-table"></i> Meja</a>
+      <a class="dropdown-item" href="pesan_meja.php"><i class="fa fa-table"></i> Meja</a>
     </div>
   </li>
+  <?php } ?>
   <li class="nav-item">
     <a class="nav-link" href="#"><i class="fa fa-binoculars"></i> About</a>
   </li>
@@ -158,7 +160,7 @@ $head->top("Home");
         </div>
       </div> 
       </div> 
-		<div class="container" align=center><h1>GALERY GASTRO SIJABU JABU</h1>
+		<div class="  alert-secondary" align=center><h1>GALERY GASTRO SIJABU JABU</h1><br>
 			<?php 
 			$account=new outentikasi;
 			if ($account->get_session('is_logged_in') && $account->get_session('user')==2) { ?>
@@ -220,14 +222,25 @@ $head->top("Home");
       </div>
 		<?php 
 		$data=new galery;
-		$galery= $data->read_galery();?>
+		$galery= $data->read_galery();
+    $i=1;?>
 		<div class="container-fluid  bg-dark"><br>
 			<div class="row">
 		<?php while($mygalery=mysqli_fetch_assoc($galery)){
 		 ?>
-		
-		
-				<div class="col-md-3">
+		  <?php if($i==1){ ?>		
+				<div class="col-md-3 wow bounceIn" data-wow-offset="0" data-wow-delay="0.5s">
+          <?php }
+          else if($i==2){ ?>
+            <div class="col-md-3 wow bounceIn" data-wow-offset="0" data-wow-delay="1s">
+            <?php } 
+            else if($i==3) {?>
+              <div class="col-md-3 wow bounceIn" data-wow-offset="0" data-wow-delay="0.8s">
+              <?php } 
+              else if($i==4){?>
+                <div class="col-md-3 wow bounceIn" data-wow-offset="0" data-wow-delay="1.2s">
+                <?php $i=1;} ?>
+
 					<div class="card">
 						<img src="img/galery/<?= $mygalery['img'] ?>" class="img-thumbnail img" alt="Card image cap">
 						<div class="card-body alert-primary">
@@ -241,7 +254,7 @@ $head->top("Home");
 					<?php	} ?>
 				</div>
 			
-		<?php } ?>
+		<?php $i++;} ?>
 		</div><br>
 		</div>
 <br>
