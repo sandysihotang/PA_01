@@ -63,7 +63,7 @@ $head->top("Meja");
     </div>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="#"><i class="fa fa-binoculars"></i> About</a>
+    <a class="nav-link" href="about.php"><i class="fa fa-binoculars"></i> About</a>
   </li>
   <li class="nav-item">
     <a class="nav-link" href="galery.php"><i class="fa fa-folder-open"></i> Galery</a>
@@ -159,7 +159,7 @@ $head->top("Meja");
       </div> 
       </div>
       <div align="center"><h3>Pesan Meja</h3></div>
-		<div class="container">
+		<div class="container wow flipInY" data-wow-offset="0" data-wow-delay="1s">
       <div class="row">
         <div class="col-md-3"></div>
         <div class="col-sm-6 bg-secondary  img-thumbnail">

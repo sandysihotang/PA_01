@@ -323,8 +323,33 @@
 	}
 	class komentar extends connection{
 		public function tambah_komentar($id,$komentar){
-			$return=mysqli_query($this->connect(),"INSERT INTO komentar(id_pelanggan,komentar) VALUES ('$id','$komentar')");
+			$return=mysqli_query($this->connect(),"INSERT INTO komentar(id_komentar,komentar,date) VALUES ('$id','$komentar',NOW())");
 			return $return;
+		}
+		public function read_komentar(){
+			$return = mysqli_query($this->connect(),"SELECT * FROM komentar ORDER BY date DESC");
+			return $return;
+		}
+		public function read_name($id){
+			$return=mysqli_query($this->connect(),"SELECT * from pelanggan WHERE nik='$id'");
+			return $return;
+		}
+		public function delete_komentar($id){
+			$return=mysqli_query($this->connect(),"DELETE FROM komentar WHERE id=$id");
+			return $return;
+		}
+	}
+	class informasi extends connection{
+		public function add_informasi($fotobaru,$deskripsi,$judul){
+			$return=mysqli_query($this->connect(),"INSERT INTO informasi(gambar,deskripsi,Judul,date) VALUES ('$fotobaru','$deskripsi','$judul',NOW())");
+			return $return;
+		}
+		public function get_informasi(){
+			$return=mysqli_query($this->connect(),"SELECT * FROM informasi ORDER BY date DESC");
+			return $return;
+		}
+		public function delete_info($id){
+			mysqli_query($this->connect(),"DELETE FROM informasi WHERE id=$id");
 		}
 	}
 ?>	

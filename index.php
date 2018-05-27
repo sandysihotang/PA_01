@@ -1,6 +1,18 @@
 <?php 
 session_start();
 include_once("functions/my_functions.php");
+if (isset($_GET['delete'])) {
+  $que=new komentar;
+  $delete=$que->delete_komentar($_GET['delete']);
+  if($delete){
+    echo "<script>alert('Berhasil Dihapus')</script>";
+    header('Refresh:0 url=index.php');
+  }
+  else{
+    echo "<script>alert('Gagal Dihapus')</script>";
+    header('Refresh:0 url=index.php');
+  }
+}
 $head=new top_buttom;
 $head->top("Home");
  ?>
@@ -8,6 +20,23 @@ $head->top("Home");
   .d-block{
     width: 100%;
     height: 100%;
+  }
+  .scroll-komentar{
+    border: 2px solid lightblue; 
+    height: 80px; 
+    margin-left: 30px; 
+    overflow: auto; 
+    padding: 3px; 
+    text-align: justify; 
+    width:80%;
+    height: 250px;
+  }
+  .komentar-pelanggan{
+    font-size: 10px;
+    color: black;
+  }
+  .isi-komentar{
+    font-size: 15px;
   }
 </style>
 	<nav class="nav bg-light navbar-light wow fadeInUp">
@@ -66,7 +95,7 @@ $head->top("Home");
   </li>
   <?php } ?>
   <li class="nav-item">
-    <a class="nav-link" href="#"><i class="fa fa-binoculars"></i> About</a>
+    <a class="nav-link" href="about.php"><i class="fa fa-binoculars"></i> About</a>
   </li>
   <li class="nav-item">
     <a class="nav-link" href="galery.php"><i class="fa fa-folder-open"></i> Galery</a>
@@ -90,9 +119,12 @@ $head->top("Home");
         <div class="carousel-inner">        	
           <div class="carousel-item active">
             <img class="d-block" src="img/slide/gastro2.jpg?auto=yes&bg=777&fg=555&text=First slide" alt="First slide">
+            <div class="carousel-caption d-none d-md-block">
+              <h1 align="center">Welcome To Gastro Sijabu-Jabu</h1>
+            </div>
           </div>
           <div class="carousel-item">
-            <img class="d-block" src="img/slide/asri.jpg?auto=yes&bg=666&fg=444&text=Second slide" alt="Second slide">
+            <img class="d-block" src="img/slide/IMG-20180511-WA0006.jpg?auto=yes&bg=666&fg=444&text=Second slide" alt="Second slide">
           </div>
           <div class="carousel-item">
             <img class="d-block" src="img/slide/IMG-20180511-WA0002.jpg?auto=yes&bg=555&fg=333&text=Third slide" alt="Third slide">
@@ -205,7 +237,7 @@ $head->top("Home");
           $menu_makanan=$makanan->read_menu();
           while($row=mysqli_fetch_assoc($menu_makanan)){
            ?>
-           <div class="col-md-4 wow slideInLeft"data-wow-offset="0" data-wow-delay="1.5s">
+           <div class="col-md-4 wow slideInLeft" data-wow-offset="0" data-wow-delay="1.5s">
             <div class="card" style="width: 18rem;">
               <img class="img-thumbnail img wow bounce" src="img/menu/<?=$row['gambar']?>" alt="Card image cap">
               <h4 align="center"><?=$row['nama_makanan']?></h4>
@@ -339,11 +371,11 @@ $head->top("Home");
           </div>
         </div>
       </div><br>
-      <?php if(isset($_SESSION['is_logged_in']) && $_SESSION['user']==1){ ?>
-      <div class="container-fluid alert-dark wow bounceInDown" data-wow-offset="0" data-wow-delay="0.6s">
-        <div class="container" align="center"> <h2>Berikan Komentar Anda</h2></div>
+      <?php if(isset($_SESSION['is_logged_in']) && ($_SESSION['user']==1 || $_SESSION['user']==2)){ ?>
+      <div class="container-fluid alert-dark wow bounceInDown" data-wow-offset="0" data-wow-delay="0.6s">        
         <div class="row">
           <div class="col-md-6">
+            <div class="container"> <h2>Berikan Komentar Anda</h2></div>
                 <form id="formKomentar" method="post" action="tambah_komentar.php">                  
                 <div>
                    <textarea class="form-control" name="komentar" rows="5" placeholder="Komentar"></textarea>
@@ -353,6 +385,38 @@ $head->top("Home");
                     <input type="submit" class="btn btn-info" value="Tambahkan Komentar" name="tambah_komentar" />
                 </div>
                 </form>
+          </div>
+          <div class="col-md-6">
+            <div class="container"> <h2>Komentar</h2></div>
+            <div class="scroll-komentar">
+              <?php 
+              $data=new komentar;
+              $komentar=$data->read_komentar(); 
+              while($all=mysqli_fetch_object($komentar)){
+                if ($all->id_komentar!=1){?>
+              <div class="alert-warning img-thumbnail">
+                <span class="komentar-pelanggan"><i class="fa fa-user"></i> <?php 
+                $name=$data->read_name($all->id_komentar)->fetch_object();
+                echo $name->firstname.' '.$name->lastname.'  '.$all->date;
+                 ?></span>
+                <p class="isi-komentar"><?php 
+                echo $all->komentar;
+                if ($_SESSION['user']==2) {
+                   echo '<a class="btn btn-danger btn-sm" href="index.php?delete='.$all->id.'">Delete</a>';
+                 } ?></p>
+                </div><br>
+              <?php } 
+              else if($all->id_komentar==1){?>
+                <div class="alert-primary img-thumbnail">
+                <span class="komentar-pelanggan"><i class="fa fa-user"><b>Gastro SiJabu-Jabu</b></i> <?='  '.$all->date ?></span>
+                <p class="isi-komentar"><?php 
+                echo $all->komentar;
+                if ($_SESSION['user']==2) {
+                   echo '<a class="btn btn-danger btn-sm" href="index.php?delete='.$all->id.'">Delete</a>';
+                 } ?></p>
+                </div><br>
+              <?php } } ?>
+            </div>
           </div>
         </div><br>
       </div>

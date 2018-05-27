@@ -47,10 +47,10 @@ $head->top("Home");
     </div>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="#"><i class="fa fa-binoculars"></i> About</a>
+    <a class="nav-link" href="about.php"><i class="fa fa-binoculars"></i> About</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="#"><i class="fa fa-folder-open"></i> Galery</a>
+    <a class="nav-link" href="galery.php"><i class="fa fa-folder-open"></i> Galery</a>
   </li>
   <?php 
   $account=new outentikasi;
