@@ -100,7 +100,11 @@ $head->top("Home");
   <li class="nav-item">
     <a class="nav-link" href="galery.php"><i class="fa fa-folder-open"></i> Galery</a>
   </li>
-  <?php if (isset($_SESSION['is_logged_in']) && $account->get_session('user')==1) { ?>
+  <?php if (isset($_SESSION['is_logged_in']) && $account->get_session('user')==2) { ?>
+    <li class="nav-item">
+      <a href="daftar.php" class="nav-link"><i class="fa fa-credit-card"></i> Daftar</a>
+    </li>
+  <?php } if (isset($_SESSION['is_logged_in']) && $account->get_session('user')==1) { ?>
   <li class="nav-item">
     <a href="list_transaksi.php" class="nav-link"><i class="fa fa-bar-chart-o"></i> List Pemesanan</a>
   </li>
@@ -224,15 +228,15 @@ $head->top("Home");
           </div>
         </div>
       </div> 
-      </div> <br>
+      </div> <br><b><hr><hr></b>
       <?php if(isset($_SESSION['is_logged_in']) && $account->get_session('user')==2){ ?>
       <div class="container"><a href="form_tambah_menu.php" class="btn btn-danger"><i class="fa fa-plus"></i> Tambah Menu Makanan</a></div><br>
-      <?php }?>
+      <?php }
+          if (isset($_SESSION['is_logged_in']) && $account->get_session('user')==2) { ?>
       <div class="container-fluid img-thumbnail bg-dark wow fadeInUp" data-wow-offset="0" data-wow-delay="0.5s">
-        <h2 align="center"><button class="btn btn-primary"><i class="fa fa-birthday-cake"></i> Menu Makanan Recomended <i class="fa fa-birthday-cake"></i></button></h2>
+        <h2 align="center"><label class="alert alert-primary btn-lg"><i class="fa fa-birthday-cake"></i> Menu Makanan<i class="fa fa-birthday-cake"></i></label></h2>
         <div class="row">
           <?php 
-          if (isset($_SESSION['is_logged_in']) && $account->get_session('user')==2) {
           $makanan=new menu;
           $menu_makanan=$makanan->read_menu();
           while($row=mysqli_fetch_assoc($menu_makanan)){
@@ -255,49 +259,16 @@ $head->top("Home");
               </div>
             </div>
           </div>
-         <?php } 
-       }
-       else{
-        $data= new menu;
-        $data1=$data->read_promo_makanan();
-        $data2=new pemesanan;
-        while($row=mysqli_fetch_assoc($data1)){
-         ?>
-           <div class="col-md-4 wow bounceIn" data-wow-offset="0" data-wow-delay="1.5s">
-            <div class="card" style="width: 18rem;">
-              <img class="img-thumbnail img" src="img/menu/<?=$row['gambar']?>" alt="Card image cap">
-              <h4 align="center"><?=$row['nama_makanan']?></h4>
-              <h4 align="center">Rp.<?= number_format($row['Harga']) ?>.00</h4>
-              <div class="card-body" align="center">
-                <?php  if (isset($_SESSION['is_logged_in']) && $account->get_session('user')==1) { 
-                    if ($row['status']==2) {
-                      echo "Makanan Sudah Habis";
-                    } else{ ?>
-                    <a href="transaksi_makanan.php?id=<?=$row['idmenu']?>" class="btn btn-success"><i class="fa fa-tags"></i> Pesan</a>
-                  <?php 
-                   } 
-                 }
-                  else {
-                    if ($row['status']==2) {
-                      echo "Makanan Sudah Habis";
-                    } else{?>
-                    <a href="index.php" class="btn btn-success"><i class="fa fa-tags"></i> Pesan</a>
-                    <?php }
-                }?>
-              </div>
-            </div>
-          </div>
-        <?php }
-      } ?>
-          
-        </div><br>
-      </div><br>
+         <?php }
+         echo "</div><br></div>"; 
+       } ?>          
+        <br><br>
+      <?php if (isset($_SESSION['is_logged_in']) && $account->get_session('user')==2) { ?>
       <div class="container-fluid img-thumbnail bg-dark wow fadeInUp" data-wow-offset="0" data-wow-delay="0.5s">
-        <h2 align="center"><button class="btn btn-primary"><i class="fa fa-beer"></i> Menu Minuman Recomended <i class="fa fa-beer"></i></button></h2>
+        
+        <h2 align="center"><label class="alert alert-primary btn-lg"><i class="fa fa-beer"></i> Menu Minuman <i class="fa fa-beer"></i></label></h2>
         <div class="row">
-          <?php 
-          if (isset($_SESSION['is_logged_in']) && $account->get_session('user')==2) {
-          
+          <?php           
           $minum=new menu;
           $minuman=$minum->read_menu_minuman();
           while ($row_minum=mysqli_fetch_assoc($minuman)) { ?>
@@ -321,57 +292,89 @@ $head->top("Home");
             </div>
           </div>            
         <?php  }
-      }
-       else{   
-        $minum=new menu;
-        $minuman=$minum->read_promo_minuman();
-        while ($row_minum=mysqli_fetch_assoc($minuman)) {  ?>
-        <div class="col-md-4 wow bounceIn" data-wow-offset="0" data-wow-delay="1.5s">
-            <div class="card" style="width: 18rem;">
-              <img class="img-thumbnail img" src="img/menu/<?=$row_minum['gambar']?>" alt="Card image cap">
-              <h4 align="center"><?=$row_minum['nama_minuman']?></h4>
-              <h4 align="center">Rp.<?= number_format($row_minum['harga']) ?>.00</h4>
-              <div class="card-body" align="center">
-                <?php if(isset($_SESSION['is_logged_in']) && $account->get_session('user')==1){  
-                            if($row_minum['status']==2) 
-                              echo "Minuman ini Sudah Habis";
-                           else {?>
-                              <a href="transaksi_minuman.php?id=<?= $row_minum['id_minum'] ?>" class="btn btn-success"><i class="fa fa-tags"></i> Pesan</a>
-                <?php } 
-              }?>
-                <?php if(!isset($_SESSION['is_logged_in']) ){ 
-                  if ($row_minum['status']==2) {
-                    echo "Minuman Sudah Habis";
-                  }else { ?>
-                <a href="index.php" class="btn btn-success"><i class="fa fa-tags"></i> Pesan</a>
-                <?php } 
-                } ?>
+      echo "</div></div>";
+      } 
+      ?>
+      <?php if ((isset($_SESSION['is_logged_in']) && $account->get_session('user')==1) || !isset($_SESSION['is_logged_in'])) { ?>    
+      <div class="row">
+        <div class="col-md-6 bg-light">            
+            <h2 align="center"><label class="alert alert-info text-black btn-lg"><i class="fa fa-birthday-cake"></i> Menu Makanan Recomended <i class="fa fa-birthday-cake"></i></label></h2>
+            <div class="row alert alert-secondary img-thumbnail">
+            <?php $data= new menu;
+            $data1=$data->read_promo_makanan();
+            $data2=new pemesanan;
+            while($row=mysqli_fetch_assoc($data1)){
+              ?>
+                <div class="col-md-6 wow bounceIn" data-wow-offset="0" data-wow-delay="1.5s">
+                  <div class="card" style="width: 18rem;">
+                    <img class="img-thumbnail img" src="img/menu/<?=$row['gambar']?>" alt="Card image cap">
+                    <h4 align="center"><?=$row['nama_makanan']?></h4>
+                    <h4 align="center">Rp.<?= number_format($row['Harga']) ?>.00</h4>
+                    <div class="card-body" align="center">
+                <?php  if (isset($_SESSION['is_logged_in']) && $account->get_session('user')==1) { 
+                    if ($row['status']==2) {
+                      echo "Makanan Sudah Habis";
+                    } else{ ?>
+                    <a href="transaksi_makanan.php?id=<?=$row['idmenu']?>" class="btn btn-success"><i class="fa fa-tags"></i> Pesan</a>
+                  <?php 
+                   } 
+                 }
+                  else {
+                    if ($row['status']==2) {
+                      echo "Makanan Sudah Habis";
+                    } else{?>
+                    <a href="index.php" class="btn btn-success"><i class="fa fa-tags"></i> Pesan</a>
+                    <?php }
+                }?>
               </div>
             </div>
           </div>
-        <?php } 
-      } ?>
-
-        </div><br>
+        <?php } ?>
       </div>
+        </div>
+        <div class="col-md-6">
+          <h2 align="center"><label class="alert alert-info text-black btn-lg"><i class="fa fa-beer"></i> Menu Minuman Recomended<i class="fa fa-beer"></i></label></h2>
+          <div class="row alert alert-secondary img-thumbnail">
+              <?php $minum=new menu;
+              $minuman=$minum->read_promo_minuman();
+              while ($row_minum=mysqli_fetch_assoc($minuman)) {  ?>
+              <div class="col-md-6 wow bounceIn" data-wow-offset="0" data-wow-delay="1.5s">
+                  <div class="card" style="width: 18rem;">
+                    <img class="img-thumbnail img" src="img/menu/<?=$row_minum['gambar']?>" alt="Card image cap">
+                    <h4 align="center"><?=$row_minum['nama_minuman']?></h4>
+                    <h4 align="center">Rp.<?= number_format($row_minum['harga']) ?>.00</h4>
+                    <div class="card-body" align="center">
+                      <?php if(isset($_SESSION['is_logged_in']) && $account->get_session('user')==1){  
+                                  if($row_minum['status']==2) 
+                                    echo "Minuman ini Sudah Habis";
+                                 else {?>
+                                    <a href="transaksi_minuman.php?id=<?= $row_minum['id_minum'] ?>" class="btn btn-success"><i class="fa fa-tags"></i> Pesan</a>
+                      <?php } 
+                    }?>
+                      <?php if(!isset($_SESSION['is_logged_in']) ){ 
+                        if ($row_minum['status']==2) {
+                          echo "Minuman Sudah Habis";
+                        }else { ?>
+                      <a href="index.php" class="btn btn-success"><i class="fa fa-tags"></i> Pesan</a>
+                      <?php } 
+                      } ?>
+                    </div>
+                  </div>
+                </div>
+              <?php } ?> 
+              </div>         
+        </div>
+      </div>
+    <?php } ?>
 <br><br>
-      <div class="container wow fadeInUp" data-wow-offset="0" data-wow-delay="0.5s">
+      <div class="wow fadeInUp" data-wow-offset="0" data-wow-delay="0.5s">
         <div class="row">
-          <div class="col-md-6">
             <div class="card-body card bg-light">
-              <div class="alert alert-primary"><h5 align="center">Location</h5></div>
-                <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d996.7082831867101!2d98.9774854!3d2.2165318!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x302e11a29988a121%3A0x4da8d232959238a0!2sGastro+Si+Jabu-Jabu!5e0!3m2!1sen!2sid!4v1525933266538" width="500" height="343" frameborder="0" style="border:0" allowfullscreen></iframe>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="card-body card bg-light">
-              <div class="alert alert-primary"><h5 align="center">Kualitas tempat yang asri</h5></div>
-              <img src="img/slide/asri.jpg" class="img-thumbnail">
-            </div>
+              <div class="alert bg-secondary text-white"><h5 align="center">Location</h5></div>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d996.7082831867101!2d98.9774854!3d2.2165318!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x302e11a29988a121%3A0x4da8d232959238a0!2sGastro+Si+Jabu-Jabu!5e0!3m2!1sen!2sid!4v1525933266538" width="100%" height="500" frameborder="0" style="border:0" allowfullscreen></iframe>
           </div>
         </div>
       </div><br>
-      <?php if(isset($_SESSION['is_logged_in']) && ($_SESSION['user']==1 || $_SESSION['user']==2)){ ?>
       <div class="container-fluid alert-dark wow bounceInDown" data-wow-offset="0" data-wow-delay="0.6s">        
         <div class="row">
           <div class="col-md-6">
@@ -382,7 +385,9 @@ $head->top("Home");
                 </div><br>
                
                 <div>
-                    <input type="submit" class="btn btn-info" value="Tambahkan Komentar" name="tambah_komentar" />
+                  <?php if (isset($_SESSION['is_logged_in'])) {
+                    echo '<input type="submit" class="btn btn-info" value="Tambahkan Komentar" name="tambah_komentar" />';
+                  } else echo '<a href=index.php class="btn btn-info">Tambahkan Komentar</a>';?>
                 </div>
                 </form>
           </div>
@@ -401,7 +406,7 @@ $head->top("Home");
                  ?></span>
                 <p class="isi-komentar"><?php 
                 echo $all->komentar;
-                if ($_SESSION['user']==2) {
+                if (isset($_SESSION['is_logged_in']) && $_SESSION['user']==2) {
                    echo '<a class="btn btn-danger btn-sm" href="index.php?delete='.$all->id.'">Delete</a>';
                  } ?></p>
                 </div><br>
@@ -411,7 +416,7 @@ $head->top("Home");
                 <span class="komentar-pelanggan"><i class="fa fa-user"><b>Gastro SiJabu-Jabu</b></i> <?='  '.$all->date ?></span>
                 <p class="isi-komentar"><?php 
                 echo $all->komentar;
-                if ($_SESSION['user']==2) {
+                if (isset($_SESSION['is_logged_in']) && $_SESSION['user']==2) {
                    echo '<a class="btn btn-danger btn-sm" href="index.php?delete='.$all->id.'">Delete</a>';
                  } ?></p>
                 </div><br>
@@ -420,7 +425,6 @@ $head->top("Home");
           </div>
         </div><br>
       </div>
-      <?php } ?>
       <div class="container-fluid bg-dark jumbotron text-white" style="opacity: 0.8;">
         <div class="row">
         <div class="col-md-4">

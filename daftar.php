@@ -1,39 +1,48 @@
-	<?php 
+<?php 
 session_start();
 include_once("functions/my_functions.php");
-if (isset($_GET['id'])) {
-  $data=new informasi;
-  $data->delete_info($_GET['id']);
-  echo "<script>alert('Berhasil Dihapus')</script>";
-  header('Refresh:0 url=about.php');
+if (isset($_GET['delete'])) {
+  $que=new komentar;
+  $delete=$que->delete_komentar($_GET['delete']);
+  if($delete){
+    echo "<script>alert('Berhasil Dihapus')</script>";
+    header('Refresh:0 url=index.php');
+  }
+  else{
+    echo "<script>alert('Gagal Dihapus')</script>";
+    header('Refresh:0 url=index.php');
+  }
 }
-
-
-
 $head=new top_buttom;
-$head->top("INFORMASI");
+$head->top("Daftar");
  ?>
   <style type="text/css">
   .d-block{
-    width: 1300px;
-    height: 700px;
-  }
-  .informasi{
-    width: 30%;
+    width: 100%;
     height: 100%;
-    float: left;
-    text-align: justify;
   }
-  .informasi1{
-    width: 30%;
-    height: 100%;
-    float: right;
-    text-align: justify;
+  .scroll-komentar{
+    border: 2px solid lightblue; 
+    height: 80px; 
+    margin-left: 30px; 
+    overflow: auto; 
+    padding: 3px; 
+    text-align: justify; 
+    width:80%;
+    height: 250px;
+  }
+  .komentar-pelanggan{
+    font-size: 10px;
+    color: black;
+  }
+  .isi-komentar{
+    font-size: 15px;
   }
 </style>
-	<nav class="nav bg-light navbar-light  wow fadeInUp">
+	<nav class="nav bg-light navbar-light wow fadeInUp">
     <div class="container-fluid">
 		<div class="float-left col-md-3">
+      <img src="">
       <label><i class="fa fa-phone"></i> +91234</label>      
     </div>
     <?php 
@@ -73,36 +82,21 @@ $head->top("INFORMASI");
   <li class="nav-item">
     <a class="nav-link" href="index.php"><i class="fa fa-home"></i> Home</a>
   </li>
- <?php if ((isset($_SESSION['is_logged_in']) && $account->get_session('user')==1) || !isset($_SESSION['is_logged_in'])) { ?>
-  <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-list"></i> Pesan</a>
-    <div class="dropdown-menu">
-      <a class="dropdown-item" href="pesan_makanan.php"><i class="fa fa-birthday-cake"></i> Makanan</a>
-      <div class="dropdown-divider"></div>
-      <a class="dropdown-item" href="pesan_minuman.php"><i class="fa fa-beer"></i> Minuman</a>
-      <div class="dropdown-divider"></div>
-      <a class="dropdown-item" href="pesan_meja.php"><i class="fa fa-table"></i> Meja</a>
-    </div>
-  </li>
-  <?php } ?>
   <li class="nav-item">
-    <a class="nav-link active" href="about.php"><i class="fa fa-binoculars"></i> About</a>
+    <a class="nav-link" href="about.php"><i class="fa fa-binoculars"></i> About</a>
   </li>
   <li class="nav-item">
     <a class="nav-link" href="galery.php"><i class="fa fa-folder-open"></i> Galery</a>
   </li>
   <?php if (isset($_SESSION['is_logged_in']) && $account->get_session('user')==2) { ?>
     <li class="nav-item">
-      <a href="daftar.php" class="nav-link"><i class="fa fa-credit-card"></i> Daftar</a>
+      <a href="daftar.php" class="nav-link  active"><i class="fa fa-credit-card"></i> Daftar</a>
     </li>
-  <?php } if (isset($_SESSION['is_logged_in']) && $account->get_session('user')==1) { ?>
-  <li class="nav-item">
-    <a href="list_transaksi.php" class="nav-link"><i class="fa fa-bar-chart-o"></i> List Pemesanan</a>
-  </li>
-   <?php } ?>
+  <?php } ?>
+
 </ul>
 	</nav>
-	 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+ <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
@@ -184,99 +178,30 @@ $head->top("INFORMASI");
           </div>
         </div>
       </div> 
-      </div> 
-		<div class="container-fluid alert-secondary" align=center><h1>INFORMASI GASTRO SIJABU JABU</h1><br></div>
-      <?php 
-      $account=new outentikasi;
-      if ($account->get_session('is_logged_in') && $account->get_session('user')==2) { ?>
-        <button type="button" data-toggle="modal" data-target="#Modal" class="btn btn-success">Tambah Informasi <i class="fa fa-plus"></i></button>
-    <?php } ?>
-    <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-              <h4 class="modal-title" id="myModalLabel">Upload Gambar</h4>
-            </div>
-            <div class="modal-body">
-
-              <div id="accordion" role="tablist">
-                <div class="card">
-                  <div class="card-header" role="tab" id="headingOne">
-                    <h5 class="mb-0">
-                      <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                        Gambar
-                      </a>
-                    </h5>
-                  </div>
-
-                  <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne">
-                    <div class="card-body">
-                      <form action="tambah_informasi.php" method="post" class="form-signin" enctype="multipart/form-data">
-                        <h2>Insert Informasi</h2>
-                        <label>Judul</label>
-                        <input type="text" name="judul" class="form-control">
-                        <label>Text</label>
-                        <textarea  class="form-control" required autofocus name="text" placeholder="Deskripsi"></textarea><br>
-                        <label>Gambar</label>
-                        <input type="file" name="gambar" class="form-control" required autofocus ><br>
-                        <button class="btn btn-primary btn-block" type="submit" name="tambah_infromasi"><i class="fa fa-plus"></i> Tambahkan</button>
-                      </form>
-                    </div>
-                  </div>
-                </div>               
-              </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
+      </div> <br>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-3"></div>
+          <div class="col-md-6 bg-secondary img-thumbnail">
+            <form action="daftar_proses.php" method="post">
+              <h2 align="center" class="text-white">Daftarkan Administrator/Kasir</h2>
+              <br>
+              <label class="sr-only">Username</label>
+              <input type="text" class="form-control" required name="username" placeholder="Username"><br>
+              <label class="sr-only">Password</label>
+              <input type="password" name="password" required class="form-control" placeholder="Password"><br>
+              <label class="sr-only">Jenis</label>
+              <select class="form-control" name="role">
+                <option value="2">Administrator</option>
+                <option value="3">Kasir</option>
+              </select><br>
+              <center><button type="submit" class="btn btn-danger" name="daftar"><i class="fa fa-plus"></i> Daftarkan</button></center>
+          </form>
           </div>
-        </div>
+          <div class="col-md-3"></div>
+        </div><br>  
       </div>
-
-      <div class="modal fade" id="firefoxModal" tabindex="-1" role="dialog" aria-labelledby="firefoxModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">            
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-          </div>
-        </div>
-      </div> 
-      </div>
-      <?php  
-      $data=new informasi;
-      $informasi=$data->get_informasi();
-      $i=1;
-      while ($info=mysqli_fetch_object($informasi)) {
-        if ($i%2==1) {
-      ?>
-        <div class="container bg-light">
-          <h3><i><b><?= $i.'. '.$info->Judul ?></b></i></h3>
-            <div class="row">
-              <p><img src="img/informasi/<?= $info->gambar ?>" class="informasi wow rollIn" data-wow-offset="0" data-wow-delay="0.5s"><i><?= $info->deskripsi ?></i></p>
-          </div>
-          <?php if (isset($_SESSION['is_logged_in']) && $_SESSION['id']==1)  { ?>
-          <a href="about.php?id=<?= $info->id ?>" class="btn btn-danger">Delete</a>
-          <?php } ?>
-        </div>
-        <?php } 
-        else if($i%2==0){?>
-          <div class="container bg-light">
-          <h3><i><b><?= $i.'. '.$info->Judul ?></b></i></h3>
-            <div class="row">
-              <p><img src="img/informasi/<?= $info->gambar ?>" class="informasi1 wow rollIn" data-wow-offset="0" data-wow-delay="0.5s"><i><?= $info->deskripsi ?></i></p>
-          </div>
-          <?php if (isset($_SESSION['is_logged_in']) && $_SESSION['id']==1)  { ?>
-          <a href="about.php?id=<?= $info->id ?>" class="btn btn-danger">Delete</a>
-          <?php } ?>
-        </div>
-    <?php } 
-    $i++;}?>
-<br>
-
-      <div class="container-fluid bg-dark text-white jumbotron" style="opacity: 0.8;">
+      <div class="container-fluid bg-dark jumbotron text-white" style="opacity: 0.8;">
         <div class="row">
         <div class="col-md-4">
           <h2>GASTRO SIJABU JABU</h2>
@@ -300,9 +225,9 @@ $head->top("INFORMASI");
         </div>
       </div>
       <hr>
-      <div class="bg-dark">
+      <div>
             <div class="col-sm-6">
-                <p class="mbr-text text-white">
+                <p class="mbr-text text-black">
                   © Copyright 2018 Gastro Sijabu jabu</p>
               </div><br>
           </div>
@@ -311,4 +236,3 @@ $head->top("INFORMASI");
 <?php 
   $head->buttom();
  ?>
- 

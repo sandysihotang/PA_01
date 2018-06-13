@@ -26,7 +26,6 @@ if ($_GET['jenis']=='minuman' && isset($_POST['lanjutkan'])) {
 	$id_minuman=$_GET['id'];
 	$account=new outentikasi;
 	$id_pelanggan=$account->get_session('id');
-	$date=$_POST['date'];
 	$pesan=new pemesanan;
 	$data=$pesan->read_minuman($id_minuman);
 	$menu=$data->fetch_assoc();
@@ -40,8 +39,5 @@ if ($_GET['jenis']=='minuman' && isset($_POST['lanjutkan'])) {
 		echo "<script>alert('Gagal Memasukkan Kedaftar Pesananan!')</script>";
 		header("refresh:0 url=index.php");
 	}
-	
-	$porsi_baru=$menu['stock'] - $porsi;
-	$sfd=$pesan->update_porsi_minuman($id_minuman,$porsi_baru);
 }
  ?>

@@ -42,7 +42,7 @@ $head->top("Home");
                <td><?= $minuman1->jumlah_pesanan ?></td>
                <td>Rp.<?= number_format($minuman1->total_harga )?>.00</td>
              </tr> 
-            <?php } ?>
+            <?php $i++; } ?>
             </tbody>
           </table>
 </div>

@@ -61,7 +61,7 @@ $head->top("Home");
    <?php } ?>
 </ul>
 	</nav><br>
-  <div class="container img-thumbnail alert-warning">
+  <div class="container img-thumbnail alert alert-info">
         <div class="row">
           <div class="col-md-12">
             <div class="product">
@@ -79,6 +79,10 @@ $head->top("Home");
                 <div class="form-group">
                   <p>Harga Makanan</p>
                   <input type="number" name="harga" value="<?=$makanan['Harga']?>" class="form-control" required />
+                </div>
+                <div class="form-group">
+                  <p>Deskripsi</p>
+                  <textarea name="deskripsi" class="form-control" placeholder="Deskripsi Minuman"><?= $makanan['deskripsi'] ?></textarea>
                 </div>
                 <div class="form-group">
                   <p>Status KeterSediaan</p>

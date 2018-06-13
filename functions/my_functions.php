@@ -33,28 +33,28 @@
 }
 
 	class menu extends connection{
-		public function tambah_menu_makanan($nama_makanan,$fotobaru,$harga,$stock){
+		public function tambah_menu_makanan($nama_makanan,$fotobaru,$harga,$stock,$deskripsi){
 			$status_promosi='Tidak dipromosikan';
-			$myquery=("INSERT INTO makanan(nama_makanan,gambar,Harga,status,status_promosi) VALUES (?,?,?,?,?)");
+			$myquery=("INSERT INTO makanan(nama_makanan,gambar,Harga,status,status_promosi,deskripsi) VALUES (?,?,?,?,?,?)");
 			$data=$this->connect()->prepare($myquery);
-			$data->bind_param('ssiis',$nama_makanan,$fotobaru,$harga,$stock,$status_promosi);
+			$data->bind_param('ssiiss',$nama_makanan,$fotobaru,$harga,$stock,$status_promosi,$deskripsi);
 			$query=$data->execute();			
 
 			return $query;
 		}
-		public function tambah_menu_minuman($nama_minuman,$fotobaru,$harga,$stock){
+		public function tambah_menu_minuman($nama_minuman,$fotobaru,$harga,$stock,$deskripsi){
 			$status_promosi='Tidak dipromosikan';
-			$myquery=("INSERT INTO minuman(nama_minuman,gambar,Harga,status,status_promosi) VALUES (?,?,?,?,?)");
+			$myquery=("INSERT INTO minuman(nama_minuman,gambar,Harga,status,status_promosi,deskripsi) VALUES (?,?,?,?,?,?)");
 			$data=$this->connect()->prepare($myquery);
-			$data->bind_param('ssiis',$nama_minuman,$fotobaru,$harga,$stock,$status_promosi);
+			$data->bind_param('ssiiss',$nama_minuman,$fotobaru,$harga,$stock,$status_promosi,$deskripsi);
 			$query=$data->execute();			
 
 			return $query;
 		}
-		public function update_menu_makanan($nama_makanan,$fotobaru,$harga,$stock,$id){
-			$myquery=("UPDATE makanan SET nama_makanan=?, gambar=?,Harga=?,status=? WHERE idmenu=?");
+		public function update_menu_makanan($nama_makanan,$fotobaru,$harga,$stock,$id,$deskripsi){
+			$myquery=("UPDATE makanan SET nama_makanan=?, gambar=?,Harga=?,status=?, deskripsi=? WHERE idmenu=?");
 			$data=$this->connect()->prepare($myquery);
-			$data->bind_param('ssiii',$nama_makanan,$fotobaru,$harga,$stock,$id);
+			$data->bind_param('ssiisi',$nama_makanan,$fotobaru,$harga,$stock,$deskripsi,$id);
 			$query=$data->execute();			
 
 			return $query;
@@ -68,10 +68,10 @@
 			}
 			
 		}
-		public function update_menu_minuman	($nama_minuman,$fotobaru,$harga,$stock,$id){
-			$myquery=("UPDATE minuman SET nama_minuman=?, gambar=?,harga=?,status=? WHERE id_minum=?");
+		public function update_menu_minuman	($nama_minuman,$fotobaru,$harga,$stock,$id,$deskripsi){
+			$myquery=("UPDATE minuman SET nama_minuman=?, gambar=?,harga=?,status=?,deskripsi=? WHERE id_minum=?");
 			$data=$this->connect()->prepare($myquery);
-			$data->bind_param('ssiii',$nama_minuman,$fotobaru,$harga,$stock,$id);
+			$data->bind_param('ssiisi',$nama_minuman,$fotobaru,$harga,$stock,$deskripsi,$id);
 			$query=$data->execute();			
 
 			return $query;
@@ -103,11 +103,11 @@
 			return $data;
 		}
 		public function read_promo_makanan(){
-			$data=mysqli_query($this->connect(),"SELECT * FROM makanan WHERE status_promosi='Promosikan'");
+			$data=mysqli_query($this->connect(),"SELECT * FROM makanan WHERE status_promosi='Promosikan' LIMIT 2");
 			return $data;
 		}
 		public function read_promo_minuman(){
-			$data=mysqli_query($this->connect(),"SELECT * FROM minuman WHERE status_promosi='Promosikan'");
+			$data=mysqli_query($this->connect(),"SELECT * FROM minuman WHERE status_promosi='Promosikan' LIMIT 2");
 			return $data;
 		}
 		public function get_while_id($id){
@@ -162,10 +162,6 @@
 		}
 		public function read_minuman($id){
 			$data=mysqli_query($this->connect(),"SELECT * FROM minuman WHERE id_minum='$id'");
-			return $data;
-		}
-		public function update_porsi_minuman($id_minuman,$porsi_baru){
-			$data=mysqli_query($this->connect(),"UPDATE minuman SET status='$porsi_baru' WHERE id_minum='$id_minuman'");
 			return $data;
 		}
 		public function ambil_data_makanan_belum_bayar($id){
@@ -350,6 +346,16 @@
 		}
 		public function delete_info($id){
 			mysqli_query($this->connect(),"DELETE FROM informasi WHERE id=$id");
+		}
+	}
+	class daftar_admin_kasir extends connection{
+		public $username;
+		public $password;
+		public $role;
+		public $id;
+		public function daftar(){
+			$return=mysqli_query($this->connect(),"INSERT INTO account VALUES ($this->id, '$this->username','$this->password',$this->role)");
+			return $return;	
 		}
 	}
 ?>	

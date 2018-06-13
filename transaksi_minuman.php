@@ -163,6 +163,8 @@ $head->top("Home");
           <p><?= $makanan_saya['nama_minuman'] ?></p>
           <h5>Harga</h5>
           <p>Rp.<?= number_format($makanan_saya['harga']) ?>.00</p>
+          <h5>Deskripsi</h5>
+          <p><?= $makanan_saya['deskripsi'] ?></p>
           <h5>Jumlah Porsi</h5>
           <form method="post" action="add_to_chart.php?id=<?= $_GET['id']?>&jenis=minuman">
           <input type="number" name="jumlah_porsi" class="form-control" required><br>

@@ -70,7 +70,11 @@ $head->top("Galery");
   <li class="nav-item">
     <a class="nav-link active" href="galery.php"><i class="fa fa-folder-open"></i> Galery</a>
   </li>
-  <?php if (isset($_SESSION['is_logged_in']) && $account->get_session('user')==1) { ?>
+  <?php if (isset($_SESSION['is_logged_in']) && $account->get_session('user')==2) { ?>
+    <li class="nav-item">
+      <a href="daftar.php" class="nav-link"><i class="fa fa-credit-card"></i> Daftar</a>
+    </li>
+  <?php } if (isset($_SESSION['is_logged_in']) && $account->get_session('user')==1) { ?>
   <li class="nav-item">
     <a href="list_transaksi.php" class="nav-link"><i class="fa fa-bar-chart-o"></i> List Pemesanan</a>
   </li>
