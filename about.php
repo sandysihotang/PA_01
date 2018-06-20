@@ -255,7 +255,7 @@ $head->top("INFORMASI");
         <div class="container bg-light">
           <h3><i><b><?= $i.'. '.$info->Judul ?></b></i></h3>
             <div class="row">
-              <p><img src="img/informasi/<?= $info->gambar ?>" class="informasi wow rollIn" data-wow-offset="0" data-wow-delay="0.5s"><i><?= $info->deskripsi ?></i></p>
+              <p align="justify"><img src="img/informasi/<?= $info->gambar ?>" class="informasi wow rollIn mr-3" data-wow-offset="0" data-wow-delay="0.5s"><i><?= $info->deskripsi ?></i></p>
           </div>
           <?php if (isset($_SESSION['is_logged_in']) && $_SESSION['id']==1)  { ?>
           <a href="about.php?id=<?= $info->id ?>" class="btn btn-danger">Delete</a>
@@ -266,7 +266,7 @@ $head->top("INFORMASI");
           <div class="container bg-light">
           <h3><i><b><?= $i.'. '.$info->Judul ?></b></i></h3>
             <div class="row">
-              <p><img src="img/informasi/<?= $info->gambar ?>" class="informasi1 wow rollIn" data-wow-offset="0" data-wow-delay="0.5s"><i><?= $info->deskripsi ?></i></p>
+              <p align="justify"><img src="img/informasi/<?= $info->gambar ?>" class="informasi1 wow rollIn" data-wow-offset="0" data-wow-delay="0.5s"><i><?= $info->deskripsi ?></i></p>
           </div>
           <?php if (isset($_SESSION['is_logged_in']) && $_SESSION['id']==1)  { ?>
           <a href="about.php?id=<?= $info->id ?>" class="btn btn-danger">Delete</a>

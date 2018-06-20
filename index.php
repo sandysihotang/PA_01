@@ -393,7 +393,7 @@ $head->top("Home");
           </div>
           <div class="col-md-6">
             <div class="container"> <h2>Komentar</h2></div>
-            <div class="scroll-komentar">
+            <div class="scroll-komentar  img-thumbnail">
               <?php 
               $data=new komentar;
               $komentar=$data->read_komentar(); 
