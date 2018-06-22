@@ -355,7 +355,13 @@
 		public $id;
 		public function daftar(){
 			$return=mysqli_query($this->connect(),"INSERT INTO account VALUES ($this->id, '$this->username','$this->password',$this->role)");
-			return $return;	
+			return true;	
+		}
+	}
+	class laporan_penjualan extends connection{
+		public function read_laporan(){
+			$query=mysqli_query($this->connect(),"SELECT * FROM all_pemesanan where status_bayar='Selesai' ORDER BY tanggal_selesai");
+			return $query;	
 		}
 	}
 ?>	

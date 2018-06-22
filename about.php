@@ -93,7 +93,7 @@ $head->top("INFORMASI");
   </li>
   <?php if (isset($_SESSION['is_logged_in']) && $account->get_session('user')==2) { ?>
     <li class="nav-item">
-      <a href="daftar.php" class="nav-link"><i class="fa fa-credit-card"></i> Daftar</a>
+      <a href="laporan_penjualan.php" class="nav-link"><i class="fa fa-book"></i> Laporan Penjualan</a>
     </li>
   <?php } if (isset($_SESSION['is_logged_in']) && $account->get_session('user')==1) { ?>
   <li class="nav-item">

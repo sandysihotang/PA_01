@@ -100,9 +100,8 @@ $head->top("Home");
   <li class="nav-item">
     <a class="nav-link" href="galery.php"><i class="fa fa-folder-open"></i> Galery</a>
   </li>
-  <?php if (isset($_SESSION['is_logged_in']) && $account->get_session('user')==2) { ?>
-    <li class="nav-item">
-      <a href="daftar.php" class="nav-link"><i class="fa fa-credit-card"></i> Daftar</a>
+  <?php if (isset($_SESSION['is_logged_in']) && $account->get_session('user')==2) { ?>    <li class="nav-item">
+      <a href="laporan_penjualan.php" class="nav-link"><i class="fa fa-book"></i> Laporan Penjualan</a>
     </li>
   <?php } if (isset($_SESSION['is_logged_in']) && $account->get_session('user')==1) { ?>
   <li class="nav-item">

@@ -1,20 +1,8 @@
 <?php 
 session_start();
 include_once("functions/my_functions.php");
-if (isset($_GET['delete'])) {
-  $que=new komentar;
-  $delete=$que->delete_komentar($_GET['delete']);
-  if($delete){
-    echo "<script>alert('Berhasil Dihapus')</script>";
-    header('Refresh:0 url=index.php');
-  }
-  else{
-    echo "<script>alert('Gagal Dihapus')</script>";
-    header('Refresh:0 url=index.php');
-  }
-}
 $head=new top_buttom;
-$head->top("Daftar");
+$head->top("Laporan Penjualan");
  ?>
   <style type="text/css">
   .d-block{
@@ -90,8 +78,8 @@ $head->top("Daftar");
   </li>
   <?php if (isset($_SESSION['is_logged_in']) && $account->get_session('user')==2) { ?>
     <li class="nav-item">
-      <a href="daftar.php" class="nav-link  active"><i class="fa fa-credit-card"></i> Daftar</a>
-    </li>
+      <a href="laporan_penjualan.php" class="nav-link active"><i class="fa fa-book"></i> Laporan Penjualan</a>
+    </li> 
   <?php } ?>
 
 </ul>
@@ -179,27 +167,31 @@ $head->top("Daftar");
         </div>
       </div> 
       </div> <br>
-      <div class="container">
-        <div class="row">
-          <div class="col-md-3"></div>
-          <div class="col-md-6 bg-secondary img-thumbnail">
-            <form action="daftar_proses.php" method="post">
-              <h2 align="center" class="text-white">Daftarkan Administrator/Kasir</h2>
-              <br>
-              <label class="sr-only">Username</label>
-              <input type="text" class="form-control" required name="username" placeholder="Username"><br>
-              <label class="sr-only">Password</label>
-              <input type="password" name="password" required class="form-control" placeholder="Password"><br>
-              <label class="sr-only">Jenis</label>
-              <select class="form-control" name="role">
-                <option value="2">Administrator</option>
-                <option value="3">Kasir</option>
-              </select><br>
-              <center><button type="submit" class="btn btn-danger" name="daftar"><i class="fa fa-plus"></i> Daftarkan</button></center>
-          </form>
-          </div>
-          <div class="col-md-3"></div>
-        </div><br>  
+      <div>
+      	<h3 class="alert alert-secondary" align="center">Laporan Penjualan Cafe</h3>
+      </div>
+      <div class="container-fluid">
+      	<table class="table table-striped img-thumbnail">
+      		<tr>
+      			<th scope="col">#</th>
+      			<th scope="col">Kode Pembelian</th>
+      			<th scope="col">Nama</th>
+      			<th scope="col">Tanggal</th>
+      			<th scope="col">Harga</th>
+      		</tr>
+      		<?php
+      		$query=new laporan_penjualan;
+      		$query->read_laporan();
+      		
+      		?>
+      		<tr>
+      			<td></td>
+      			<td></td>
+      			<td></td>
+      			<td></td>
+      			<td></td>
+      		</tr>
+      	</table>
       </div>
       <div class="container-fluid bg-dark jumbotron text-white" style="opacity: 0.8;">
         <div class="row">
