@@ -11,6 +11,8 @@ if (isset($_GET['meja'])) {
   echo "<script>alert('Berhasi Mengupdate')</script>";
   header('Refresh:0 url=kasir.php');
 }
+$control=new pemesanan;
+$control->delete_expired();
 $head=new top_buttom;
 $head->top("KASIR");
  ?>
@@ -248,7 +250,7 @@ $head->top("KASIR");
              $nam1=new outentikasi;
              $name=$nam1->get_user($row->id_pelanggan)->fetch_object();
              echo $name->firstname.' '.$name->lastname; ?></td>
-             <td><?= $row->volume ?> Meja</td>
+             <td><?= $row->volume ?> Kursi</td>
              <td><?= $row->tangal_pemakaian ?></td>
              <td><?= $row->jenis ?></td>
              <td><a href="kasir.php?meja=<?= $row->id_pemesanan ?>" class="btn btn-success btn-sm">Selesai</a></td>

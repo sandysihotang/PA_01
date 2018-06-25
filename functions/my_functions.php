@@ -220,7 +220,7 @@
 		public function kirim_bukti($nama_bukti,$id,$pel){
 			$status_bayar='Belum dibayar';
 			$metode=2;
-			$update=mysqli_query($this->connect(),"UPDATE all_pemesanan SET bukti_bayar='$nama_bukti' WHERE metode_bayar='$metode' AND id='$id' AND status_bayar='$status_bayar' AND pelanggan='$pel'");
+			$update=mysqli_query($this->connect(),"UPDATE all_pemesanan SET bukti_bayar='$nama_bukti' WHERE metode_bayar=$metode AND id='$id' AND status_bayar='$status_bayar' AND pelanggan='$pel'");
 			return $update;
 		}
 		public function get_nama_makanan($id){
@@ -239,8 +239,17 @@
 			$return =mysqli_query($this->connect(),"SELECT * FROM minuman");
 			return $return;
 		}
-	}
+		public function delete_expired(){
+			$data=mysqli_query($this->connect(),"SELECT * FROM all_pemesanan WHERE `tanggal_ambil` < NOW() AND status_bayar='Belum dibayar'");
+			while($tes=mysqli_fetch_object($data)){
+				mysqli_query($this->connect(),"DELETE FROM pemesanan_makanan WHERE id_pemesanan='$tes->id'");
+				mysqli_query($this->connect(),"DELETE FROM pemesanan_minuman WHERE id_pemesanan='$tes->id'");
+				mysqli_query($this->connect(),"DELETE FROM all_pemesanan WHERE id='$tes->id'");
+			}
+			mysqli_query($this->connect(),"DELETE FROM booking_meja WHERE `tangal_pemakaian` < NOW() AND status='Dipesan'");
 
+		}
+	}
 	class konfirmasi_pelanggan extends connection{
 		public function get_data_pemesanan(){
 			$query=mysqli_query($this->connect(),"SELECT * FROM all_pemesanan WHERE metode_bayar=1 AND status_bayar='Belum dibayar'");
@@ -267,7 +276,13 @@
 			return $query;
 		}
 		public function action_pemesanan($action,$id){
-			$query=mysqli_query($this->connect(),"UPDATE all_pemesanan SET status_bayar='$action' WHERE id='$id'");
+			if ($action=='Konfirmasi') {
+				mysqli_query($this->connect(),"UPDATE all_pemesanan SET status_bayar='$action' WHERE id='$id'");
+			}else{
+			mysqli_query($this->connect(),"UPDATE all_pemesanan SET status_bayar='$action', tanggal_selesai= NOW() WHERE id='$id'");
+			mysqli_query($this->connect(),"UPDATE pemesanan_minuman SET status_bayar='Sudah Bayar' WHERE id_pemesanan='$id'");
+			mysqli_query($this->connect(),"UPDATE pemesanan_makanan SET status_bayar='Sudah Bayar' WHERE id_pemesanan='$id'");
+			}
 		}
 		public function get_penyelesaian_pesanan_cash(){
 			$query=mysqli_query($this->connect(),"SELECT * FROM all_pemesanan WHERE status_bayar='Konfirmasi' AND metode_bayar=1");
@@ -282,11 +297,17 @@
 			return $query;
 		}
 		public function selesai_cash($id){
-			$query=mysqli_query($this->connect(),"UPDATE all_pemesanan SET status_bayar='Selesai',tanggal_selesai=NOW() WHERE id='$id'");
+			$query=mysqli_query($this->connect(),"UPDATE all_pemesanan SET status_bayar='Selesai', tanggal_selesai= NOW() WHERE id='$id'");
+			mysqli_query($this->connect(),"UPDATE pemesanan_minuman SET status_bayar='Sudah Bayar' WHERE id_pemesanan='$id'");
+			mysqli_query($this->connect(),"UPDATE pemesanan_makanan SET status_bayar='Sudah Bayar' WHERE id_pemesanan='$id'");
+
 			return $query;
 		}
 		public function selesai_atm($id){
-			$query=mysqli_query($this->connect(),"UPDATE all_pemesanan SET status_bayar='Selesai',tanggal_selesai=NOW() WHERE id='$id'");
+
+			$query=mysqli_query($this->connect(),"UPDATE all_pemesanan SET status_bayar='Selesai', tanggal_selesai= NOW() WHERE id='$id'");
+			mysqli_query($this->connect(),"UPDATE pemesanan_minuman SET status_bayar='Sudah Bayar' WHERE id_pemesanan='$id'");
+			mysqli_query($this->connect(),"UPDATE pemesanan_makanan SET status_bayar='Sudah Bayar' WHERE id_pemesanan='$id'");
 			return $query;
 		}
 	}
@@ -362,6 +383,10 @@
 		public function read_laporan(){
 			$query=mysqli_query($this->connect(),"SELECT * FROM all_pemesanan where status_bayar='Selesai' ORDER BY tanggal_selesai");
 			return $query;	
+		}
+		public function search($date){
+			$query=mysqli_query($this->connect(),"SELECT * FROM all_pemesanan WHERE tanggal_selesai LIKE '".$date."%'");
+			return $query;
 		}
 	}
 ?>	

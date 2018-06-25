@@ -1,6 +1,7 @@
 <?php 
 session_start();
 include_once("functions/my_functions.php");
+
 if (isset($_GET['delete'])) {
   $que=new komentar;
   $delete=$que->delete_komentar($_GET['delete']);
@@ -13,6 +14,8 @@ if (isset($_GET['delete'])) {
     header('Refresh:0 url=index.php');
   }
 }
+$control=new pemesanan;
+$control->delete_expired();
 $head=new top_buttom;
 $head->top("Home");
  ?>

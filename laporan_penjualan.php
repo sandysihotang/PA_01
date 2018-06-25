@@ -167,30 +167,61 @@ $head->top("Laporan Penjualan");
         </div>
       </div> 
       </div> <br>
-      <div>
-      	<h3 class="alert alert-secondary" align="center">Laporan Penjualan Cafe</h3>
+      <div class="container-fluid alert alert-secondary img-thumbnail">
+      	  <h3 align="center">Laporan Penjualan Cafe</h3>
+          <div align="right">
+          <form action="laporan_penjualan.php" method="post">
+            <?php if (isset($_POST['submit'])) {?>
+            <input type="date" value="<?= $_POST['tanggal'] ?>" name="tanggal" required>
+          <?php } else {?>
+            <input type="date" name="tanggal" required>
+            <?php } ?>
+            <button type="submit" name="submit"><i class="fa fa-search"></i></button>
+          </form>
+        </div>
       </div>
       <div class="container-fluid">
       	<table class="table table-striped img-thumbnail">
       		<tr>
       			<th scope="col">#</th>
       			<th scope="col">Kode Pembelian</th>
-      			<th scope="col">Nama</th>
-      			<th scope="col">Tanggal</th>
+      			<th scope="col">Tanggal Selesai</th>
       			<th scope="col">Harga</th>
       		</tr>
       		<?php
       		$query=new laporan_penjualan;
-      		$query->read_laporan();
-      		
-      		?>
+          $data=$query->read_laporan();
+          $no=1;
+          if (!isset($_POST['submit'])) {
+          while ($data3=$data->fetch_assoc()){ 
+          ?>
       		<tr>
-      			<td></td>
-      			<td></td>
-      			<td></td>
-      			<td></td>
-      			<td></td>
+            <td><?php echo $no; ?></td>
+      			<td><?php echo $data3['id']; ?></td>
+      			<td><?php echo $data3['tanggal_selesai']; ?></td>
+      			<td><?php echo "Rp. ".number_format($data3['total_harga']).".00"; ?></td>      			
       		</tr>
+        <?php $no++; } 
+      }
+      else{
+        $data2=$query->search($_POST['tanggal']);
+        if (!mysqli_num_rows($data2)) { ?>
+          <tr>
+            <td colspan="4">Data pada tanggal <?= $_POST['tanggal'] ?> tidak ada..</td>
+          </tr>
+       <?php }else{
+        while ($data3=$data2->fetch_assoc()){ ?>
+          <tr>
+            <td><?php echo $no; ?></td>
+            <td><?php echo $data3['id']; ?></td>
+            <td><?php echo $data3['tanggal_selesai']; ?></td>
+            <td><?php echo "Rp. ".number_format($data3['total_harga']).".00"; ?></td>           
+          </tr>
+        <?php $no ++;
+          } 
+        }
+      }
+      ?>
       	</table>
       </div>
       <div class="container-fluid bg-dark jumbotron text-white" style="opacity: 0.8;">
