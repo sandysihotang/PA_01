@@ -31,7 +31,7 @@ $head->top("Laporan Penjualan");
     <div class="container-fluid">
 		<div class="float-left col-md-3">
       <img src="">
-      <label><i class="fa fa-phone"></i> +91234</label>      
+      <label><b>Call Center : </b><i class="fa fa-phone"></i> +62 822 7414 8833</label>      
     </div>
     <?php 
     if (!isset($_SESSION['is_logged_in'])) { ?>

@@ -1,6 +1,10 @@
 <?php 
 session_start();
 include_once("functions/my_functions.php");
+$account=new outentikasi;
+if ($account->get_session('user')==3) {
+  header('location: kasir.php');
+}
 
 if (isset($_GET['delete'])) {
   $que=new komentar;
@@ -46,7 +50,7 @@ $head->top("Home");
     <div class="container-fluid">
 		<div class="float-left col-md-3">
       <img src="">
-      <label><i class="fa fa-phone"></i> +91234</label>      
+      <label><b>Call Center : </b><i class="fa fa-phone"></i> +62 822 7414 8833</label>      
     </div>
     <?php 
     if (!isset($_SESSION['is_logged_in'])) { ?>
@@ -56,7 +60,7 @@ $head->top("Home");
     </div>
      <?php } 
      else{ 
-      $account=new outentikasi;
+      
 
       if ($account->get_session('user')==2) { ?>
       <div class="nav navbar float-right"><button class="btn btn-primary btn-sm" >
@@ -125,15 +129,25 @@ $head->top("Home");
         <div class="carousel-inner">        	
           <div class="carousel-item active">
             <img class="d-block" src="img/slide/gastro2.jpg?auto=yes&bg=777&fg=555&text=First slide" alt="First slide">
-            <div class="carousel-caption d-none d-md-block">
-              <h1 align="center">Welcome To Gastro Sijabu-Jabu</h1>
+            <div class="carousel-caption d-none d-md-block wow fadeInUp" data-wow-offset="0" data-wow-delay="0.5s">
+              <img src="img/slide/2.jpg" style="width: 300px;height: 200px" class="img-thumbnail" align="right">
             </div>
           </div>
           <div class="carousel-item">
             <img class="d-block" src="img/slide/IMG-20180511-WA0006.jpg?auto=yes&bg=666&fg=444&text=Second slide" alt="Second slide">
+            <div class="col-md-3 carousel-caption wow fadeInUp alert btn-secondary img-thumbnail" data-wow-offset="0" data-wow-delay="0.5s""><b>
+              <h3 align="center" class="text-black">MAKANAN</h3>
+              <p style="color: #ffff00;" align="center">Makanan mulai dari yang Berkelas Hingga Tradisional</p>
+            </b>
+            </div>
           </div>
           <div class="carousel-item">
             <img class="d-block" src="img/slide/IMG-20180511-WA0002.jpg?auto=yes&bg=555&fg=333&text=Third slide" alt="Third slide">
+            <div class="col-md-3 carousel-caption wow fadeInUp alert btn-secondary img-thumbnail" data-wow-offset="0" data-wow-delay="0.5s""><b>
+              <h3 align="center" class="text-black">MINUMAN</h3>
+              <p style="color: #ffff00;" align="center">Minuman mulai dari yang Berkelas Hingga Tradisional</p>
+            </b>
+            </div>
           </div>
 
         <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
@@ -243,7 +257,7 @@ $head->top("Home");
           $menu_makanan=$makanan->read_menu();
           while($row=mysqli_fetch_assoc($menu_makanan)){
            ?>
-           <div class="col-md-4 wow slideInLeft" data-wow-offset="0" data-wow-delay="1.5s">
+           <div class="col-md-4">
             <div class="card" style="width: 18rem;">
               <img class="img-thumbnail img wow bounce" src="img/menu/<?=$row['gambar']?>" alt="Card image cap">
               <h4 align="center"><?=$row['nama_makanan']?></h4>

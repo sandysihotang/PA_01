@@ -16,7 +16,7 @@ $head->top("List Transaksi");
 	<nav class="nav bg-light navbar-light wow fadeInUp">
     <div class="container-fluid">
 		<div class="float-left col-md-3">
-      <label><i class="fa fa-phone"></i> +91234</label>      
+      <label><b>Call Center : </b><i class="fa fa-phone"></i> +62 822 7414 8833</label>      
     </div>
     <?php 
     if (!isset($_SESSION['is_logged_in'])) { ?>
@@ -306,7 +306,7 @@ $head->top("List Transaksi");
                     <td><form action="cash_or_atm.php?id=<?= $account->get_session('id')?>" method="post">
                       <label>Tanggal Pengambilan</label>
                       <input type="datetime-local" name="time" required class="form-control"><br><button class="btn btn-primary btn-sm" name="cash">Cash</button>&nbsp;<button class="btn btn-success btn-sm" name="atm">Atm</button></form></td>
-                    <td><a href="index.php" class="btn btn-info btn-sm">Tambah</a> </td>
+                    <td><a href="pesan_makanan.php" class="btn btn-info btn-sm">Tambah</a> </td>
                   </tr>
                   <?php } ?>
             </tbody>
