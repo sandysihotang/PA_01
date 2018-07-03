@@ -4,6 +4,10 @@ include_once("functions/my_functions.php");
 if (!isset($_SESSION['is_logged_in'])) {
   header('location: index.php');
 }
+if (isset($_GET['jenis']) && isset($_GET['id'])) {
+  $tes=new pemesanan;
+  $tes->delete_pemesanan($_GET['jenis'],$_GET['id']);
+}
 $head=new top_buttom;
 $head->top("List Transaksi");
  ?>
@@ -178,7 +182,8 @@ $head->top("List Transaksi");
                     <td><?= $nama_makanan['nama_makanan'] ?></td>
                     <td><?=$makanan['jumlah_pesanan']?></td>
                     <td>Rp.<?= number_format($makanan['total_harga']) ?>.00</td>
-                    <td><button class="btn btn-secondary" data-toggle="modal" data-target="#Modal<?=$i?>" >Update</button></td>
+                    <td><button class="btn btn-secondary" data-toggle="modal" data-target="#Modal<?=$i?>" >Update</button>
+                      <a href="list_transaksi.php?jenis=makanan&id=<?= $makanan['id']?>" class="btn btn-danger"><i class="fa fa-delete"></i> Delete</a></td>
                   </tr>
                  <div class="modal fade" id="Modal<?=$i?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
@@ -243,7 +248,9 @@ $head->top("List Transaksi");
                     <td><?= $nama_minuman['nama_minuman'] ?></td>
                     <td><?=$minuman['jumlah_pesanan']?></td>
                     <td>Rp.<?= number_format($minuman['total_harga']) ?>.00</td>
-                    <td><button class="btn btn-secondary" data-toggle="modal" data-target="#Modal<?=$i?>" >Update</button></td>
+                    <td><button class="btn btn-secondary" data-toggle="modal" data-target="#Modal<?=$i?>" >Update</button>
+                    <a href="list_transaksi.php?jenis=minuman&id=<?= $minuman['id'] ?>" class="btn btn-danger"><i class="fa fa-delete"></i> Delete</a>
+                  </td>
                   </tr>
                  <div class="modal fade" id="Modal<?=$i?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">

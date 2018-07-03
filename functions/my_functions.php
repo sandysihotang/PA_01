@@ -251,7 +251,7 @@
 			return $return;
 		}
 		public function delete_expired(){
-			$data=mysqli_query($this->connect(),"SELECT * FROM all_pemesanan WHERE `tanggal_ambil` < NOW() AND (status_bayar='Belum dibayar' OR status_bayar='Konfirmasi')");
+			$data=mysqli_query($this->connect(),"SELECT * FROM all_pemesanan WHERE `tanggal_ambil` < NOW() AND status_bayar='Belum dibayar'");
 			while($tes=mysqli_fetch_object($data)){
 				mysqli_query($this->connect(),"DELETE FROM pemesanan_makanan WHERE id_pemesanan='$tes->id'");
 				mysqli_query($this->connect(),"DELETE FROM pemesanan_minuman WHERE id_pemesanan='$tes->id'");
@@ -259,6 +259,14 @@
 			}
 			mysqli_query($this->connect(),"DELETE FROM booking_meja WHERE `tangal_pemakaian` < NOW() AND status='Dipesan'");
 
+		}
+		public function delete_pemesanan($jenis,$id){
+			if ($jenis=='makanan') {
+				mysqli_query($this->connect(),"DELETE FROM pemesanan_makanan where id=$id");
+			}
+			else{
+				mysqli_query($this->connect(),"DELETE FROM pemesanan_minuman where id=$id");	
+			}
 		}
 	}
 	class konfirmasi_pelanggan extends connection{
