@@ -245,7 +245,7 @@ $head->top("Galery");
                 <div class="col-md-3 wow bounceIn" data-wow-offset="0" data-wow-delay="1.2s">
                 <?php $i=1;} ?>
 
-					<div class="card">
+					<div class="card" align="center">
 						<img src="img/galery/<?= $mygalery['img'] ?>" class="img-thumbnail img" alt="Card image cap">
 						<div class="card-body alert-primary">
 							<p><?= $mygalery['Deskripsi'] ?></p>

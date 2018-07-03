@@ -219,7 +219,7 @@ $head->top("Home");
       if (isset($_SESSION['is_logged_in']) && $account->get_session('user')==2) { 
         if (!isset($_GET['jenis']) || $_GET['jenis']=='makanan') {       
         ?>
-      <div class="container-fluid img-thumbnail bg-dark">
+      <div class="container-fluid img-thumbnail bg-dark" align="center">
         <h2 align="center"><label class="alert alert-primary btn-lg"><i class="fa fa-birthday-cake"></i> Menu Makanan<i class="fa fa-birthday-cake"></i></label></h2>
         <div class="row">
           <?php 
@@ -250,7 +250,7 @@ $head->top("Home");
        } } ?>
       <?php if (isset($_SESSION['is_logged_in']) && $account->get_session('user')==2) { 
         if (isset($_GET['jenis']) && $_GET['jenis']=='minuman') {?>
-      <div class="container-fluid img-thumbnail bg-dark">
+      <div class="container-fluid img-thumbnail bg-dark" align="center">
         
         <h2 align="center"><label class="alert alert-primary btn-lg"><i class="fa fa-beer"></i> Menu Minuman <i class="fa fa-beer"></i></label></h2>
         <div class="row">
