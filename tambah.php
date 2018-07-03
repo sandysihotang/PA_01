@@ -40,7 +40,7 @@
 			$key=$name->tambah_menu_minuman($nama_makanan,$fotobaru,$harga,$stock,$deskripsi);
 			if ($key) {
 				echo "<script>alert('Menu Minuman Berhasil Ditambahkan');</script>";
-				header('Refresh:0  url=index.php');
+				header('Refresh:0  url=index.php?jenis=minuman');
 			}
 			else{
 				echo "<script>alert('Menu Minuman Gagal Ditambahkan');</script>";
@@ -90,7 +90,7 @@
 			$key=$name->update_menu_minuman($nama_minuman,$fotobaru,$harga,$stock,$_GET['id'],$deskripsi);
 			if ($key) {
 				echo "<script>alert('Menu Minuman Berhasil Diubah');</script>";
-				header('Refresh:0  url=index.php');
+				header('Refresh:0  url=index.php?jenis=minuman');
 			}
 			else{
 				echo "<script>alert('Menu Minuman Gagal Diubah');</script>";
