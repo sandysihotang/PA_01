@@ -63,6 +63,7 @@ if (!isset($_SESSION['is_logged_in'])) {
    <?php } ?>
 </ul>
 	</nav><br>
+  <?php if ($_GET['jenis']=='makanan') { ?>
   <div class="container img-thumbnail alert alert-info text-black">
         <div class="row">
           <div class="col-md-12">
@@ -99,6 +100,7 @@ if (!isset($_SESSION['is_logged_in'])) {
           </div>
         </div>
       </div><br>
+    <?php } else{ ?>
 
   <div class="container img-thumbnail alert alert-info">
         <div class="row">
@@ -136,6 +138,7 @@ if (!isset($_SESSION['is_logged_in'])) {
           </div>
         </div>
       </div><br>
+    <?php } ?>
  
       <div class="container-fluid bg-secondary text-white jumbotron" style="opacity: 0.8;">
         <div class="row">
