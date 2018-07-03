@@ -41,30 +41,23 @@ $head->top("List Transaksi");
 	</nav>
 	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
 	  <ul class="nav nav-pills">
+ <li class="nav-item">
+    <a class="nav-link active" href="kasir.php"><i class="fa fa-home"></i> Konfirmasi Pelanggan</a>
+  </li>
   <li class="nav-item">
-    <a class="nav-link" href="index.php"><i class="fa fa-home"></i> Home</a>
+    <a class="nav-link" href="penyelesaian_pesanan.php"><i class="fa fa-binoculars"></i> Penyelesaian Pesanan</a>
   </li>
   <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-list"></i> Pesan</a>
+    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-list"></i> Buat Pesanan</a>
     <div class="dropdown-menu">
-      <a class="dropdown-item" href="pesan_makanan.php"><i class="fa fa-birthday-cake"></i> Makanan</a>
+      <a class="dropdown-item" href="pesan_makanan_manual.php"><i class="fa fa-birthday-cake"></i> Makanan</a>
       <div class="dropdown-divider"></div>
-      <a class="dropdown-item" href="pesan_minuman.php"><i class="fa fa-beer"></i> Minuman</a>
-      <div class="dropdown-divider"></div>
-      <a class="dropdown-item" href="pesan_meja.php"><i class="fa fa-table"></i> Meja</a>
+      <a class="dropdown-item" href="pesan_minuman_manual.php"><i class="fa fa-beer"></i> Minuman</a>
     </div>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="about.php"><i class="fa fa-binoculars"></i> About</a>
+    <a href="list_transaksi_manual.php" class="nav-link"><i class="fa fa-user"></i> List Transaksi Manual</a>
   </li>
-  <li class="nav-item">
-    <a class="nav-link" href="galery.php"><i class="fa fa-folder-open"></i> Galery</a>
-  </li>
-  <?php if (isset($_SESSION['is_logged_in']) && $account->get_session('user')==1) { ?>
-  <li class="nav-item">
-    <a href="list_transaksi.php" class="nav-link"><i class="fa fa-bar-chart-o"></i> List Pemesanan</a>
-  </li>
-   <?php } ?>
 </ul>
 	</nav>
 	 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -304,82 +297,13 @@ $head->top("List Transaksi");
                   <tr>
                     <td colspan="3">Tanggal Pengambilan</td>
                     <td><form action="cash_or_atm.php?id=<?= $account->get_session('id')?>" method="post">
-                      <input type="datetime-local" name="time" required class="form-control"><button class="btn btn-success btn-sm" name="atm">PESAN</button></form></td>
-                    <td><a href="pesan_makanan.php" class="btn btn-info btn-sm">Tambah</a> </td>
+                      <button class="btn btn-success btn-sm" name="cash"><i class="fa fa-plus"></i> Buat Pesanan</button></form></td>
+                    <td><a href="pesan_makanan_manual.php" class="btn btn-info btn-sm">Tambah</a> </td>
                   </tr>
                   <?php } ?>
             </tbody>
           </table>
       </div><br>
-      <h1 align="center" class="alert alert-secondary">Transaksi Belum Terkonfirmasi</h1>
-<br>
-      <div class="container-fluid img-thumbnail">
-        <table class="table table-striped">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">No. Pesanan</th>
-                <th scope="col">Tanggal Ambil</th>
-                <th scope="col">Total Harga</th>
-                <th scope="col">Status Bayar</th>
-                <th scope="col">Bukti Bayar</th>
-                <th scope="col"></th>
-              </tr>
-            </thead>
-            <?php 
-            $all=new pemesanan;
-            $data=$all->ambil_data_belum_bayar_atm($account->get_session('id'));
-            $i=1;
-            while($mydata=mysqli_fetch_object($data)){
-             ?>
-             <tr>
-               <td><?= $i ?></td>
-               <td><?= $mydata->id ?></td>
-               <td><?= $mydata->tanggal_ambil ?></td>
-               <td>Rp.<?= number_format($mydata->total_harga) ?>.00</td>
-               <td><?= $mydata->status_bayar ?></td>
-               <td><?php if ($mydata->bukti_bayar==NULL){?>
-                  <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModal<?=$i?>">
-                    Kirim Bukti Bayar
-                  </button>
-
-                  <div class="modal fade" id="exampleModal<?=$i?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="exampleModalLabel">Kirim Bukti Bayar</h5>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        <div class="modal-body">
-                          <form method="post" enctype="multipart/form-data" action="kirim_bukti.php?id=<?= $mydata->id ?>&pel=<?= $account->get_session('id') ?>">
-                            <div class="form-group">
-                              <label>Pilih Gambar</label>
-                              <input type="file" name="gambar" class="form-control">
-                            </div>
-                            <div class="form-group">
-                              <button type="submit" class="btn btn-primary" name="kirim">Kirim</button>
-                            </div>
-                          </form>
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-             <?php   }
-                else {
-                  echo '<a href="img/bukti-bayar/'.$mydata->bukti_bayar.'">'.$mydata->bukti_bayar.'</a>';
-                }
-               ?></td>
-               <td><a href="look_all.php?id=<?=$mydata->id?>" class="btn btn-primary btn-sm text-white">LOOK</a>&nbsp;&nbsp;</td>
-             </tr>
-
-            <?php $i++; } ?>
-        </table>
-      </div>
       <div class="container-fluid bg-dark text-white jumbotron" style="opacity: 0.8;">
         <div class="row">
         <div class="col-md-4">

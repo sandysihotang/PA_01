@@ -27,7 +27,7 @@ function FancyTable($header, $data,$id)
     $this->SetLineWidth(.3);
     $this->SetFont('','B');
     // Header
-    $w = array(20,65, 30,30, 45);
+    $w = array(10,75, 30,30, 45);
     $this->Cell(190,10,'No-Transaksi: '.$id,0,0,'L',true);
     $this->Ln();
     $this->Cell(array_sum($w),0,'','T');
@@ -47,18 +47,18 @@ function FancyTable($header, $data,$id)
     foreach($data as $row)
     {
         if (key_exists('id_menu',$row)) {
-            $this->Cell($w[0],7,$no++,0,0,'C',$fill);
-            $this->Cell($w[1],7,$my->read_makanan($row['id_menu'])->fetch_object()->nama_makanan,0,0,'C',$fill);
-            $this->Cell($w[2],7,'Rp.'.number_format($my->read_makanan($row['id_menu'])->fetch_object()->Harga).'.00',0,0,'C',$fill);
+            $this->Cell($w[0],7,$no++,0,0,'L',$fill);
+            $this->Cell($w[1],7,$my->read_makanan($row['id_menu'])->fetch_object()->nama_makanan,0,0,'L',$fill);
+            $this->Cell($w[2],7,'Rp.'.number_format($my->read_makanan($row['id_menu'])->fetch_object()->Harga).'.00',0,0,'L',$fill);
             $this->Cell($w[3],7,number_format($row['jumlah_pesanan']),0,0,'C',$fill);
             $this->Cell($w[4],7,'Rp.'.number_format($row['total_harga']).'.00',0,0,'L',$fill);
             $tot+=$row['total_harga'];
             $this->Ln();
         }
         else if(key_exists('Id_menu_minum',$row)){
-            $this->Cell($w[0],7,$no++,0,0,'C',$fill);
-            $this->Cell($w[1],7,$my->read_minuman($row['Id_menu_minum'])->fetch_object()->nama_minuman,0,0,'C',$fill);
-            $this->Cell($w[2],7,'Rp.'.number_format($my->read_minuman($row['Id_menu_minum'])->fetch_object()->harga).'.00',0,0,'C',$fill);
+            $this->Cell($w[0],7,$no++,0,0,'L',$fill);
+            $this->Cell($w[1],7,$my->read_minuman($row['Id_menu_minum'])->fetch_object()->nama_minuman,0,0,'L',$fill);
+            $this->Cell($w[2],7,'Rp.'.number_format($my->read_minuman($row['Id_menu_minum'])->fetch_object()->harga).'.00',0,0,'L',$fill);
             $this->Cell($w[3],7,number_format($row['jumlah_pesanan']),0,0,'C',$fill);
             $this->Cell($w[4],7,'Rp.'.number_format($row['total_harga']).'.00',0,0,'L',$fill);
             $tot+=$row['total_harga'];
@@ -67,8 +67,8 @@ function FancyTable($header, $data,$id)
         
         $fill = !$fill;
     }
-    $this->Cell(130,10,'Total ',0,0,'L',$fill);
-    $this->Cell(60,10,'Rp.'.number_format($tot).'.00',0,0,'L',$fill);
+    $this->Cell(145,10,'Total ',0,0,'C',$fill);
+    $this->Cell(45,10,'Rp.'.number_format($tot).'.00',0,0,'L',$fill);
 }
 }
 

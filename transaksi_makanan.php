@@ -38,6 +38,7 @@ $head->top("Home");
 	</nav>
 	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
 	  <ul class="nav nav-pills">
+      <?php if ($_SESSION['user']==1 || $_SESSION['user']==2) { ?>
   <li class="nav-item">
     <a class="nav-link" href="index.php"><i class="fa fa-home"></i> Home</a>
   </li>
@@ -60,6 +61,25 @@ $head->top("Home");
   <?php if (isset($_SESSION['is_logged_in']) && $account->get_session('user')==1) { ?>
   <li class="nav-item">
     <a href="list_transaksi.php" class="nav-link"><i class="fa fa-bar-chart-o"></i> List Pemesanan</a>
+  </li>
+   <?php } }
+   else{?>
+     <li class="nav-item">
+    <a class="nav-link" href="kasir.php"><i class="fa fa-home"></i> Konfirmasi Pelanggan</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="penyelesaian_pesanan.php"><i class="fa fa-binoculars"></i> Penyelesaian Pesanan</a>
+  </li>
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-list"></i> Buat Pesanan</a>
+    <div class="dropdown-menu">
+      <a class="dropdown-item" href="pesan_makanan_manual.php"><i class="fa fa-birthday-cake"></i> Makanan</a>
+      <div class="dropdown-divider"></div>
+      <a class="dropdown-item" href="pesan_minuman_manual.php"><i class="fa fa-beer"></i> Minuman</a>
+    </div>
+  </li>
+  <li class="nav-item">
+    <a href="list_transaksi_manual.php" class="nav-link"><i class="fa fa-user"></i> List Transaksi Manual</a>
   </li>
    <?php } ?>
 </ul>
@@ -183,14 +203,14 @@ $head->top("Home");
             <p>Website Resto yang berada di : Pasar Siborong-Borong, Siborong-Borong, North Tapanuli Regency, North Sumatra 22474</p>
         </div>
         <div class="col-md-4">
-          <h2>Developer:</h2>
+          <!-- <h2>Developer:</h2>
           <h3>Institut Teknologi Del</h3>
           <ul>
             <li>Sandy Sihotang</li>
             <li>Mariana Sinaga</li>
             <li>Sarah Simanjuntak</li>
             <li>Edwinda Tampubolon</li>
-          </ul>
+          </ul> -->
         </div>
         <div class="col-md-4">
           <h2>Contact Us</h2>

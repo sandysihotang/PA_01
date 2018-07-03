@@ -118,50 +118,6 @@ $head->top("Home");
 
 </ul>
 	</nav>
-  <div class="alert-secondary">
-    <h1 align="center">Welcome To Gastro Sijabu-Jabu</h1>
-  <div id="carouselExampleIndicators" class="carousel slide img-thumbnail" data-ride="carousel">
-        <ol class="carousel-indicators">
-          <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-          <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-          <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-        </ol>
-        <div class="carousel-inner">        	
-          <div class="carousel-item active">
-            <img class="d-block" src="img/slide/gastro2.jpg?auto=yes&bg=777&fg=555&text=First slide" alt="First slide">
-            <div class="carousel-caption d-none d-md-block wow fadeInUp" data-wow-offset="0" data-wow-delay="0.5s">
-              <img src="img/slide/2.jpg" style="width: 300px;height: 200px" class="img-thumbnail" align="right">
-            </div>
-          </div>
-          <div class="carousel-item">
-            <img class="d-block" src="img/slide/IMG-20180511-WA0006.jpg?auto=yes&bg=666&fg=444&text=Second slide" alt="Second slide">
-            <div class="col-md-3 carousel-caption wow fadeInUp alert btn-secondary img-thumbnail" data-wow-offset="0" data-wow-delay="0.5s""><b>
-              <h3 align="center" class="text-black">MAKANAN</h3>
-              <p style="color: #ffff00;" align="center">Makanan mulai dari yang Berkelas Hingga Tradisional</p>
-            </b>
-            </div>
-          </div>
-          <div class="carousel-item">
-            <img class="d-block" src="img/slide/IMG-20180511-WA0002.jpg?auto=yes&bg=555&fg=333&text=Third slide" alt="Third slide">
-            <div class="col-md-3 carousel-caption wow fadeInUp alert btn-secondary img-thumbnail" data-wow-offset="0" data-wow-delay="0.5s""><b>
-              <h3 align="center" class="text-black">MINUMAN</h3>
-              <p style="color: #ffff00;" align="center">Minuman mulai dari yang Berkelas Hingga Tradisional</p>
-            </b>
-            </div>
-          </div>
-
-        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="sr-only">Previous</span>
-        </a>
-        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="sr-only">Next</span>
-        </a>
-      </div>
-  </div>	
-</div>
-
  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
@@ -244,12 +200,12 @@ $head->top("Home");
           </div>
         </div>
       </div> 
-      </div> <br><b><hr><hr></b>
+      </div> <b><hr><hr></b>
       <?php if(isset($_SESSION['is_logged_in']) && $account->get_session('user')==2){ ?>
-      <div class="container"><a href="form_tambah_menu.php" class="btn btn-danger"><i class="fa fa-plus"></i> Tambah Menu Makanan</a></div><br>
+      <div class="container" align="right"><a href="form_tambah_menu.php" class="btn btn-danger"><i class="fa fa-plus"></i> Tambah Menu</a></div><br>
       <?php }
           if (isset($_SESSION['is_logged_in']) && $account->get_session('user')==2) { ?>
-      <div class="container-fluid img-thumbnail bg-dark wow fadeInUp" data-wow-offset="0" data-wow-delay="0.5s">
+      <div class="container-fluid img-thumbnail bg-dark">
         <h2 align="center"><label class="alert alert-primary btn-lg"><i class="fa fa-birthday-cake"></i> Menu Makanan<i class="fa fa-birthday-cake"></i></label></h2>
         <div class="row">
           <?php 
@@ -259,7 +215,7 @@ $head->top("Home");
            ?>
            <div class="col-md-4">
             <div class="card" style="width: 18rem;">
-              <img class="img-thumbnail img wow bounce" src="img/menu/<?=$row['gambar']?>" alt="Card image cap">
+              <img class="img-thumbnail img" src="img/menu/<?=$row['gambar']?>" alt="Card image cap">
               <h4 align="center"><?=$row['nama_makanan']?></h4>
               <h4 align="center">Rp.<?= number_format($row['Harga']) ?>.00</h4>
               <div class="card-body">
@@ -280,7 +236,7 @@ $head->top("Home");
        } ?>          
         <br><br>
       <?php if (isset($_SESSION['is_logged_in']) && $account->get_session('user')==2) { ?>
-      <div class="container-fluid img-thumbnail bg-dark wow fadeInUp" data-wow-offset="0" data-wow-delay="0.5s">
+      <div class="container-fluid img-thumbnail bg-dark">
         
         <h2 align="center"><label class="alert alert-primary btn-lg"><i class="fa fa-beer"></i> Menu Minuman <i class="fa fa-beer"></i></label></h2>
         <div class="row">
@@ -288,7 +244,7 @@ $head->top("Home");
           $minum=new menu;
           $minuman=$minum->read_menu_minuman();
           while ($row_minum=mysqli_fetch_assoc($minuman)) { ?>
-          <div class="col-md-4 wow bounceIn" data-wow-offset="0" data-wow-delay="1.5s">
+          <div class="col-md-4">
             <div class="card" style="width: 18rem;">
               <img class="img-thumbnail img" src="img/menu/<?=$row_minum['gambar']?>" alt="Card image cap">
               <h4 align="center"><?=$row_minum['nama_minuman']?></h4>
@@ -448,14 +404,14 @@ $head->top("Home");
             <p>Website Resto yang berada di : Pasar Siborong-Borong, Siborong-Borong, North Tapanuli Regency, North Sumatra 22474</p>
         </div>
         <div class="col-md-4">
-          <h2>Developer:</h2>
+          <!-- <h2>Developer:</h2>
           <h3>Institut Teknologi Del</h3>
           <ul>
             <li>Sandy Sihotang</li>
             <li>Mariana Sinaga</li>
             <li>Sarah Simanjuntak</li>
             <li>Edwinda Tampubolon</li>
-          </ul>
+          </ul> -->
         </div>
         <div class="col-md-4">
           <h2>Contact Us</h2>

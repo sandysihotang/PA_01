@@ -1,20 +1,8 @@
-<?php 
+	<?php 
 session_start();
 include_once("functions/my_functions.php");
-if (!isset($_SESSION['is_logged_in'])) {
-  header('location: index.php');
-}
-if (isset($_GET['meja'])) {
-  $id=$_GET['meja'];
-  $meja=new meja;
-  $meja->selesai_pemakaian($id);
-  echo "<script>alert('Berhasi Mengupdate')</script>";
-  header('Refresh:0 url=kasir.php');
-}
-$control=new pemesanan;
-$control->delete_expired();
 $head=new top_buttom;
-$head->top("KASIR");
+$head->top("Pesan Minuman");
  ?>
   <style type="text/css">
   .d-block{
@@ -34,9 +22,25 @@ $head->top("KASIR");
       </button>
     </div>
      <?php } 
-     else{  ?>
+     else{ 
+      $account=new outentikasi;
+
+      if ($account->get_session('user')==2) { ?>
       <div class="nav navbar float-right"><button class="btn btn-primary btn-sm" >
+        <i class="fa fa-user"></i><b>Administrator</b></button>
+        
+      
+     <?php }
+     else if($account->get_session('user')==3){
+     ?>
+     <div class="nav navbar float-right"><button class="btn btn-primary btn-sm" >
         <i class="fa fa-user"></i><b>Kasir</b></button>
+     <?php } 
+     else { $user=$account->get_user($account->get_session('id'));
+            $name=$user->fetch_assoc(); ?>
+      <div class="nav navbar float-right"><button class="btn btn-primary btn-sm" >
+        <i class="fa fa-user"></i><?= $name['firstname']." ".$name['lastname'] ?></button>
+      <?php } ?>
         &nbsp;<a href="functions/logout.php" class="btn btn-danger btn-sm">Logout</a></button>      
     </div> 
     <?php } ?>
@@ -44,15 +48,15 @@ $head->top("KASIR");
   </div>
 	</nav>
 	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-	  <ul class="nav nav-pills">
+    <ul class="nav nav-pills">
   <li class="nav-item">
-    <a class="nav-link active" href="kasir.php"><i class="fa fa-home"></i> Konfirmasi Pelanggan</a>
+    <a class="nav-link" href="kasir.php"><i class="fa fa-home"></i> Konfirmasi Pelanggan</a>
   </li>
   <li class="nav-item">
     <a class="nav-link" href="penyelesaian_pesanan.php"><i class="fa fa-binoculars"></i> Penyelesaian Pesanan</a>
   </li>
   <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-list"></i> Buat Pesanan</a>
+    <a class="nav-link dropdown-toggle active" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-list"></i> Buat Pesanan</a>
     <div class="dropdown-menu">
       <a class="dropdown-item" href="pesan_makanan_manual.php"><i class="fa fa-birthday-cake"></i> Makanan</a>
       <div class="dropdown-divider"></div>
@@ -146,88 +150,56 @@ $head->top("KASIR");
           </div>
         </div>
       </div> 
-      </div><br>
-		<div class="container-fluid">
-			<h2 class="alert alert-dark">Konfirmasi Pesanan</h2>
-			<table class="table table-striped img-thumbnail">
-				<thead>
-					<tr>
-						<th scope="col">#</th>
-						<th scope="col">Nama</th>
-            <th scope="col">Pesanan</th>
-						<th scope="col">Tanggal Ambil</th>
-						<th scope="col">Bukti-bayar</th>
-            <th scope="col">Action</th>
-            <th></th>
-					</tr>
-				</thead>
-        <tbody>
-        <?php
-        $data=new konfirmasi_pelanggan; 
+      </div> 
+		<div class="alert-secondary wow swing" align=center><h1>Pesan Minuman</h1>
+      </div>
+      <div class="container-fluid" align="center">
+       
+        <?php 
+        $minuman=new pemesanan;
+        $read_minum=$minuman->all_menu_minuman();
         $i=1;
-        $data1=$data->get_data_pemesanan1();
-        while($row1=mysqli_fetch_assoc($data1)){
-         ?>   
-         <tr>
-          <td><?=$i?></td>
-          <td><?php 
-          $nam1=new outentikasi;
-            $name1=$nam1->get_user($row1['pelanggan'])->fetch_assoc();
-            echo $name1['firstname']." ".$name1['lastname']; ?></td>
-          <td><a class="btn btn-success btn-sm" href="all_pemesanan.php?id=<?=$row1['id']?>">LOOK</a></td>
-          <td><?= $row1['tanggal_ambil'] ?></td>
-          <td><a href="img/bukti-bayar/<?= $row1['bukti_bayar'] ?>"><?= $row1['bukti_bayar'] ?></a></td>
-            <form method="post" action="konfirmasi_pesanan.php?id=<?=$row1['id']?>">
-              <td><select class="form-control" name="aksi">
-                <option>Konfirmasi</option>
-                <option>Selesai</option>
-              </select></td>
-              <td><input type="submit" name="ubah" value="Update" class="btn-sm btn btn-primary"></td>
-            </form>
-            
-        </tr>     
-       <?php
-       $i++; } ?>
-        </tbody>
-			</table>
-		</div>
-<br>
-  <div class="container-fluid">
-      <h2 class="alert alert-dark">MEJA</h2>
-      <table class="table table-striped img-thumbnail">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Nama</th>
-            <th scope="col">Jumlah Kursi</th>
-            <th scope="col">Tanggal Pemakaian</th>
-            <th scope="col">Jenis</th>
-            <th scope="col">Action</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php 
-          $data=new meja;
-          $meja=$data->read_pemesanan_meja();
-          $j=1;
-          while($row=$meja->fetch_object()){
-           ?>
-           <tr>
-            <td><?= $j?></td>
-             <td><?php 
-             $nam1=new outentikasi;
-             $name=$nam1->get_user($row->id_pelanggan)->fetch_object();
-             echo $name->firstname.' '.$name->lastname; ?></td>
-             <td><?= $row->volume ?> Kursi</td>
-             <td><?= $row->tangal_pemakaian ?></td>
-             <td><?= $row->jenis ?></td>
-             <td><a href="kasir.php?meja=<?= $row->id_pemesanan ?>" class="btn btn-success btn-sm">Selesai</a></td>
-           </tr>
-          <?php } ?>
-        </tbody>
-      </table>
+        while($minuman=mysqli_fetch_object($read_minum)){
+         ?>
+
+          <?php if($i==1) {?>            
+            <div class="row">
+                <div class="col-md-4 wow bounceIn" data-wow-offset="0" data-wow-delay="0.5s">
+              <?php }
+              else if($i==2){?>
+                  <div class="col-md-4 wow bounceIn" data-wow-offset="0" data-wow-delay="1s">
+                <?php } 
+                else if($i==3){?>
+                  <div class="col-md-4 wow bounceIn" data-wow-offset="0" data-wow-delay="0.8s">
+                    <?php $i=1; } ?>
+
+              <div class="card" style="width: 18rem;">
+                <img class="img-thumbnail img" src="img/menu/<?=$minuman->gambar?>" alt="Card image cap">
+                <h4 align="center"><?=$minuman->nama_minuman?></h4>
+                <h4 align="center">Rp.<?= number_format($minuman->harga) ?>.00</h4>
+                <div class="card-body" align="center">
+                  <?php  if (isset($_SESSION['is_logged_in']) && $account->get_session('user')==3) { 
+                          if ($minuman->status==2) {
+                              echo "Minuman Sudah Habis";
+                          } else{ ?>
+                            <a href="transaksi_minuman.php?id=<?=$minuman->id_minum?>" class="btn btn-success"><i class="fa fa-tags"></i> Buat Pesanan</a>
+                          <?php 
+                          } 
+                        }
+                        else {
+                          if ($minuman->status==2) {
+                            echo "Minuman Sudah Habis";
+                        } else{?>
+                            <a href="index.php" class="btn btn-success"><i class="fa fa-tags"></i> Pesan</a>
+                        <?php }
+                    }?>
+                  </div>
+                </div>
+              </div>    
+            <?php $i++;} ?>      
+        </div>
     </div>
+<br>
 
       <div class="container-fluid bg-dark text-white jumbotron" style="opacity: 0.8;">
         <div class="row">
@@ -264,3 +236,4 @@ $head->top("KASIR");
 <?php 
   $head->buttom();
  ?>
+ 

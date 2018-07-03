@@ -107,14 +107,14 @@ $head->top("Home");
             <p>Website Resto yang berada di : Pasar Siborong-Borong, Siborong-Borong, North Tapanuli Regency, North Sumatra 22474</p>
         </div>
         <div class="col-md-4">
-          <h2>Developper:</h2>
+          <!-- <h2>Developper:</h2>
           <h3>Institut Teknologi Del</h3>
           <ul>
             <li>Sandy Sihotang</li>
             <li>Mariana Sinaga</li>
             <li>Sarah Simanjuntak</li>
             <li>Edwinda Tampubolon</li>
-          </ul>
+          </ul> -->
         </div>
         <div class="col-md-4">
           <h2>Contact Us</h2>

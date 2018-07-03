@@ -9,8 +9,13 @@
 			$harga_baru=$harga*$porsi;		
 			$data=$update->update_menu_beli($_GET['id'],$porsi,$harga_baru);
 			if ($data) {
-				echo "<script>alert('Behasil Diupdate')</script>";
-				header('Refresh:0 url= list_transaksi.php');
+				if($_SESSION['user']==3){
+					echo "<script>alert('Behasil Diupdate')</script>";
+					header('Refresh:0 url= list_transaksi_manual.php');	
+				}else{
+					echo "<script>alert('Behasil Diupdate')</script>";
+					header('Refresh:0 url= list_transaksi.php');
+				}
 			}
 		}
 		if($_GET['jenis']=='minuman'){
@@ -18,8 +23,13 @@
 			$harga_baru=$harga*$porsi;	
 			$data=$update->update_menu_beli_minum($_GET['id'],$porsi,$harga_baru);
 			if ($data) {
-				echo "<script>alert('Behasil Diupdate')</script>";
-				header('Refresh:0 url= list_transaksi.php');
+				if($_SESSION['user']==3){
+					echo "<script>alert('Behasil Diupdate')</script>";
+					header('Refresh:0 url= list_transaksi_manual.php');	
+				}else{
+					echo "<script>alert('Behasil Diupdate')</script>";
+					header('Refresh:0 url= list_transaksi.php');
+				}
 			}
 		}
 	}

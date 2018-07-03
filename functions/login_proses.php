@@ -15,6 +15,7 @@
 			if ($mydata['role']==3) {
 				$outen->set_session('is_logged_in',TRUE);
 				$outen->set_session('user',$mydata['role']);
+				$outen->set_session('id',$mydata['id']);
 				header("location: ../kasir.php");
 			}else{
 				$outen->set_session('is_logged_in',TRUE);

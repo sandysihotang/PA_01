@@ -160,7 +160,7 @@ $head->top("Pesan Makanan");
       </div> 
 		<div class="alert-secondary wow swing" align=center><h1>Pesan Makanan</h1>
       </div>
-      <div class="container-fluid">
+      <div class="container-fluid" align="center">
        
         <?php 
         $makan=new pemesanan;
@@ -215,14 +215,14 @@ $head->top("Pesan Makanan");
             <p>Website Resto yang berada di : Pasar Siborong-Borong, Siborong-Borong, North Tapanuli Regency, North Sumatra 22474</p>
         </div>
         <div class="col-md-4">
-          <h2>Developer:</h2>
+          <!-- <h2>Developer:</h2>
           <h3>Institut Teknologi Del</h3>
           <ul>
             <li>Sandy Sihotang</li>
             <li>Mariana Sinaga</li>
             <li>Sarah Simanjuntak</li>
             <li>Edwinda Tampubolon</li>
-          </ul>
+          </ul> -->
         </div>
         <div class="col-md-4">
           <h2>Contact Us</h2>

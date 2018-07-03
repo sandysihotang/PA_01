@@ -12,8 +12,13 @@ if ($_GET['jenis']=='makanan' && isset($_POST['lanjutkan'])) {
 	$total_harga=$menu['Harga']*$porsi;
 	$yes=$pesan->add_to_chart_makanan($id_pelanggan,$id_makanan,$porsi,$total_harga);
 	if ($yes) {
-		echo "<script>alert('Berhasil Dimasukkan Kedaftar Pesananan!')</script>";
-		header("refresh:0 url=list_transaksi.php");
+		if ($account->get_session('user')==3) {
+			echo "<script>alert('Berhasil Dimasukkan Kedaftar Pesananan!')</script>";
+			header("refresh:0 url=list_transaksi_manual.php");
+		}else{
+			echo "<script>alert('Berhasil Dimasukkan Kedaftar Pesananan!')</script>";
+			header("refresh:0 url=list_transaksi.php");
+		}
 	}
 	else{
 		echo "<script>alert('Gagal Memasukkan Kedaftar Pesananan!')</script>";
@@ -32,8 +37,13 @@ if ($_GET['jenis']=='minuman' && isset($_POST['lanjutkan'])) {
 	$total_harga=$menu['harga']*$porsi;
 	$yes=$pesan->add_to_chart_minuman($id_pelanggan,$id_minuman,$porsi,$total_harga);
 	if ($yes) {
-		echo "<script>alert('Berhasil Dimasukkan Kedaftar Pesananan!')</script>";
-		header("refresh:0 url=list_transaksi.php");
+		if ($account->get_session('user')==3) {
+			echo "<script>alert('Berhasil Dimasukkan Kedaftar Pesananan!')</script>";
+			header("refresh:0 url=list_transaksi_manual.php");
+		}else{
+			echo "<script>alert('Berhasil Dimasukkan Kedaftar Pesananan!')</script>";
+			header("refresh:0 url=list_transaksi.php");
+		}
 	}
 	else{
 		echo "<script>alert('Gagal Memasukkan Kedaftar Pesananan!')</script>";
