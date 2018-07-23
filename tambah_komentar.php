@@ -7,7 +7,7 @@ if (isset($_POST['tambah_komentar'])) {
 	$tambah=$data->tambah_komentar($_SESSION['id'],$komentar);
 	if ($tambah) {
 		echo "<script>alert('Komentar Ditambahkan')</script>";
-		header('Refresh:0 url=index.php');
+		header('Refresh:0 url=index.php#komentar');
 	}
 }
 

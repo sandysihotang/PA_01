@@ -11,11 +11,11 @@ if (isset($_GET['delete'])) {
   $delete=$que->delete_komentar($_GET['delete']);
   if($delete){
     echo "<script>alert('Berhasil Dihapus')</script>";
-    header('Refresh:0 url=index.php');
+    header('Refresh:0 url=index.php#komentar');
   }
   else{
     echo "<script>alert('Gagal Dihapus')</script>";
-    header('Refresh:0 url=index.php');
+    header('Refresh:0 url=index.php#komentar');
   }
 }
 $control=new pemesanan;
@@ -364,7 +364,7 @@ $head->top("Home");
         </div>
       </div><br>
     <?php } ?>
-      <div class="container-fluid alert-dark wow bounceInDown" data-wow-offset="0" data-wow-delay="0.6s">        
+      <div class="container-fluid alert-dark wow bounceInUp" id="komentar" data-wow-offset="0" data-wow-delay="0.6s">        
         <div class="row">
           <div class="col-md-6">
             <div class="container"> <h2>Berikan Komentar Anda</h2></div>

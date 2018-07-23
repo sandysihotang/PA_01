@@ -42,7 +42,7 @@ $head->top("List Transaksi");
 	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
 	  <ul class="nav nav-pills">
  <li class="nav-item">
-    <a class="nav-link active" href="kasir.php"><i class="fa fa-home"></i> Konfirmasi Pelanggan</a>
+    <a class="nav-link" href="kasir.php"><i class="fa fa-home"></i> Konfirmasi Pelanggan</a>
   </li>
   <li class="nav-item">
     <a class="nav-link" href="penyelesaian_pesanan.php"><i class="fa fa-binoculars"></i> Penyelesaian Pesanan</a>
@@ -56,7 +56,7 @@ $head->top("List Transaksi");
     </div>
   </li>
   <li class="nav-item">
-    <a href="list_transaksi_manual.php" class="nav-link"><i class="fa fa-user"></i> List Transaksi Manual</a>
+    <a href="list_transaksi_manual.php" class="nav-link active"><i class="fa fa-user"></i> List Transaksi Manual</a>
   </li>
 </ul>
 	</nav>
