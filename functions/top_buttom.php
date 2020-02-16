@@ -1,40 +1,49 @@
-<?php 
-class top_buttom{
-    public function top($title){?>
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-      <title><?=$title?></title>
-      <link rel="icon" type="image/jpg" href="img/logo.jpg">
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
+<?php
 
-      <link rel="stylesheet" href="css/bootstrap.min.css">
-      <link rel="stylesheet" href="css/animate.css-master/animate.min.css">
-      <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
-    </head>
-    <style type="text/css">
-        .img{
-            width:300px;
-            height: 300px;
+class top_buttom
+{
+    public function top($title)
+    {
+        ?>
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <title><?= $title ?></title>
+            <link rel="icon" type="image/jpg" href="img/logo.jpg">
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        }
-    </style>
-    <body class="bg-light"> 
-		<?php }
+            <link rel="stylesheet" href="css/bootstrap.min.css">
+            <link rel="stylesheet" href="css/animate.css-master/animate.min.css">
+            <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+            <link rel="stylesheet" href="js/fontawesome/css/fontawesome.css">
+            <link rel="stylesheet" href="js/fontawesome/css/brands.css">
+            <link rel="stylesheet" href="js/fontawesome/css/solid.css">
+        </head>
+        <style type="text/css">
+            .img {
+                width: 300px;
+                height: 300px;
 
-	public function buttom(){?>
-      <script src="js/jquery.min.js"></script>
-      <script src="js/bootstrap.min.js"></script>
-      <script type="text/javascript" src="js/popper.min.js"></script>
-      <script type="text/javascript" src="js/jquery-3.3.1.slim.min.js"></script>
-      <script src="js/wow.min.js"></script>
-      <script>wow = new WOW({}).init();</script>
-    </body>
+            }
+        </style>
+        <body class="bg-light">
+    <?php }
 
-    </html>
+    public function buttom()
+    {
+        ?>
+        <script src="js/jquery.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="js/popper.min.js"></script>
+        <script type="text/javascript" src="js/jquery-3.3.1.slim.min.js"></script>
+        <script src="js/wow.min.js"></script>
+        <script>wow = new WOW({}).init();</script>
+        </body>
 
-		<?php }
-    }
- ?>
+        </html>
+
+    <?php }
+}
+
+?>

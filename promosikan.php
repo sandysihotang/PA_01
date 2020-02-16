@@ -1,7 +1,7 @@
 <?php 
 
 	include_once"functions/my_functions.php";
-	if ($_GET['jenis']=='makanan') {
+	if ($_GET['jenis']==md5('makanan')) {
 		if ($_GET['status']=='Tidak dipromosikan') {
 			$data=new menu;
 			$status=$data->promosi_makanan($_GET['id'],'Promosikan');
@@ -27,7 +27,7 @@
 			}
 		}
 	}
-	if ($_GET['jenis']=='minuman') {
+	if ($_GET['jenis']==md5('minuman')) {
 		if ($_GET['status']=='Tidak dipromosikan') {
 			$data=new menu;
 			$status=$data->promosi_minuman($_GET['id'],'Promosikan');
