@@ -483,12 +483,14 @@ class konfirmasi_pelanggan extends connection
         from all_pemesanan
         INNER JOIN pelanggan
         ON all_pemesanan.pelanggan = nik
+        WHERE all_pemesanan.id = ?
         LIMIT 1');
+        $query->bind_param('s', $id);
         $query->execute();
         $query->bind_result($firstname, $lastname, $id, $metode_bayar, $nik);
         if ($query->fetch()) {
             $activity = 'Telah melakukan pemesanan makanan dengan NO Order: ';
-            $activity .= $id;
+            $activity .= md5($id);
             $activity .= ' dengan metode bayar: ' . ($metode_bayar == 1 ? 'Cash' : 'ATM');
 
             $query_activity = $this->connect()->prepare('

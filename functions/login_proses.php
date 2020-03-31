@@ -2,6 +2,10 @@
 include_once("my_functions.php");
 session_start();
 if ($_POST['login']) {
+    if ($_SESSION['code'] && $_SESSION['code'] != $_POST['captcha']) {
+        echo "<script>alert('Masukkan code dengan baik!');</script>";
+        header("Refresh:0 url=../index.php");
+    }
     $conection = new connection;
     $username = mysqli_escape_string($conection->connect(), $_POST['username']);
     $password = md5($_POST['password']);

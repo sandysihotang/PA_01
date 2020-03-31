@@ -16,7 +16,7 @@ class MailForConfirm
     function template($key)
     {
         return '<h1 align="center">Konfirmasi Pesanan</h1>
-                  <p>Pesanan anda dengan No. Pemasanan: ' . $key . '</p>
+                  <p>Pesanan anda dengan No. Pemasanan: ' . md5($key) . '</p>
                   <p>Telah Dikonfirmasi</p>
                   <p>Silahkan datang untuk mengambil Pesanan anda.</p>';
     }
