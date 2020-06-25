@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.4
+-- version 4.7.9
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 03 Jul 2018 pada 06.27
--- Versi Server: 10.1.30-MariaDB
--- PHP Version: 7.2.1
+-- Generation Time: Jun 25, 2020 at 03:57 PM
+-- Server version: 10.5.2-MariaDB
+-- PHP Version: 7.2.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -25,36 +25,79 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `account`
+-- Table structure for table `account`
 --
 
 CREATE TABLE `account` (
   `id` varchar(50) NOT NULL,
+  `email` varchar(191) NOT NULL DEFAULT 'test@gmail.com',
   `username` varbinary(50) NOT NULL,
   `password` varbinary(1000) NOT NULL,
+  `state_change_password` tinyint(1) NOT NULL DEFAULT 0,
   `role` int(2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `account`
+-- Dumping data for table `account`
 --
 
-INSERT INTO `account` (`id`, `username`, `password`, `role`) VALUES
-('-1970545340', 0x61646d696e32, 0x6338343235386539633339303539613839616237376438343664646162393039, 2),
-('1', 0x61646d696e, 0x3231323332663239376135376135613734333839346130653461383031666333, 2),
-('1212032011980001', 0x73616e6479, 0x6261383533633535306131363837643363633931326165663739663835376333, 1),
-('1212088726263563', 0x7361726168, 0x6563323632303236353165643232316366386639393336363863343539643436, 1),
-('122421341', 0x656b6f, 0x6535656139623664373130383664666566336131356637323661626363356266, 1),
-('123543', 0x747269736e61, 0x6262333636376335323231643638356431383130613339656438616630323235, 1),
-('124234', 0x746f70616c, 0x6538373530396530366337393463333637346166343164613331663366663036, 1),
-('1452010', 0x77696e6461, 0x6165643261656334316266643764646235356232316633636532303663363662, 1),
-('2', 0x6b61736972, 0x6337393131616633616462643132613033356232383935353664393634373061, 3),
-('3443543456677', 0x726f6e616c646f737467, 0x3162643732303938363264383163333334373238663833656432363936653466, 1);
+INSERT INTO `account` (`id`, `email`, `username`, `password`, `state_change_password`, `role`) VALUES
+('01212345678', 'yuliantisimatupang@gmail.com', 0x79756c69616e7469, 0x6539353039663934393233333338323865313762663533636231353362336337, 0, 1),
+('01293912423', 'sandysihotang12@gmail.com', 0x6a756c69616e7479, 0x3865316130373065396230333430646132623065613466313933633137326630, 0, 1),
+('1', 'test@gmail.com', 0x61646d696e, 0x3231323332663239376135376135613734333839346130653461383031666333, 0, 2),
+('1212032011980001', 'test@gmail.com', 0x73616e6479, 0x6261383533633535306131363837643363633931326165663739663835376333, 0, 1),
+('1212088726263563', 'sandysihotang12@gmail.com', 0x7361726168, 0x3865316130373065396230333430646132623065613466313933633137326630, 0, 1),
+('122421341', 'test@gmail.com', 0x656b6f, 0x6535656139623664373130383664666566336131356637323661626363356266, 0, 1),
+('123512423', 'sandysihotang868@gmail.com', 0x73616472, 0x3865316130373065396230333430646132623065613466313933633137326630, 1, 1),
+('123543', 'test@gmail.com', 0x747269736e61, 0x6262333636376335323231643638356431383130613339656438616630323235, 0, 1),
+('124234', 'test@gmail.com', 0x746f70616c, 0x6538373530396530366337393463333637346166343164613331663366663036, 0, 1),
+('132e23', 'test@gmail.com', 0x736f746172646f6b3132, 0x6436383661353366623836613663333166613666616131643933333332363765, 0, 1),
+('1452010', 'test@gmail.com', 0x77696e6461, 0x6165643261656334316266643764646235356232316633636532303663363662, 0, 1),
+('2', 'test@gmail.com', 0x6b61736972, 0x6337393131616633616462643132613033356232383935353664393634373061, 0, 3),
+('3443543456677', 'test@gmail.com', 0x726f6e616c646f737467, 0x3162643732303938363264383163333334373238663833656432363936653466, 0, 1);
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `all_pemesanan`
+-- Table structure for table `activity_user`
+--
+
+CREATE TABLE `activity_user` (
+  `id` int(11) NOT NULL,
+  `id_user` varchar(50) NOT NULL,
+  `type_activity` int(11) NOT NULL DEFAULT 0,
+  `Activity` text NOT NULL,
+  `current_create` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `activity_user`
+--
+
+INSERT INTO `activity_user` (`id`, `id_user`, `type_activity`, `Activity`, `current_create`) VALUES
+(1, '123512423', 1, 'Change Password', '2019-12-24 14:09:26'),
+(2, '123512423', 1, 'Change Password', '2020-01-09 09:00:08'),
+(3, '124234', 0, 'Telah melakukan pemesanan makanan dengan NO Order: GS-00001 dengan metode bayar: ATM', '2020-01-10 07:33:01'),
+(4, '124234', 0, 'Telah melakukan pemesanan makanan dengan NO Order: GS-00001 dengan metode bayar: ATM', '2020-01-10 07:33:04'),
+(5, '123512423', 1, 'Change Password', '2020-01-10 08:54:39'),
+(6, '124234', 0, 'Telah melakukan pemesanan makanan dengan NO Order: GS-00001 dengan metode bayar: ATM', '2020-01-12 10:39:28'),
+(7, '124234', 0, 'Telah melakukan pemesanan makanan dengan NO Order: GS-00001 dengan metode bayar: ATM', '2020-01-12 10:50:59'),
+(8, '123512423', 1, 'Change Password', '2020-01-13 13:18:37'),
+(9, '1212032011980001', 0, 'Telah melakukan pemesanan makanan dengan NO Order: GS-00007 dengan metode bayar: ATM', '2020-01-13 13:28:52'),
+(10, '1212032011980001', 0, 'Telah melakukan pemesanan makanan dengan NO Order: GS-00007 dengan metode bayar: ATM', '2020-01-13 13:28:56'),
+(11, '01293912423', 1, 'Change Password', '2020-01-13 13:34:04'),
+(12, '01212345678', 1, 'Change Password', '2020-01-14 03:23:02'),
+(13, '01212345678', 0, 'Telah melakukan pemesanan makanan dengan NO Order: GS-00016 dengan metode bayar: ATM', '2020-01-14 04:06:39'),
+(14, '01212345678', 0, 'Telah melakukan pemesanan makanan dengan NO Order: GS-00016 dengan metode bayar: ATM', '2020-01-14 06:19:34'),
+(15, '01212345678', 1, 'Change Password', '2020-01-14 07:50:36'),
+(16, '01212345678', 1, 'Change Password', '2020-01-14 08:14:01'),
+(17, '01212345678', 0, 'Telah melakukan pemesanan makanan dengan NO Order: GS-00016 dengan metode bayar: ATM', '2020-01-14 08:20:20'),
+(18, '01212345678', 0, 'Telah melakukan pemesanan makanan dengan NO Order: 1924022ac23e03195d0ff26d779f86b8 dengan metode bayar: ATM', '2020-01-15 03:55:45');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `all_pemesanan`
 --
 
 CREATE TABLE `all_pemesanan` (
@@ -69,7 +112,7 @@ CREATE TABLE `all_pemesanan` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `all_pemesanan`
+-- Dumping data for table `all_pemesanan`
 --
 
 INSERT INTO `all_pemesanan` (`id`, `tanggal_ambil`, `total_harga`, `pelanggan`, `metode_bayar`, `bukti_bayar`, `status_bayar`, `tanggal_selesai`) VALUES
@@ -82,12 +125,23 @@ INSERT INTO `all_pemesanan` (`id`, `tanggal_ambil`, `total_harga`, `pelanggan`, 
 ('GS-00007', '2018-07-31 12:12:00', 1845000, '1212032011980001', 2, 'bukti-air mineral.jpg', 'Selesai', '2018-07-03 10:38:28'),
 ('GS-00008', '2018-07-02 17:19:48', 4372000, '2', 1, NULL, 'Selesai', '2018-07-02 17:20:38'),
 ('GS-00009', '2018-07-25 12:12:00', 3347000, '1212032011980001', 2, 'bukti-minuman-043533chocolate frappe.jpg', 'Selesai', '2018-07-03 10:41:40'),
-('GS-00010', '2018-07-03 10:42:28', 1222930000, '2', 1, NULL, 'Selesai', '2018-07-03 10:43:08');
+('GS-00010', '2018-07-03 10:42:28', 1222930000, '2', 1, NULL, 'Selesai', '2018-07-03 10:43:08'),
+('GS-00011', '2020-01-10 21:21:00', 136000, '1212088726263563', 2, 'bukti-ny-meme.png', 'Selesai', '2020-01-10 14:33:04'),
+('GS-00012', '2020-01-13 12:12:00', 989000, '1212088726263563', 2, 'bukti-ny-meme.png', 'Selesai', '2020-01-12 17:39:28'),
+('GS-00013', '2020-01-20 12:12:00', 492000, '1212088726263563', 2, 'bukti-ny-meme.png', 'Selesai', '2020-01-12 17:50:59'),
+('GS-00014', '2020-01-14 09:01:00', 1008000, '1212088726263563', 2, 'bukti-ny-meme.png', 'Selesai', '2020-01-13 20:28:56'),
+('GS-00015', '2020-01-13 23:23:00', 205000, '123512423', 2, 'bukti-ny-meme.png', 'Selesai', '2020-01-13 20:28:52'),
+('GS-00016', '2020-01-14 12:12:00', 533000, '01212345678', 2, 'bukti-ny-meme.png', 'Selesai', '2020-01-14 11:06:39'),
+('GS-00017', '2020-01-14 13:31:00', 41000, '01212345678', 2, 'bukti-ny-meme.png', 'Selesai', '2020-01-14 13:19:34'),
+('GS-00018', '2020-01-15 12:12:00', 86000, '01212345678', 2, 'bukti-itdel.jpg', 'Konfirmasi', NULL),
+('GS-00019', '2020-01-16 12:02:00', 82000, '01212345678', 2, 'bukti-itdel.jpg', 'Selesai', '2020-01-14 15:20:20'),
+('GS-00020', '2020-01-15 11:11:00', 86000, '01212345678', 2, 'bukti-itdel.jpg', 'Selesai', '2020-01-15 10:55:45'),
+('GS-00021', '2020-02-27 15:00:00', 125000, '1452010', 2, 'bukti-itdel.jpg', 'Konfirmasi', NULL);
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `booking_meja`
+-- Table structure for table `booking_meja`
 --
 
 CREATE TABLE `booking_meja` (
@@ -100,7 +154,7 @@ CREATE TABLE `booking_meja` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `booking_meja`
+-- Dumping data for table `booking_meja`
 --
 
 INSERT INTO `booking_meja` (`id_pemesanan`, `id_pelanggan`, `tangal_pemakaian`, `status`, `jenis`, `volume`) VALUES
@@ -115,7 +169,7 @@ INSERT INTO `booking_meja` (`id_pemesanan`, `id_pelanggan`, `tangal_pemakaian`, 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `galery`
+-- Table structure for table `galery`
 --
 
 CREATE TABLE `galery` (
@@ -125,7 +179,7 @@ CREATE TABLE `galery` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `galery`
+-- Dumping data for table `galery`
 --
 
 INSERT INTO `galery` (`id`, `Deskripsi`, `img`) VALUES
@@ -137,7 +191,7 @@ INSERT INTO `galery` (`id`, `Deskripsi`, `img`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `informasi`
+-- Table structure for table `informasi`
 --
 
 CREATE TABLE `informasi` (
@@ -149,7 +203,7 @@ CREATE TABLE `informasi` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `informasi`
+-- Dumping data for table `informasi`
 --
 
 INSERT INTO `informasi` (`id`, `gambar`, `deskripsi`, `Judul`, `date`) VALUES
@@ -159,7 +213,7 @@ INSERT INTO `informasi` (`id`, `gambar`, `deskripsi`, `Judul`, `date`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `komentar`
+-- Table structure for table `komentar`
 --
 
 CREATE TABLE `komentar` (
@@ -170,7 +224,7 @@ CREATE TABLE `komentar` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `komentar`
+-- Dumping data for table `komentar`
 --
 
 INSERT INTO `komentar` (`id`, `id_komentar`, `komentar`, `date`) VALUES
@@ -186,12 +240,28 @@ INSERT INTO `komentar` (`id`, `id_komentar`, `komentar`, `date`) VALUES
 (19, '1212088726263563', 'Makanan Nya enak\r\n', '2018-06-28 08:16:33'),
 (20, '1', 'Terimakasih @sarah', '2018-06-28 08:17:29'),
 (21, '123543', 'Makanan nya enak', '2018-06-28 09:20:22'),
-(22, '1', 'Terimakasih @trisna\r\n', '2018-06-28 09:21:19');
+(22, '1', 'Terimakasih @trisna\r\n', '2018-06-28 09:21:19'),
+(23, '1212088726263563', '<button>sandy</button>', '2020-01-09 16:33:20'),
+(24, '1212088726263563', '333333', '2020-01-10 10:43:48'),
+(25, '1212088726263563', '333333', '2020-01-10 10:45:16'),
+(26, '1212088726263563', '', '2020-01-10 10:46:48'),
+(27, '1212088726263563', 'dvgdvg', '2020-01-10 10:48:20'),
+(28, '1212088726263563', 'dvgdvg', '2020-01-10 10:50:27'),
+(29, '1212088726263563', '?vfulswAdohuw+*vvv*,?2vfulswA', '2020-01-10 10:52:29'),
+(30, '1212088726263563', '?exwwrqAVDQG?2exwwrqA', '2020-01-10 10:53:02'),
+(31, '1212088726263563', '?exwwrqAVDQG?2exwwrqA', '2020-01-10 10:53:17'),
+(32, '1212088726263563', '?exwwrqAVDQG|?2exwwrqA', '2020-01-10 10:53:37'),
+(33, '1212088726263563', 'gdevgdvng#dmvgq#dv#ndvgvd', '2020-01-10 10:58:16'),
+(34, '01212345678', '?vfulswAdohuw+kd|,>?2vfulswA', '2020-01-14 10:44:01'),
+(35, '01212345678', 'pdndqdq#q|d#hqdn', '2020-01-14 10:44:24'),
+(36, '01212345678', 'asdas', '2020-01-14 13:26:09'),
+(37, '01212345678', 'dvegmdv*', '2020-01-14 13:27:12'),
+(38, '01212345678', '*', '2020-01-14 15:08:48');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `makanan`
+-- Table structure for table `makanan`
 --
 
 CREATE TABLE `makanan` (
@@ -206,7 +276,7 @@ CREATE TABLE `makanan` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `makanan`
+-- Dumping data for table `makanan`
 --
 
 INSERT INTO `makanan` (`idmenu`, `nama_makanan`, `deskripsi`, `gambar`, `Harga`, `status`, `status_promosi`, `tgl_tambah`) VALUES
@@ -229,7 +299,7 @@ INSERT INTO `makanan` (`idmenu`, `nama_makanan`, `deskripsi`, `gambar`, `Harga`,
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `metode_bayar`
+-- Table structure for table `metode_bayar`
 --
 
 CREATE TABLE `metode_bayar` (
@@ -238,7 +308,7 @@ CREATE TABLE `metode_bayar` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `metode_bayar`
+-- Dumping data for table `metode_bayar`
 --
 
 INSERT INTO `metode_bayar` (`id`, `cara`) VALUES
@@ -248,7 +318,7 @@ INSERT INTO `metode_bayar` (`id`, `cara`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `minuman`
+-- Table structure for table `minuman`
 --
 
 CREATE TABLE `minuman` (
@@ -263,7 +333,7 @@ CREATE TABLE `minuman` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `minuman`
+-- Dumping data for table `minuman`
 --
 
 INSERT INTO `minuman` (`id_minum`, `nama_minuman`, `deskripsi`, `gambar`, `harga`, `status`, `status_promosi`, `tgl_tambah`) VALUES
@@ -289,7 +359,7 @@ INSERT INTO `minuman` (`id_minum`, `nama_minuman`, `deskripsi`, `gambar`, `harga
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `pelanggan`
+-- Table structure for table `pelanggan`
 --
 
 CREATE TABLE `pelanggan` (
@@ -301,15 +371,19 @@ CREATE TABLE `pelanggan` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `pelanggan`
+-- Dumping data for table `pelanggan`
 --
 
 INSERT INTO `pelanggan` (`nik`, `firstname`, `lastname`, `tlp`, `alamat`) VALUES
+('01212345678', 'Yulianti', 'Simatupang', '082134567890', 'Medan'),
+('01293912423', 'Julianty', 'Simatupang', '1234324', 'Bandar'),
 ('1212032011980001', 'Sandy', 'Sihotang', '082361631346', 'Perdagangan'),
 ('1212088726263563', 'sarah', 'simanjuntak', '082167856754', 'Laguboti'),
 ('122421341', 'Eko', 'Naldi', '091221841', 'Sibolga'),
+('123512423', 'asndjan', 'jnaskjdn', 'asdas', 'asdas'),
 ('123543', 'Trisna', 'Manurung', '083242', 'Medan'),
 ('124234', 'topal', 'asdfas', '23423', 'ASfknsn'),
+('132e23', 'asdsf', 'dsfsdf', '1234324', 'dfdsf'),
 ('1452010', 'Winda', 'Tampu', '0892318', 'Medan'),
 ('2', 'Kasir', 'Kasir', '4385230239', 'Siborong borong'),
 ('3443543456677', 'Ronaldo', 'Sitanggang', '0864367876', 'Medan');
@@ -317,7 +391,7 @@ INSERT INTO `pelanggan` (`nik`, `firstname`, `lastname`, `tlp`, `alamat`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `pemesanan_makanan`
+-- Table structure for table `pemesanan_makanan`
 --
 
 CREATE TABLE `pemesanan_makanan` (
@@ -331,7 +405,7 @@ CREATE TABLE `pemesanan_makanan` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `pemesanan_makanan`
+-- Dumping data for table `pemesanan_makanan`
 --
 
 INSERT INTO `pemesanan_makanan` (`id`, `id_pemesanan`, `id_menu`, `id_pelanggan`, `jumlah_pesanan`, `status_bayar`, `total_harga`) VALUES
@@ -341,12 +415,27 @@ INSERT INTO `pemesanan_makanan` (`id`, `id_pemesanan`, `id_menu`, `id_pelanggan`
 (22, 'GS-00009', 18, '1212032011980001', 12, 'Sudah Bayar', 492000),
 (23, 'GS-00009', 22, '1212032011980001', 65, 'Sudah Bayar', 1495000),
 (24, 'GS-00010', 19, '2', 32, 'Sudah Bayar', 864000),
-(25, 'GS-00010', 27, '2', 543, 'Sudah Bayar', 8688000);
+(25, 'GS-00010', 27, '2', 543, 'Sudah Bayar', 8688000),
+(26, 'GS-00011', 18, '1212088726263563', 2, 'Sudah Bayar', 82000),
+(28, 'GS-00012', 17, '1212088726263563', 23, 'Sudah Bayar', 989000),
+(29, 'GS-00013', 18, '1212088726263563', 12, 'Sudah Bayar', 492000),
+(30, 'GS-00014', 17, '1212088726263563', 12, 'Sudah Bayar', 516000),
+(31, 'GS-00014', 18, '1212088726263563', 12, 'Sudah Bayar', 492000),
+(32, 'GS-00015', 18, '123512423', 5, 'Sudah Bayar', 205000),
+(33, 'GS-00016', 18, '01212345678', 12, 'Sudah Bayar', 492000),
+(34, 'GS-00016', 18, '01212345678', 1, 'Sudah Bayar', 41000),
+(35, 'GS-00017', 18, '01212345678', 1, 'Sudah Bayar', 41000),
+(39, 'GS-00018', 17, '01212345678', 1, 'Belum dibayar', 43000),
+(40, 'GS-00018', 17, '01212345678', 1, 'Belum dibayar', 43000),
+(41, 'GS-00019', 18, '01212345678', 2, 'Sudah Bayar', 82000),
+(42, 'GS-00020', 17, '01212345678', 2, 'Sudah Bayar', 86000),
+(43, 'GS-00021', 18, '1452010', 2, 'Belum dibayar', 82000),
+(44, 'GS-00021', 17, '1452010', 1, 'Belum dibayar', 43000);
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `pemesanan_minuman`
+-- Table structure for table `pemesanan_minuman`
 --
 
 CREATE TABLE `pemesanan_minuman` (
@@ -360,7 +449,7 @@ CREATE TABLE `pemesanan_minuman` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `pemesanan_minuman`
+-- Dumping data for table `pemesanan_minuman`
 --
 
 INSERT INTO `pemesanan_minuman` (`id`, `id_pemesanan`, `Id_menu_minum`, `id_pelanggan`, `jumlah_pesanan`, `status_bayar`, `total_harga`) VALUES
@@ -369,12 +458,13 @@ INSERT INTO `pemesanan_minuman` (`id`, `id_pemesanan`, `Id_menu_minum`, `id_pela
 (11, 'GS-00009', 15, '1212032011980001', 32, 'Sudah Bayar', 928000),
 (12, 'GS-00009', 21, '1212032011980001', 54, 'Sudah Bayar', 432000),
 (13, 'GS-00010', 19, '2', 53443, 'Sudah Bayar', 1175746000),
-(14, 'GS-00010', 31, '2', 2352, 'Sudah Bayar', 37632000);
+(14, 'GS-00010', 31, '2', 2352, 'Sudah Bayar', 37632000),
+(15, 'GS-00011', 14, '1212088726263563', 2, 'Sudah Bayar', 54000);
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `role`
+-- Table structure for table `role`
 --
 
 CREATE TABLE `role` (
@@ -383,7 +473,7 @@ CREATE TABLE `role` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `role`
+-- Dumping data for table `role`
 --
 
 INSERT INTO `role` (`id`, `deskripsi`) VALUES
@@ -394,7 +484,7 @@ INSERT INTO `role` (`id`, `deskripsi`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `status_makanan_minuman`
+-- Table structure for table `status_makanan_minuman`
 --
 
 CREATE TABLE `status_makanan_minuman` (
@@ -403,7 +493,7 @@ CREATE TABLE `status_makanan_minuman` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `status_makanan_minuman`
+-- Dumping data for table `status_makanan_minuman`
 --
 
 INSERT INTO `status_makanan_minuman` (`id`, `varchar`) VALUES
@@ -421,6 +511,13 @@ ALTER TABLE `account`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `username` (`username`),
   ADD KEY `role` (`role`);
+
+--
+-- Indexes for table `activity_user`
+--
+ALTER TABLE `activity_user`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_foreign_user_id` (`id_user`);
 
 --
 -- Indexes for table `all_pemesanan`
@@ -517,6 +614,12 @@ ALTER TABLE `status_makanan_minuman`
 --
 
 --
+-- AUTO_INCREMENT for table `activity_user`
+--
+ALTER TABLE `activity_user`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+
+--
 -- AUTO_INCREMENT for table `booking_meja`
 --
 ALTER TABLE `booking_meja`
@@ -538,7 +641,7 @@ ALTER TABLE `informasi`
 -- AUTO_INCREMENT for table `komentar`
 --
 ALTER TABLE `komentar`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT for table `makanan`
@@ -562,63 +665,69 @@ ALTER TABLE `minuman`
 -- AUTO_INCREMENT for table `pemesanan_makanan`
 --
 ALTER TABLE `pemesanan_makanan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT for table `pemesanan_minuman`
 --
 ALTER TABLE `pemesanan_minuman`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
--- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
+-- Constraints for dumped tables
 --
 
 --
--- Ketidakleluasaan untuk tabel `account`
+-- Constraints for table `account`
 --
 ALTER TABLE `account`
   ADD CONSTRAINT `account_ibfk_1` FOREIGN KEY (`role`) REFERENCES `role` (`id`);
 
 --
--- Ketidakleluasaan untuk tabel `all_pemesanan`
+-- Constraints for table `activity_user`
+--
+ALTER TABLE `activity_user`
+  ADD CONSTRAINT `fk_foreign_user_id` FOREIGN KEY (`id_user`) REFERENCES `account` (`id`);
+
+--
+-- Constraints for table `all_pemesanan`
 --
 ALTER TABLE `all_pemesanan`
   ADD CONSTRAINT `all_pemesanan_ibfk_1` FOREIGN KEY (`pelanggan`) REFERENCES `pelanggan` (`nik`),
   ADD CONSTRAINT `all_pemesanan_ibfk_2` FOREIGN KEY (`metode_bayar`) REFERENCES `metode_bayar` (`id`);
 
 --
--- Ketidakleluasaan untuk tabel `booking_meja`
+-- Constraints for table `booking_meja`
 --
 ALTER TABLE `booking_meja`
   ADD CONSTRAINT `booking_meja_ibfk_1` FOREIGN KEY (`id_pelanggan`) REFERENCES `pelanggan` (`nik`);
 
 --
--- Ketidakleluasaan untuk tabel `komentar`
+-- Constraints for table `komentar`
 --
 ALTER TABLE `komentar`
   ADD CONSTRAINT `komentar_ibfk_1` FOREIGN KEY (`id_komentar`) REFERENCES `account` (`id`);
 
 --
--- Ketidakleluasaan untuk tabel `makanan`
+-- Constraints for table `makanan`
 --
 ALTER TABLE `makanan`
   ADD CONSTRAINT `makanan_ibfk_1` FOREIGN KEY (`status`) REFERENCES `status_makanan_minuman` (`id`);
 
 --
--- Ketidakleluasaan untuk tabel `minuman`
+-- Constraints for table `minuman`
 --
 ALTER TABLE `minuman`
   ADD CONSTRAINT `minuman_ibfk_1` FOREIGN KEY (`status`) REFERENCES `status_makanan_minuman` (`id`);
 
 --
--- Ketidakleluasaan untuk tabel `pelanggan`
+-- Constraints for table `pelanggan`
 --
 ALTER TABLE `pelanggan`
   ADD CONSTRAINT `pelanggan_ibfk_1` FOREIGN KEY (`nik`) REFERENCES `account` (`id`);
 
 --
--- Ketidakleluasaan untuk tabel `pemesanan_makanan`
+-- Constraints for table `pemesanan_makanan`
 --
 ALTER TABLE `pemesanan_makanan`
   ADD CONSTRAINT `pemesanan_makanan_ibfk_1` FOREIGN KEY (`id_menu`) REFERENCES `makanan` (`idmenu`),
@@ -626,7 +735,7 @@ ALTER TABLE `pemesanan_makanan`
   ADD CONSTRAINT `pemesanan_makanan_ibfk_4` FOREIGN KEY (`id_pemesanan`) REFERENCES `all_pemesanan` (`id`);
 
 --
--- Ketidakleluasaan untuk tabel `pemesanan_minuman`
+-- Constraints for table `pemesanan_minuman`
 --
 ALTER TABLE `pemesanan_minuman`
   ADD CONSTRAINT `pemesanan_minuman_ibfk_1` FOREIGN KEY (`Id_menu_minum`) REFERENCES `minuman` (`id_minum`),
